@@ -1,0 +1,16 @@
+sys4_quests
+default
+intllib?
+beds?
+boats?
+bucket?
+doors?
+dye?
+farming?
+flowers?
+screwdriver?
+stairs?
+tnt?
+vessels?
+wool?
+xpanes?

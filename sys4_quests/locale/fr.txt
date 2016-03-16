@@ -1,0 +1,4 @@
+dig = Recolte
+place = Pose
+craft = Fabrique
+

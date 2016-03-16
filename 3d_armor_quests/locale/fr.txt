@@ -1,0 +1,2 @@
+shields:shield_wood = Boucliers en Bois
+shields:shield_cactus = Boucliers en Cactus

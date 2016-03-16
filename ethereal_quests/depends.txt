@@ -1,0 +1,4 @@
+ethereal
+default
+sys4_quests
+minetest_quests
