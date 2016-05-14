@@ -103,12 +103,12 @@ ins(quests, {
 
 -- paper_crafter
 ins(quests, {
-       'paper_crafter', "Paper's Crafter", nil, {'default:paper'}, 100, {'default:book'}, 'papyrus_digger', type = t
+       'paper_crafter', "Papers Crafter", nil, {'default:paper'}, 100, {'default:book'}, 'papyrus_digger', type = t
 	    })
 
 -- book_crafter
 ins(quests, {
-       'book_crafter', "Book's Crafter", nil, {'default:book'}, 100, {'default:bookshelf'}, 'paper_crafter', type = t
+       'book_crafter', "Books Crafter", nil, {'default:book'}, 100, {'default:bookshelf'}, 'paper_crafter', type = t
 	    })
 
 -- bronze_crafter
@@ -380,7 +380,7 @@ if minetest.get_modpath(mod) then
    
    -- gravel_digger
    ins(quests, {
-	  'gravel_digger', "Gravel digger", nil, {'default:gravel'}, 100, {'tnt:gunpowder'}, nil, type = t
+	  'gravel_digger', "Gravel Digger", nil, {'default:gravel'}, 100, {'tnt:gunpowder'}, nil, type = t
 	       })
 
    -- Type Craft --

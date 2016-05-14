@@ -1,23 +1,259 @@
-default:tree =
+
+### Quests Title ###
+
+Tree Digger =
+Crumbly Nodes Digger =
+Papyrus Digger =
+Coal Digger =
+Stone Digger =
+Iron Digger =
+Copper Digger =
+Gold Digger =
+Mese Digger =
+Diamond Digger =
+Obsidian Digger =
+
+Wood Crafter =
+Sticks Crafter =
+Sandstone Crafter =
+Papers Crafter =
+Books Crafter =
+Bronze Crafter =
+Tools Crafter =
+Tools Crafter Lover =
+Tools Crafter Pro =
+Tools Crafter Expert =
+Tools Crafter Master =
+
+Furnace Builder =
+Wood Builder =
+Wood Builder Lover =
+
+### Custom Descriptions ###
+
 Blocks of Crumbly Nodes =
-default:papyrus =
-default:stone_with_coal =
-default:stone =
-default:stone_with_iron =
-default:stone_with_copper =
-default:stone_with_gold =
-default:stone_with_mese =
-default:stone_with_diamond =
-default:obsidian =
-default:wood =
-default:stick =
-default:sandstone =
-default:paper =
-default:book =
-default:bronze_ingot =
 Wooden Tools =
 Stone Tools =
 Steel or Bronze Tools =
 Mese Tools =
 Diamond Tools =
+
+### Nodes names ###
+
+# Trees
+group:tree =
+default:tree =
+default:acacia_tree =
+default:jungletree =
+default:pine_tree =
+
+# Stick
+group:stick =
+default:stick =
+
+# Wood
+group:wood =
+default:wood =
+default:acacia_wood =
+default:junglewood =
+default:pine_wood =
+stairs:slab_acacia_wood =
+stairs:stair_acacia_wood =
+stairs:slab_junglewood =
+stairs:stair_junglewood =
+stairs:slab_pine_wood =
+stairs:stair_pine_wood =
+stairs:slab_wood =
+stairs:stair_wood =
+
+# Leaves
+default:acacia_leaves =
+default:jungleleaves =
+default:leaves =
+default:pine_needles =
+
+# Saplings
+default:acacia_sapling =
+default:junglesapling =
+default:pine_sapling =
+default:sapling =
+
+# Fruits
+default:apple =
+
+# Haches
+default:axe_bronze =
+default:axe_diamond =
+default:axe_mese =
+default:axe_steel =
+default:axe_stone =
+default:axe_wood =
+
+# Picks
+default:pick_bronze =
+default:pick_diamond =
+default:pick_mese =
+default:pick_steel =
+default:pick_stone =
+default:pick_wood =
+
+# Shovels
+default:shovel_bronze =
+default:shovel_diamond =
+default:shovel_mese =
+default:shovel_steel =
+default:shovel_stone =
+default:shovel_wood =
+
+# Swords
+default:sword_bronze =
+default:sword_diamond =
+default:sword_mese =
+default:sword_steel =
+default:sword_stone =
+default:sword_wood =
+
+# Books
+default:book =
+default:bookshelf =
+
+# Bricks
+default:brick =
+default:clay_brick =
+stairs:slab_brick =
+stairs:stair_brick =
+
+# Metal Lumps
+default:copper_lump =
+default:gold_lump =
+default:iron_lump =
+
+# Ingots
+default:bronze_ingot =
+default:copper_ingot =
+default:gold_ingot =
+default:steel_ingot =
+
+# Metal Blocks
+default:bronzeblock =
+default:copperblock =
+default:goldblock =
+default:steelblock =
+stairs:slab_bronzeblock =
+stairs:stair_bronzeblock =
+stairs:slab_copperblock =
+stairs:stair_copperblock =
+stairs:slab_goldblock =
+stairs:stair_goldblock =
+stairs:slab_steelblock =
+stairs:stair_steelblock =
+
+# Cactus
+default:cactus =
+
+# Chests
+default:chest =
+default:chest_locked =
+
+# Clays
+default:clay =
+default:clay_lump =
+
+# Coal
+default:coal_lump =
+default:coalblock =
+
+# Stones
+default:cobble =
+default:desert_cobble =
+default:desert_stone =
+default:desert_stonebrick =
+default:mossycobble =
+default:stone =
+default:stone_with_coal =
+default:stone_with_copper =
+default:stone_with_diamond =
+default:stone_with_gold =
+default:stone_with_iron =
+default:stone_with_mese =
+default:stonebrick =
+stairs:slab_cobble =
+stairs:stair_cobble =
+stairs:slab_desert_cobble =
+stairs:stair_desert_cobble =
+stairs:slab_desert_stone =
+stairs:stair_desert_stone =
+stairs:slab_desert_stonebrick =
+stairs:stair_desert_stonebrick =
+stairs:slab_stone =
+stairs:stair_stone =
+stairs:slab_stonebrick =
+stairs:stair_stonebrick =
+
+# Obsidian
+default:obsidian =
+default:obsidian_glass =
+default:obsidian_shard =
+default:obsidianbrick =
+stairs:slab_obsidian =
+stairs:stair_obsidian =
+stairs:slab_obsidianbrick =
+stairs:stair_obsidianbrick =
+
+# Sands
+default:desert_sand =
+default:sand =
+default:sandstone =
+default:sandstonebrick =
+stairs:slab_sandstone =
+stairs:stair_sandstone =
+stairs:slab_sandstonebrick =
+stairs:stair_sandstonebrick =
+
+# Gravel
+default:gravel =
+
+# Precious Stones
+default:diamond =
+default:diamondblock =
+default:mese =
+default:mese_crystal =
+default:mese_crystal_fragment =
+
+# Dirts
+default:dirt =
+default:dirt_with_dry_grass =
+default:dirt_with_grass =
+default:dirt_with_snow =
+
+# Vegetation
+default:dry_grass_1 =
+default:dry_shrub =
+default:grass_1 =
+default:junglegrass =
+default:papyrus =
+
+# Wooden Objects
+default:fence_wood =
+default:ladder =
+default:sign_wall =
+
+# Stone Objects
 default:furnace =
+
+# Verre
+default:glass =
+
+# Others
+default:ice =
+default:lava_source =
+default:meselamp =
+default:nyancat =
+default:nyancat_rainbow =
+default:paper =
+default:rail =
+default:river_water_source =
+default:snow =
+default:snowblock =
+default:torch =
+default:water_source =

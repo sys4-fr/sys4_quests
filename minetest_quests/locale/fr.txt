@@ -1,28 +1,258 @@
-default:tree = Troncs d'arbres
+### Quests Title ###
+
+Tree Digger = Coupe du Bois
+Crumbly Nodes Digger = Déterre tout
+Papyrus Digger = Récolte du Papyrus
+Coal Digger = Trouve du Charbon
+Stone Digger = Mine de la Roche
+Iron Digger = Trouve du Fer
+Copper Digger = Trouve du Cuivre
+Gold Digger = Trouve de l'Or
+Mese Digger = Trouve du Mese
+Diamond Digger = Trouve du Diamant
+Obsidian Digger = Trouve de l'Obsidienne
+
+Wood Crafter = Fait des Planches
+Sticks Crafter = Fait des Batons
+Sandstone Crafter = Fait du gré
+Papers Crafter = Fait du Papier
+Books Crafter = Fait des livres
+Bronze Crafter = Fait du Bronze
+Tools Crafter = Outils en Bois
+Tools Crafter Lover = Outils en Roche
+Tools Crafter Pro = Outils en Métal
+Tools Crafter Expert = Outils en Mese
+Tools Crafter Master = Outils en Diamant
+
+Furnace Builder = Pose de Four
+Wood Builder = Pose des Planches
+Wood Builder Lover = Pose des Dalles en Bois
+
+### Custom Descriptions ###
+
 Blocks of Crumbly Nodes = Blocs Friables
-default:papyrus = Tiges de Papyrus
-default:stone_with_coal = Roches avec Charbon
-default:stone = Blocs de Roche
-default:stone_with_iron = Roches avec Fer
-default:stone_with_copper = Roches avec Cuivre
-default:stone_with_gold = Roches avec Or
-default:stone_with_mese = Roches avec Mese
-default:stone_with_diamond = Roches avec Diamants
-default:obsidian = Blocs d'Obsidienne
-default:wood = Planches de Bois
-default:stick = Batons
-default:sandstone = Blocs de Gr�s
-default:paper = Feuilles de Papier
-default:book = Livres
-default:bronze_ingot = Lingots de Bronze
 Wooden Tools = Outils en Bois
 Stone Tools = Outils en Pierre
 Steel or Bronze Tools = Outils en Acier ou en Bronze
 Mese Tools = Outils en Mese
 Diamond Tools = Outils en Diamant
-default:furnace = Four
-default:sword_wood = Epees en Bois
-stairs:slab_wood = Dalles en Bois
-stairs:stair_wood = Escaliers en Bois
-stairs:slab_straw = Dalles en Paille
-stairs:stair_straw = Escaliers en Paille
+
+### Nodes names ###
+
+# Trees
+group:tree = Troncs d'arbres
+default:tree = Troncs d'arbres
+default:acacia_tree = Bois d'Acacia
+default:jungletree = Bois de Jungle
+default:pine_tree = Bois de Pin
+
+# Stick
+group:stick = Batons
+default:stick = Batons
+
+# Wood
+group:wood = Planches de bois
+default:wood = Planches de bois
+default:acacia_wood = Planches d'Acacia
+default:junglewood = Planches de Jungle
+default:pine_wood = Planches de Pin
+stairs:slab_acacia_wood = Dalles en Planches d'Acacia
+stairs:stair_acacia_wood = Escaliers en Planches d'Acacia
+stairs:slab_junglewood = Dalles en Planches de Jungle
+stairs:stair_junglewood = Escaliers en Planches de Jungle
+stairs:slab_pine_wood = Dalles en Planches de Pin
+stairs:stair_pine_wood = Escaliers en Planches de Pin
+stairs:slab_wood = Dalles en Planches de Bois
+stairs:stair_wood = Escaliers en Planches de Bois
+
+# Leaves
+default:acacia_leaves = Feuilles d'Acacia
+default:jungleleaves = Feuilles de Jungle
+default:leaves = Feuilles d'Arbre
+default:pine_needles = Aiguilles de Pin
+
+# Saplings
+default:acacia_sapling = Jeunes arbres d'Acacia
+default:junglesapling = Jeunes arbres de Jungle
+default:pine_sapling = Jeunes arbres de Pin
+default:sapling = Jeunes arbres
+
+# Fruits
+default:apple = Pommes
+
+# Haches
+default:axe_bronze = Haches en Bronze
+default:axe_diamond = Haches en Diamant
+default:axe_mese = Haches en Mese
+default:axe_steel = Haches en Acier
+default:axe_stone = Haches en Pierre
+default:axe_wood = Haches en Bois
+
+# Picks
+default:pick_bronze = Pioches en Bronze
+default:pick_diamond = Pioches en Diamant
+default:pick_mese = Pioches en Mese
+default:pick_steel = Pioches en Acier
+default:pick_stone = Pioches en Pierre
+default:pick_wood = Pioches en Bois
+
+# Shovels
+default:shovel_bronze = Pelles en Bronze
+default:shovel_diamond = Pelles en Diamant
+default:shovel_mese = Pelles en Mese
+default:shovel_steel = Pelles en Acier
+default:shovel_stone = Pelles en Pierre
+default:shovel_wood = Pelles en Bois
+
+# Swords
+default:sword_bronze = Épées en Bronze
+default:sword_diamond = Épées en Diamant
+default:sword_mese = Épées en Mese
+default:sword_steel = Épées en Acier
+default:sword_stone = Épées en Pierre
+default:sword_wood = Épées en Bois
+
+# Books
+default:book = Livres
+default:bookshelf = Bibliothèques
+
+# Bricks
+default:brick = Blocs de Briques
+default:clay_brick = Briques d'Argile
+stairs:slab_brick = Dalles en Briques
+stairs:stair_brick = Escaliers en Briques
+
+# Metal Lumps
+default:copper_lump = Morceaux de Cuivre
+default:gold_lump = Morceaux d'Or
+default:iron_lump = Morceaux de Fer
+
+# Ingots
+default:bronze_ingot = Lingots de Bronze
+default:copper_ingot = Lingots de Cuivre
+default:gold_ingot = Lingots d'Or
+default:steel_ingot = Lingots d'Acier
+
+# Metal Blocks
+default:bronzeblock = Blocs en Bronze
+default:copperblock = Blocs en Cuivre
+default:goldblock = Blocs en Or
+default:steelblock = Blocs en Acier
+stairs:slab_bronzeblock = Dalles en Bronze
+stairs:stair_bronzeblock = Escaliers en Bronze
+stairs:slab_copperblock = Dalles en Cuivre
+stairs:stair_copperblock = Escaliers en Cuivre
+stairs:slab_goldblock = Dalles en Or
+stairs:stair_goldblock = Escaliers en Or
+stairs:slab_steelblock = Dalles en Acier
+stairs:stair_steelblock = Escaliers en Acier
+
+# Cactus
+default:cactus = Troncs de Cactus
+
+# Chests
+default:chest = Coffres
+default:chest_locked = Coffres vérouillés
+
+# Clays
+default:clay = Blocs d'Argile
+default:clay_lump = Morceaux d'Argile
+
+# Coal
+default:coal_lump = Morceaux de Charbon
+default:coalblock = Blocs de Charbon
+
+# Stones
+default:cobble = Pavés de Pierres
+default:desert_cobble = Pavés de Pierres du Desert
+default:desert_stone = Blocs de Roches du Désert
+default:desert_stonebrick = Briques en Roche du Désert
+default:mossycobble = Pavés de Pierres Humides
+default:stone = Blocs de Roches
+default:stone_with_coal = Roches avec Charbon
+default:stone_with_copper = Roches avec Cuivre
+default:stone_with_diamond = Roches avec Diamants
+default:stone_with_gold = Roches avec Or
+default:stone_with_iron = Roches avec Fer
+default:stone_with_mese = Roches avec Mese
+default:stonebrick = Briques en Roche
+stairs:slab_cobble = Dalles en Pavés de Pierres
+stairs:stair_cobble = Escaliers en Pavés de Pierres
+stairs:slab_desert_cobble = Dalles en Pavés de Pierres du Desert
+stairs:stair_desert_cobble = Escaliers en Pavés de Pierres du Desert
+stairs:slab_desert_stone = Dalles en Roche du Desert
+stairs:stair_desert_stone = Escaliers en Roche du Desert
+stairs:slab_desert_stonebrick = Dalles en Briques de Roche du Desert
+stairs:stair_desert_stonebrick = Escaliers en Briques de Roche du Desert
+stairs:slab_stone = Dalles en Roche
+stairs:stair_stone = Escaliers en Roche
+stairs:slab_stonebrick = Dalles en Briques de Roche
+stairs:stair_stonebrick = Escaliers en Briques de Roche
+
+# Obsidian
+default:obsidian = Blocs d'Obsidienne
+default:obsidian_glass = Blocs en Verre d'Obsidienne
+default:obsidian_shard = Échardes d'Obsidienne
+default:obsidianbrick = Briques d'Obsidienne
+stairs:slab_obsidian = Dalles en Obsidienne
+stairs:stair_obsidian = Escaliers en Obsidienne
+stairs:slab_obsidianbrick = Dalles en Briques d'Obsidienne
+stairs:stair_obsidianbrick = Escaliers en Briques d'Obsidienne
+
+# Sands
+default:desert_sand = Blocs de Sable du Désert
+default:sand = Blocs de Sable
+default:sandstone = Blocs de Grés
+default:sandstonebrick = Briques de Grés
+stairs:slab_sandstone = Dalles en Grés
+stairs:stair_sandstone = Escaliers en Grés
+stairs:slab_sandstonebrick = Dalles en Briques de Grés
+stairs:stair_sandstonebrick = Escaliers en Briques de Grés
+
+# Gravel
+default:gravel = Blocs de Gravier
+
+# Precious Stones
+default:diamond = Diamants
+default:diamondblock = Blocs en Diamant
+default:mese = Blocs de Mese
+default:mese_crystal = Crystaux de Mese
+default:mese_crystal_fragment = Fragments de Crystaux de Mese
+
+# Dirts
+default:dirt = Blocs de Terre
+default:dirt_with_dry_grass = Blocs d Terre avec Herbe Sèche
+default:dirt_with_grass = Blocs de Terre avec Herbe
+default:dirt_with_snow = Blocs de Terre avec Neige
+
+# Vegetation
+default:dry_grass_1 = Touffes d'herbes Sèches
+default:dry_shrub = Arbustes Secs
+default:grass_1 = Touffes d'herbes
+default:junglegrass = Touffes d'herbes de Jungle
+default:papyrus = Tiges de Papyrus
+
+# Wooden Objects
+default:fence_wood = Barrières en Bois
+default:ladder = Échelles
+default:sign_wall = Pancartes
+
+# Stone Objects
+default:furnace = Fours
+
+# Verre
+default:glass = Blocs de Verre
+
+# Others
+default:ice = Blocs de Glace
+default:lava_source = Sources de Lave
+default:meselamp = Lampes en Mese
+default:nyancat = Nyancats
+default:nyancat_rainbow = Queues de Nyancats
+default:paper = Feuilles de Papier
+default:rail = Rails
+default:river_water_source = Sources d'eau de Rivière
+default:snow = Flocons de Neige
+default:snowblock = Blocs de Neige
+default:torch = Torches
+default:water_source = Sources d'eau

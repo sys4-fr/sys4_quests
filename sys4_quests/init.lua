@@ -22,9 +22,7 @@ minetest.register_node("sys4_quests:waste",
 sys4_quests = {}
 
 local lastQuestIndex = 0
-local level = 0.1
-local bookMode = false
-local craftMode = true
+local level = 1
 
 function sys4_quests.initQuests(mod, intllib)
    if not intllib or intllib == nil then
@@ -88,11 +86,11 @@ function sys4_quests.formatDescription(quest, level, intllib)
    
    local str = S(questType).." "..targetCount.." "
    if customDesc ~= nil then
-      str = str..intllib(customDesc)
+      str = str..intllib(customDesc).."."
    else
       local itemTarget = quest[4][1]
       local item_intllib = sys4_quests.intllib_by_item(itemTarget)
-      str = str..item_intllib(itemTarget)
+      str = str..item_intllib(itemTarget).."."
    end
 
    -- Print Unlocked Items
@@ -310,36 +308,22 @@ local function giveBook(playerName, quest)
    end
 end
 
-local playerList
-local function isNewPlayer(playern)
-   if playerList ~= nil then
-      for _, player in ipairs(playerList) do
-	 if player.name == playern and player.isNew then
-	    player.isNew = false
-	    return true
-	 end
-      end
-   end
-
-   return false
-end
-
--- local isNewPlayer = false
+local playerList = {}
 
 minetest.register_on_newplayer(
    function(player)
-      if not playerList or playerList == nil then
-	 playerList = {}
-      end
-
       local playern = player:get_player_name()
-      table.insert(playerList, {name = playern, isNew = true})
+      playerList[playern] = {name = playern, isNew = true, craftMode = true, bookMode = false}
    end)
 
 minetest.register_on_joinplayer(
    function(player)
       local playern = player:get_player_name()
-      if (isNewPlayer(playern)) then
+      if not playerList[playern] or playerList[playern] == nil then
+	 playerList[playern] = {name = playern, isNew = true, craftMode = true, bookMode = false}
+      end
+
+      if (playerList[playern].isNew) then
 	 for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 	    for _, registeredQuest in ipairs(registeredQuests.quests) do
 	       if registeredQuest[7] == nil then
@@ -362,7 +346,7 @@ minetest.register_on_dignode(
 	    if type == "dig" and isNodesEquivalent(registeredQuest[4], oldnode.name) then
 	       if quests.update_quest(playern, "sys4_quests:"..questName, 1) then
 		  minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
-		  if bookMode then
+		  if playerList[playern].bookMode then
 		     giveBook(playern, questName)
 		  end
 	       end
@@ -406,7 +390,7 @@ minetest.register_on_craft(
 	       
 	       if quests.update_quest(playern, "sys4_quests:"..questName, itemstackCount) then
 		  minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
-		  if bookMode then
+		  if playerList[playern].bookMode then
 		     giveBook(playern, questName)
 		  end
 	       end
@@ -417,7 +401,7 @@ minetest.register_on_craft(
       
       if wasteItem == nil then
 	 return wasteItem
-      elseif not craftMode then
+      elseif not playerList[playern].craftMode then
 	 return nil
       else
 	 return ItemStack(wasteItem)
@@ -435,7 +419,7 @@ local function register_on_placenode(pos, node, placer)
 	 if type == "place" and isNodesEquivalent(registeredQuest[4], node.name) then
 	    if quests.update_quest(playern, "sys4_quests:"..questName, 1) then
 	       minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
-	       if bookMode then
+	       if playerList[playern].bookMode then
 		  giveBook(playern, questName)
 	       end
 	    end
@@ -476,10 +460,10 @@ minetest.register_chatcommand("craftmode",
    description = "Enable or not locked crafts.",
    func = function(name, param)
       if param == "on" then
-	 craftMode = true
+	 playerList[name].craftMode = true
 	 minetest.chat_send_player(name, "Craft Mode Enabled.")
       else
-	 craftMode = false
+	 playerList[name].craftMode = false
 	 minetest.chat_send_player(name, "Craft Mode Disabled.")
       end
    end
@@ -491,10 +475,10 @@ minetest.register_chatcommand("bookmode",
    description = "Enable or not books that describe unlocked craft recipes.",
    func = function(name, param)
       if param == "on" then
-	 bookMode = true
+	 playerList[name].bookMode = true
 	 minetest.chat_send_player(name, "Book Mode Enabled.")
       else
-	 bookMode = false
+	 playerList[name].bookMode = false
 	 minetest.chat_send_player(name, "Book Mode Disabled.")
       end
    end

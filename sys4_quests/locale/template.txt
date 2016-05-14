@@ -1,3 +1,4 @@
 dig =
 place =
 craft =
+The end of the Quest Unlock this Items : = 
