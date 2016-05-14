@@ -22,7 +22,7 @@ minetest.register_node("sys4_quests:waste",
 sys4_quests = {}
 
 local lastQuestIndex = 0
-local level = 1
+local level = 0.1
 
 function sys4_quests.initQuests(mod, intllib)
    if not intllib or intllib == nil then
@@ -146,11 +146,63 @@ function sys4_quests.updateQuest(questName, targetNodes, items)
    end
 end
 
+local function isQuestCompleted(quest, playern)
+   if quests.successfull_quests[playern] ~= nil
+      and quests.successfull_quests[playern]["sys4_quests:"..quest ] ~= nil
+   then
+      return true
+   end
+
+   return false
+end
+
+local function isParentQuestsCompleted(parentQuests_arg, quest, playern)
+   local questCompleted = false
+   local parentQuests = {}
+
+   if parentQuests_arg and parentQuests_arg ~= nil then
+      if type(parentQuests_arg) == "string" then
+	 table.insert(parentQuests, parentQuests_arg)
+      else
+	 parentQuests = parentQuests_arg
+      end
+      
+      for _, parentQuest in ipairs(parentQuests) do
+	 if parentQuest == quest then
+	    questCompleted = true
+	 end
+      end
+   end
+
+   if questCompleted and #parentQuests > 1 then
+      for _, parentQuest in ipairs(parentQuests) do
+	 if parentQuest ~= quest and not isQuestCompleted(parentQuest, playern) then
+	    print("ParentQuests Completed : false")
+	    return false
+	 end
+      end
+   end
+
+   print("ParentQuests Completed -end function- : "..dump(questCompleted))
+   return questCompleted
+end
+
 function sys4_quests.hasDependencies(questName)
    for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
       for _, quest in ipairs(registeredQuests.quests) do
-	 if quest[7] and quest[7] ~= nil and quest[7] == questName then
+	 print("quest : "..dump(quest[1]).." parentQuests : "..dump(quest[7]).." questName : "..questName)
+	 if quest[7] and quest[7] ~= nil and type(quest[7]) == "string" and quest[7] == questName then
+	    print("dependency OK : String")
 	    return true
+	 elseif type(quest[7]) == "table" then
+	    for __, quest_1 in ipairs(quest[7]) do
+	       if quest_1 == questName then
+		  print("dependency OK : Table")
+		  return true
+	       end
+	    end
+	 else
+	    print("Pas de dépendances trouvées")
 	 end
       end
    end
@@ -159,15 +211,17 @@ function sys4_quests.hasDependencies(questName)
 end
 
 function sys4_quests.nextQuest(playername, questname)
+   print("Entering Next Quest for quest"..questname)
    if questname ~= "" then
       local quest = string.split(questname, ":")[2]
       if quest and quest ~= nil and quest ~= "" and sys4_quests.hasDependencies(quest) then
+	 print("NextQuest : OK")
 	 local nextquest = nil
 	 for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 	    for _, registeredQuest in ipairs(registeredQuests.quests) do
-	       local parentQuest = registeredQuest[7]
+	       local parentQuests = registeredQuest[7]
 
-	       if parentQuest and parentQuest ~= nil and parentQuest == quest then
+	       if isParentQuestsCompleted(parentQuests, quest, playername) then
 		  nextquest = registeredQuest.index
 		  sys4_quests.setCurrentQuest(playername, nextquest)
 		  minetest.after(1, function() quests.start_quest(playername, "sys4_quests:"..registeredQuest[1]) end)
@@ -320,7 +374,7 @@ minetest.register_on_joinplayer(
    function(player)
       local playern = player:get_player_name()
       if not playerList[playern] or playerList[playern] == nil then
-	 playerList[playern] = {name = playern, isNew = true, craftMode = true, bookMode = false}
+	 playerList[playern] = {name = playern, isNew = false, craftMode = true, bookMode = false}
       end
 
       if (playerList[playern].isNew) then
@@ -370,10 +424,11 @@ minetest.register_on_craft(
 	    local items = registeredQuest[6]
 
 	    for __, item in ipairs(items) do
- 
+	       
 	       if item == itemstackName
 		  and quests.successfull_quests[playern] ~= nil
-	       and quests.successfull_quests[playern]["sys4_quests:"..questName ] ~= nil then
+		  and quests.successfull_quests[playern]["sys4_quests:"..questName ] ~= nil
+	       then
 		  wasteItem = nil
 	       end
 	    end

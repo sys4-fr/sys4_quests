@@ -108,7 +108,7 @@ ins(quests, {
 
 -- book_crafter
 ins(quests, {
-       'book_crafter', "Books Crafter", nil, {'default:book'}, 100, {'default:bookshelf'}, 'paper_crafter', type = t
+       'book_crafter', "Books Crafter", nil, {'default:book'}, 100, {'default:bookshelf'}, {'paper_crafter', 'wood_crafter'}, type = t
 	    })
 
 -- bronze_crafter
