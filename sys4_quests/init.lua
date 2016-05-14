@@ -22,7 +22,7 @@ minetest.register_node("sys4_quests:waste",
 sys4_quests = {}
 
 local lastQuestIndex = 0
-local level = 0.1
+local level = 1
 
 function sys4_quests.initQuests(mod, intllib)
    if not intllib or intllib == nil then
@@ -177,32 +177,25 @@ local function isParentQuestsCompleted(parentQuests_arg, quest, playern)
    if questCompleted and #parentQuests > 1 then
       for _, parentQuest in ipairs(parentQuests) do
 	 if parentQuest ~= quest and not isQuestCompleted(parentQuest, playern) then
-	    print("ParentQuests Completed : false")
 	    return false
 	 end
       end
    end
 
-   print("ParentQuests Completed -end function- : "..dump(questCompleted))
    return questCompleted
 end
 
 function sys4_quests.hasDependencies(questName)
    for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
       for _, quest in ipairs(registeredQuests.quests) do
-	 print("quest : "..dump(quest[1]).." parentQuests : "..dump(quest[7]).." questName : "..questName)
 	 if quest[7] and quest[7] ~= nil and type(quest[7]) == "string" and quest[7] == questName then
-	    print("dependency OK : String")
 	    return true
 	 elseif type(quest[7]) == "table" then
 	    for __, quest_1 in ipairs(quest[7]) do
 	       if quest_1 == questName then
-		  print("dependency OK : Table")
 		  return true
 	       end
 	    end
-	 else
-	    print("Pas de dépendances trouvées")
 	 end
       end
    end
@@ -211,11 +204,9 @@ function sys4_quests.hasDependencies(questName)
 end
 
 function sys4_quests.nextQuest(playername, questname)
-   print("Entering Next Quest for quest"..questname)
    if questname ~= "" then
       local quest = string.split(questname, ":")[2]
       if quest and quest ~= nil and quest ~= "" and sys4_quests.hasDependencies(quest) then
-	 print("NextQuest : OK")
 	 local nextquest = nil
 	 for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 	    for _, registeredQuest in ipairs(registeredQuests.quests) do
@@ -422,7 +413,6 @@ minetest.register_on_craft(
 	    local questType = registeredQuest.type
 	    local questName = registeredQuest[1]
 	    local items = registeredQuest[6]
-
 	    for __, item in ipairs(items) do
 	       
 	       if item == itemstackName
@@ -449,7 +439,7 @@ minetest.register_on_craft(
 		     giveBook(playern, questName)
 		  end
 	       end
-	       return nil
+	       --return nil
 	    end
 	 end
       end
