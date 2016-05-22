@@ -54,7 +54,7 @@ function sys4_quests.registerQuests()
 	 --print("Autoaccept next quest : "..dump(auto))
 
 	 local maxlevel = quest[5] * level
-	 if quest.level and not quest.level then
+	 if quest.custom_level then
 	    maxlevel = quest[5]
 	 end
 	 

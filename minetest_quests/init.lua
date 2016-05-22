@@ -143,7 +143,7 @@ ins(quests, {
 
 -- furnace_crafter
 ins(quests, {
-       'furnace_crafter', "Furnace Crafter", nil, {"default:furnace"}, 1, {"default:stonebrick", "default:desert_stonebrick", "stairs:slab_stonebrick", "stairs:slab_desert_stonebrick", "stairs:stair_stonebrick", "stairs:stair_desert_stonebrick", "stairs:slab_stone", "stairs:slab_desert_stone", "stairs:stair_stone", "stairs:stair_desert_stone"}, "stone_digger_master", type = t, level = false
+       'furnace_crafter', "Furnace Crafter", nil, {"default:furnace"}, 1, {"default:stonebrick", "default:desert_stonebrick", "stairs:slab_stonebrick", "stairs:slab_desert_stonebrick", "stairs:stair_stonebrick", "stairs:stair_desert_stonebrick", "stairs:slab_stone", "stairs:slab_desert_stone", "stairs:stair_stone", "stairs:stair_desert_stone"}, "stone_digger_master", type = t, custom_level = true
 	    })
 
 -- brick_crafter
