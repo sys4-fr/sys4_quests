@@ -30,57 +30,52 @@ local t = "dig"
 
 -- tree_digger
 ins(quests, {
-       'tree_digger', "Tree Digger", nil, {"default:tree", "default:jungletree", "default:acacia_tree", "default:pine_tree"}, 100, {"default:wood", "default:junglewood", "default:acacia_wood", "default:pine_wood"}, nil, type = t
-	    })
-
--- crumbly_nodes_digger
-ins(quests, {
-       'crumbly_nodes_digger', 'Crumbly Nodes Digger', "Blocks of Crumbly Nodes", {'default:gravel', 'default:dirt', 'default:dirt_with_grass', 'default:dirt_with_dry_grass', 'default:dirt_with_snow', 'default:clay', 'default:desert_sand', 'default:sand', 'default:sandstone', 'default:snowblock', 'default:snow'}, 100, {"default:clay", "default:clay_lump", "default:sand", "default:sandstone", "default:snowblock", "default:snow"}, nil, type = t
+       'tree_digger', "Tree Digger", nil, {"default:tree", "default:jungletree", "default:acacia_tree", "default:pine_tree", "default:aspen_tree"}, 1, {"default:wood", "default:junglewood", "default:acacia_wood", "default:pine_wood", "default:aspen_wood"}, nil, type = t
 	    })
 
 -- papyrus_digger
 ins(quests, {
-       'papyrus_digger', 'Papyrus Digger', nil, {'default:papyrus'}, 100, {'default:paper'}, nil, type = t
+       'papyrus_digger', "Papyrus Digger", nil, {"default:papyrus"}, 3, {"default:paper"}, nil, type = t
+	    })
+
+-- clay_digger
+ins(quests, {
+       'clay_digger', "Clay Crafter", nil, {"default:clay"}, 1, {"default:clay", "default:brick"}, nil, type = t
 	    })
 
 -- coal_digger
 ins(quests, {
-       'coal_digger', 'Coal Digger', nil, {'default:stone_with_coal'}, 100, {"default:torch", "default:coal_lump", "default:coalblock"}, 'tools_crafter', type = t
+       'coal_digger', "Coal Digger", nil, {"default:stone_with_coal"}, 1, {"default:torch"}, "more_tools", type = t
+	    })
+
+-- coal_digger_lover
+ins(quests, {
+       'coal_digger_lover', "Coal Digger Lover", nil, {"default:stone_with_coal"}, 8, {"default:coalblock", "default:coal_lump"}, "coal_digger", type = t
 	    })
 
 -- stone_digger
 ins(quests, {
-       'stone_digger', "Stone Digger", nil, {'default:stone', 'default:desert_stone', 'default:cobble', 'default:desert_cobble', 'default:mossycobble'}, 100, {'default:sword_stone', 'default:axe_stone', 'default:shovel_stone', 'default:furnace'}, 'tools_crafter', type = t
+       'stone_digger', "Stone Digger", nil, {"default:stone", "default:desert_stone", "default:cobble", "default:desert_cobble", "default:mossycobble", "default:stonebrick", "default:desert_stonebrick"}, 1, {"default:shovel_stone"}, "more_tools", type = t
 	    })
 
--- iron_digger
+-- stone_digger_lover
 ins(quests, {
-       'iron_digger', 'Iron Digger', nil, {'default:stone_with_iron'}, 100, { 'default:steel_ingot', 'default:steelblock', 'default:sword_steel', 'default:axe_steel', 'default:shovel_steel', 'default:chest_locked', 'default:rail'}, 'tools_crafter_lover', type = t
+       'stone_digger_lover', "Stone Digger Lover", nil, {"default:stone", "default:desert_stone", "default:cobble", "default:desert_cobble", "default:mossycobble", "default:stonebrick", "default:desert_stonebrick"}, 1, {"default:sword_stone"}, "stone_digger", type = t
 	    })
 
--- copper_digger
+-- stone_digger_pro
 ins(quests, {
-       'copper_digger', 'Copper Digger', nil, {'default:stone_with_copper'}, 100, {'default:copper_ingot', 'default:copperblock', 'default:bronze_ingot'}, 'tools_crafter_lover', type = t
+       'stone_digger_pro', "Stone Digger Pro", nil, {"default:stone", "default:desert_stone", "default:cobble", "default:desert_cobble", "default:mossycobble", "default:stonebrick", "default:desert_stonebrick"}, 1, {"default:pick_stone", "default:axe_stone", "stairs:slab_cobble", "stairs:slab_desert_cobble"}, "stone_digger_lover", type = t
 	    })
 
--- gold_digger
+-- stone_digger_expert
 ins(quests, {
-       'gold_digger', 'Gold Digger', nil, {'default:stone_with_gold'}, 100, {'default:gold_ingot', 'default:goldblock'}, 'tools_crafter_lover', type = t
+       'stone_digger_expert', "Stone Digger Expert", nil, {"default:stone", "default:desert_stone", "default:cobble", "default:desert_cobble", "default:mossycobble", "default:stonebrick", "default:desert_stonebrick"}, 3, {"stairs:stair_cobble", "stairs:stair_desert_cobble"}, "stone_digger_pro", type = t
 	    })
 
--- mese_digger
+-- stone_digger_master
 ins(quests, {
-       'mese_digger', 'Mese Digger', nil, {'default:stone_with_mese', 'default:mese'}, 100, {'default:mese', 'default:mese_crystal', 'default:mese_crystal_fragment', 'default:sword_mese', 'default:axe_mese', 'default:shovel_mese', 'default:meselamp'}, 'tools_crafter_pro', type = t
-	    })
-
--- diamond_digger
-ins(quests, {
-       'diamond_digger', 'Diamond Digger', nil, {'default:stone_with_diamond'}, 100, {'default:diamond', 'default:diamondblock', 'default:sword_diamond', 'default:axe_diamond', 'default:shovel_diamond'}, 'tools_crafter_pro', type = t
-	    })
-
--- obsidian_digger
-ins(quests, {
-       'obsidian_digger', 'Obsidian Digger', nil, {'default:obsidian'}, 100, {'default:obsidian', 'default:obsidian_shard', 'default:obsidianbrick'}, "tools_crafter_pro", type = t
+       'stone_digger_master', "Stone Digger Master", nil, {"default:stone", "default:desert_stone", "default:cobble", "default:desert_cobble", "default:mossycobble", "default:stonebrick", "default:desert_stonebrick"}, 2, {"default:furnace"}, "stone_digger_expert", type = t
 	    })
 
 ----- Quests with type="craft" -----
@@ -88,358 +83,86 @@ t = "craft"
 
 -- wood_crafter
 ins(quests, {
-       'wood_crafter', "Wood Crafter", nil, {"default:wood", "default:junglewood", "default:acacia_wood", "default:pine_wood"}, 100, {"default:stick", "default:chest", "default:sign_wall", "default:sword_wood", "default:axe_wood", "default:shovel_wood"}, "tree_digger", type = t
+       'wood_crafter', "Wood Crafter", nil, {"default:wood", "default:junglewood", "default:acacia_wood", "default:pine_wood", "default:aspen_wood"}, 1, {"default:stick"}, "tree_digger", type = t
+	    })
+
+-- wood_crafter_lover
+ins(quests, {
+       'wood_crafter_lover', "Wood Crafter Lover", nil, {"default:wood", "default:junglewood", "default:acacia_wood", "default:pine_wood", "default:aspen_wood"}, 1, {"default:sword_wood"}, "wood_crafter", type = t
+	    })
+
+-- wood_crafter_pro
+ins(quests, {
+       'wood_crafter_pro', "Wood Crafter Pro", nil, {"default:wood", "default:junglewood", "default:acacia_wood", "default:pine_wood", "default:aspen_wood"}, 1, {"stairs:slab_wood", "stairs:slab_junglewood", "stairs:slab_pine_wood", "stairs:slab_acacia_wood", "stairs:slab_aspen_wood"}, "wood_crafter_lover", type = t
+	    })
+
+-- wood_crafter_expert
+ins(quests, {
+       'wood_crafter_expert', "Wood Crafter Expert", nil, {"default:wood", "default:junglewood", "default:acacia_wood", "default:pine_wood", "default:aspen_wood"}, 3, {"default:sign_wall_wood", "stairs:stair_wood", "stairs:stair_junglewood", "stairs:stair_pine_wood", "stairs:stair_acacia_wood", "stairs:stair_aspen_wood"}, "wood_crafter_pro", type = t
+	    })
+
+-- wood_crafter_master
+ins(quests, {
+       'wood_crafter_master', "Wood Crafter Master", nil, {"default:wood", "default:junglewood", "default:acacia_wood", "default:pine_wood", "default:aspen_wood"}, 2, {"default:chest"}, "wood_crafter_expert", type = t
 	    })
 
 -- sticks_crafter
 ins(quests, {
-       'sticks_crafter', "Sticks Crafter", nil, {"default:stick"}, 100, {'default:ladder', 'default:fence_wood'}, 'wood_crafter', type = t
+       'sticks_crafter', "Sticks Crafter", nil, {"default:stick"}, 2, {"default:shovel_wood"}, "wood_crafter", type = t
 	    })
 
--- sandstone_crafter
+-- sticks_crafter_lover
 ins(quests, {
-       'sandstone_crafter', "Sandstone Crafter", nil, {'default:sandstone'}, 100, {'default:sandstonebrick'}, 'crumbly_nodes_digger', type = t
+       'sticks_crafter_lover', "Sticks Crafter Lover", nil, {"default:stick"}, 5, {"default:ladder_wood"}, "sticks_crafter", type = t
+	    })
+
+-- more_tools
+ins(quests, {
+       'more_tools', "More Tools", nil, {"default:wood", "default:junglewood", "default:acacia_wood", "default:pine_wood", "default:aspen_wood"}, 1, {"default:axe_wood", "default:pick_wood"}, {"wood_crafter_lover", "sticks_crafter"}, type = t
 	    })
 
 -- paper_crafter
 ins(quests, {
-       'paper_crafter', "Papers Crafter", nil, {'default:paper'}, 100, {'default:book'}, 'papyrus_digger', type = t
+       'paper_crafter', "Paper Crafter", nil, {"default:paper"}, 3, {"default:book"}, "papyrus_digger", type = t
 	    })
 
 -- book_crafter
 ins(quests, {
-       'book_crafter', "Books Crafter", nil, {'default:book'}, 100, {'default:bookshelf'}, {'paper_crafter', 'wood_crafter'}, type = t
+       'book_crafter', "Book Crafter", nil, {"default:book"}, 3, {"default:bookshelf"}, {"wood_crafter_expert", "paper_crafter"}, type = t
 	    })
 
--- bronze_crafter
+-- clay_crafter
 ins(quests, {
-       'bronze_crafter', "Bronze Crafter", nil, {'default:bronze_ingot'}, 100, {'default:sword_bronze', 'default:axe_bronze', 'default:shovel_bronze'}, 'copper_digger', type = t
+       'clay_crafter', "Clay Crafter", nil, {"default:clay"}, 1, {"default:clay_lump"}, "clay_digger", type = t
 	    })
 
--- tools_crafter
+-- wood_architect
 ins(quests, {
-       'tools_crafter', "Tools Crafter", "Wooden Tools", {'default:sword_wood', 'default:axe_wood', 'default:shovel_wood'}, 20, {'default:pick_wood'},  'wood_crafter', type = t
+       'wood_architect', "Wood Architect", nil, {"default:wood", "default:junglewood", "default:acacia_wood", "default:pine_wood", "default:aspen_wood"}, 1, {"default:fence_wood", "default:fence_junglewood", "default:fence_pine_wood", "default:fence_acacia_wood", "default:fence_aspen_wood"}, {"sticks_crafter", "wood_crafter_pro"}, type = t
 	    })
 
--- tools_crafter_lover
+-- furnace_crafter
 ins(quests, {
-       'tools_crafter_lover', "Tools Crafter Lover", "Stone Tools", {'default:sword_stone', 'default:axe_stone', 'default:shovel_stone'}, 15, {'default:pick_stone'},  'stone_digger', type = t
+       'furnace_crafter', "Furnace Crafter", nil, {"default:furnace"}, 1, {"default:stonebrick", "default:desert_stonebrick", "stairs:slab_stonebrick", "stairs:slab_desert_stonebrick", "stairs:stair_stonebrick", "stairs:stair_desert_stonebrick", "stairs:slab_stone", "stairs:slab_desert_stone", "stairs:stair_stone", "stairs:stair_desert_stone"}, "stone_digger_master", type = t, level = false
 	    })
 
--- tools_crafter_pro
+-- brick_crafter
 ins(quests, {
-       'tools_crafter_pro', "Tools Crafter Pro", "Steel or Bronze Tools", {'default:sword_steel', 'default:axe_steel', 'default:shovel_steel', 'default:sword_bronze', 'default:axe_bronze', 'default:shovel_bronze'}, 10, {'default:pick_steel', 'default:pick_bronze'},  'iron_digger', type = t
+       'brick_crafter', "Bricks Crafter", nil, {"default:brick"}, 1, {"default:clay_brick"}, {"clay_digger", "furnace_crafter"}, type = t
 	    })
 
--- tools_crafter_expert
-ins(quests, {
-       'tools_crafter_expert', "Tools Crafter Expert", "Mese Tools", {'default:sword_mese', 'default:axe_mese', 'default:shovel_mese'}, 5, {'default:pick_mese'},  'mese_digger', type = t
-	    })
-
--- tools_crafter_master
-ins(quests, {
-       'tools_crafter_master', "Tools Crafter Master", "Diamond Tools", {'default:sword_diamond', 'default:axe_diamond', 'default:shovel_diamond'}, 5, {'default:pick_diamond'}, 'diamond_digger', type = t
-	    })
-
------ Quests with type="place" -----
-t = "place"
-
--- furnace_builder
-ins(quests, {
-       'furnace_builder', "Furnace Builder", nil, {'default:furnace'}, 2, {'default:clay_brick', 'default:brick', 'default:stonebrick', 'default:desert_stonebrick'}, 'stone_digger', type = t
-	    })
-
--- wood_builder
-ins(quests, {
-       'wood_builder', "Wood Builder", "Wooden Planks", {'default:wood', 'default:junglewood', 'default:acacia_wood', 'default:pine_wood'}, 100, {'stairs:slab_wood', 'stairs:slab_junglewood', 'stairs:slab_acacia_wood', 'stairs:slab_pine_wood'}, 'tree_digger', type = t
-	    })
-
--- wood_builder_lover
-ins(quests, {
-       'wood_builder_lover', "Wood Builder Lover", "stairs:slab_wood", {'stairs:slab_wood', 'stairs:slab_junglewood', 'stairs:slab_acacia_wood', 'stairs:slab_pine_wood'}, 100, {'stairs:stair_wood', 'stairs:stair_junglewood', 'stairs:stair_acacia_wood', 'stairs:stair_pine_wood'}, 'wood_builder', type = t
-	    })
-
------------ Register quests ----------
-sys4_quests.registerQuests(mod)
-
-
----------- Quests for farming mod ----------
 mod = "farming"
-if minetest.get_modpath(mod) then
-   quests = sys4_quests.initQuests(mod, S)
-   
-   -- Type Dig --
-   t = "dig"
-   
-   -- wood_crafter UP
-   up('wood_crafter', nil, {'farming:hoe_wood'})
-   
-   -- stone_digger UP
-   up('stone_digger', nil, {'farming:hoe_stone'})
-   
-   -- iron_digger UP
-   up('iron_digger', nil, {'farming:hoe_steel'})
-   
-   -- mese_digger UP
-   up('mese_digger', nil, {'farming:hoe_mese'})
-   
-   -- diamond_digger UP
-   up('diamond_digger', nil, {'farming:hoe_diamond'})
-   
-   -- wheat_digger
-   ins(quests, {
-	  'wheat_digger', "Wheat Digger", nil, {'farming:wheat_1', 'farming:wheat_2', 'farming:wheat_3', 'farming:wheat_4', 'farming:wheat_5', 'farming:wheat_6', 'farming:wheat_7', 'farming:wheat_8'}, 100, {'farming:flour'}, 'wood_crafter', type = t
-	       })
-   
-   -- Type Craft --
-   t = "craft"
-   
-   -- bronze_crafter UP
-   up('bronze_crafter', nil, {'farming:hoe_bronze'})
+quests = sys4_quests.initQuests(mod, S)
 
-   -- tools_crafter UP
-   up('tools_crafter', {'farming:hoe_wood'}, nil)
+t = "craft"
 
-   -- tools_crafter_lover UP
-   up('tools_crafter_lover', {'farming:hoe_stone'}, nil)
+-- farming_tools
+ins(quests, {
+       'farming_tools', "Farming Tools", nil, {"default:wood", "default:junglewood", "default:acacia_wood", "default:pine_wood", "default:aspen_wood"}, 1, {"farming:hoe_wood"}, {"wood_crafter","sticks_crafter"}, type = t
+	    })
 
-   -- tools_crafter_pro UP
-   up('tools_crafter_pro', {'farming:hoe_steel', 'farming:hoe_bronze'}, nil)
+sys4_quests.registerQuests()
 
-   -- tools_crafter_expert UP
-   up('tools_crafter_expert', {'farming:hoe_mese'}, nil)
+-- updates
 
-   -- tools_crafter_master UP
-   up('tools_crafter_master', {'farming:hoe_diamond'}, nil)
-   
-   -- flour_crafter
-   ins(quests, {
-	  'flour_crafter', "Flour Crafter", nil, {'farming:flour'}, 100, {'farming:wheat', 'farming:straw'}, 'wheat_digger', type = t
-	       })
-   
-   -- Type Place
-   t = "place"
-
-   -- straw_builder
-   ins(quests, {
-	  'straw_builder', "Straw Builder", nil, {'farming:straw'}, 100, {'stairs:slab_straw'}, 'flour_crafter', type = t
-	       })
-
-   -- straw_builder_lover
-   ins(quests, {
-	  'straw_builder_lover', "Straw Builder Lover", nil, {'stairs:slab_straw'}, 100, {'stairs:stair_straw'}, 'straw_builder', type = t
-	       })
-
-   sys4_quests.registerQuests(mod)
-end
-
----------- Quests for wool mod ----------
-mod = "wool"
-if minetest.get_modpath(mod)
-and minetest.get_modpath("farming") then
-   quests = sys4_quests.initQuests(mod, S)
-   
-   -- Type Dig --
-   t = "dig"
-
-   -- Cotton_digger
-   ins(quests, {
-	  'cotton_digger', "Cotton Digger", nil, {'farming:cotton_1', 'farming:cotton_2', 'farming:cotton_3', 'farming:cotton_4', 'farming:cotton_5', 'farming:cotton_6', 'farming:cotton_7', 'farming:cotton_8', }, 100, {'wool:white'}, 'wood_crafter', type = t
-       })
-
-   -- Type Craft --
-   t = "craft"
-
-   -- wool_crafter
-   ins(quests, {
-	  'wool_crafter', "Wool Crafter", nil, {'wool:white'}, 100, {'wool:black', 'wool:blue', 'wool:brown', 'wool:cyan', 'wool:dark_green', 'wool:dark_grey', 'wool:green', 'wool:grey', 'wool:magenta', 'wool:orange', 'wool:pink', 'wool:red', 'wool:violet', 'wool:yellow'}, 'cotton_digger', type = t
-	       })
-
-   sys4_quests.registerQuests(mod)
-end
-
----------- Quests for dye mod ----------
-mod = "dye"
-if minetest.get_modpath(mod) then
-   quests = sys4_quests.initQuests(mod, S)
-   
-   -- Type Dig --
-   t = "dig"
-
-   -- coal_digger UP
-   up('coal_digger', nil, {'dye:black'})
-
-   if minetest.get_modpath("flowers") then
-
-      -- flower_digger
-      ins(quests, {
-	     'flower_digger', "Flower Digger", "Flowers", {'flowers:dandelion_white', 'flowers:dandelion_yellow', 'flowers:geranium', 'flowers:rose', 'flowers:tulip', 'flowers:viola'}, 100, {'dye:blue', 'dye:brown', 'dye:cyan', 'dye:dark_green', 'dye:dark_grey', 'dye:green', 'dye:grey', 'dye:magenta', 'dye:orange', 'dye:pink', 'dye:red', 'dye:violet', 'dye:yellow', 'dye:white'}, nil, type = t
-		  })
-   end
-
-   sys4_quests.registerQuests(mod)
-end
-
----------- Quests for beds mod ----------
-mod = "beds"
-if minetest.get_modpath(mod)
-and minetest.get_modpath("wool") then
-   quests = sys4_quests.initQuests(mod)
-   
-   -- Type Craft --
-   t = "craft"
-
-   -- wool_crafter_lover
-   ins(quests, {
-	  'wool_crafter_lover', "Wool Crafter Lover", "Colored Wools", {'wool:black', 'wool:blue', 'wool:brown', 'wool:cyan', 'wool:dark_green', 'wool:dark_grey', 'wool:green', 'wool:grey', 'wool:magenta', 'wool:orange', 'wool:pink', 'wool:red', 'wool:violet', 'wool:yellow'}, 100, {'beds:bed_bottom', 'beds:fancy_bed_bottom'}, 'wool_crafter', type = t
-	       })
-
-   sys4_quests.registerQuests(mod)
-end
-
----------- Quests for boats mod ----------
-mod = "boats"
-if minetest.get_modpath(mod) then
-   quests = sys4_quests.initQuests(mod, S)
-
-   -- Type Craft --
-   t = "craft"
-
-   -- wood_crafter UP
-   up('wood_crafter', nil, {'boats:boat'})
-
-   -- sys4_quests.registerQuests(mod)
-   -- Not needeed here, because there is no quest insertion
-end
-
----------- Quests for bucket mod ----------
-mod = "bucket"
-if minetest.get_modpath(mod) then
-   quests = sys4_quests.initQuests(mod, S)
-
-   -- Type Place --
-   t = "place"
-
-   -- furnace_builder UP
-   up('furnace_builder', nil, {'bucket:bucket_empty'})
-
-end
-
----------- Quests for doors mod ----------
-mod = "doors"
-if minetest.get_modpath(mod) then
-   quests = sys4_quests.initQuests(mod)
-
-   -- Type Craft --
-   t = "craft"
-
-   -- wood_crafter UP
-   up('wood_crafter', nil, {'doors:door_wood', 'doors:trapdoor'})
-
-   -- obsidian_shard_crafter
-   ins(quests, {
-	  'obsidian_shard_crafter', "Obsidian shard Crafter", nil, {'default:obsidian_shard'}, 100, {'doors:door_obsidian_glass'}, 'obsidian_digger', type = t
-	       })
-
-   -- Type Dig --
-   t = "dig"
-   
-   -- iron_digger UP
-   up('iron_digger', nil, {'doors:door_steel'})
-
-   -- Type Place --
-   t = "place"
-
-   -- glass_builder
-   ins(quests, {
-	  'glass_builder', "Glass Builder", nil, {'default:glass'}, 100, {'doors:door_glass'}, 'furnace_builder', type = t
-	       })
-
-   sys4_quests.registerQuests(mod)
-end
-
----------- Quests for screwdriver mod ----------
-mod = "screwdriver"
-if minetest.get_modpath(mod) then
-   quests = sys4_quests.initQuests(mod, S)
-
-   -- Type Place --
-   t = "place"
-
-   -- furnace_builder
-   up('furnace_builder', nil, {'screwdriver:screwdriver'})
-end
-
----------- Quests for tnt mod ----------
-mod = "tnt"
-if minetest.get_modpath(mod) then
-   quests = sys4_quests.initQuests(mod, S)
-
-   -- Type Dig --
-   t = "dig"
-   
-   -- gravel_digger
-   ins(quests, {
-	  'gravel_digger', "Gravel Digger", nil, {'default:gravel'}, 100, {'tnt:gunpowder'}, nil, type = t
-	       })
-
-   -- Type Craft --
-   t = "craft"
-
-   -- gunpowder_crafter
-   ins(quests, {
-	  'gunpowder_crafter', "Gunpowder Crafter", nil,{'tnt:gunpowder'}, 10, {'tnt:tnt'}, 'gravel_digger', type = t
-	       })
-
-   sys4_quests.registerQuests(mod)
-end
-
----------- Quests for vessels mod ----------
-mod = "vessels"
-if minetest.get_modpath(mod) then
-   quests = sys4_quests.initQuests(mod, S)
-
-   -- Type Place --
-   t = "place"
-
-   -- furnace_builder UP
-   up('furnace_builder', nil, {'vessels:steel_bottle', 'vessels:drinking_glass', 'vessels:glass_bottle', 'vessels:glass_fragments'})
-
-   -- Type Craft --
-   t = "craft"
-
-   -- vessels_crafter
-   ins(quests, {
-	  'vessels_crafter', "Vessels Crafter", "Vessels Items", {'vessels:steel_bottle', 'vessels:drinking_glass', 'vessels:glass_bottle'}, 100, {'vessels:shelf'}, 'furnace_builder', type = t
-	       })
-
-   sys4_quests.registerQuests(mod)
-end
-
----------- Quests for xpanes mod ----------
-mod = "xpanes"
-if minetest.get_modpath(mod) then
-   quests = sys4_quests.initQuests(mod, S)
-
-   -- Type Dig --
-   t = "dig"
-
-   -- iron_digger UP
-   up('iron_digger', nil, {'xpanes:bar'})
-
-   -- Type Place --
-   t = "place"
-
-   if minetest.get_modpath("doors") then
-      -- glass_builder UP
-      up('glass_builder', nil, {'xpanes:pane'})
-
-   else
-      -- glass_builder
-      ins(quests, {
-	     'glass_builder', "Glass Builder", nil, {'default:glass'}, 100, {'xpanes:pane'}, 'furnace_builder', type = t
-		  })
-
-      sys4_quests.registerQuests(mod)
-   end
-end
+up('stone_digger_lover', nil, {"farming:hoe_stone"})

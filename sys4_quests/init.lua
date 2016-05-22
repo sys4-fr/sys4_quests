@@ -22,7 +22,7 @@ minetest.register_node("sys4_quests:waste",
 sys4_quests = {}
 
 local lastQuestIndex = 0
-local level = 1
+local level = 5
 
 function sys4_quests.initQuests(mod, intllib)
    if not intllib or intllib == nil then
@@ -39,27 +39,38 @@ function sys4_quests.initQuests(mod, intllib)
    return sys4_quests.registeredQuests[mod].quests
 end
 
-function sys4_quests.registerQuests(mod)
-   local modIntllib = sys4_quests.registeredQuests[mod].intllib
+function sys4_quests.registerQuests()
 
-   -- init quests index
-   for _, quest in pairs(sys4_quests.registeredQuests[mod].quests) do
-      lastQuestIndex = lastQuestIndex + 1
-      quest.index = lastQuestIndex
-   end
+   for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+      
+      local modIntllib = registeredQuests.intllib
 
-   -- Register quests
-   for _, quest in pairs(sys4_quests.registeredQuests[mod].quests) do
-      
-      -- Register quest
-      quests.register_quest("sys4_quests:"..quest[1],
-			    { title = modIntllib(quest[2]),
-			      description = sys4_quests.formatDescription(quest, level, modIntllib),
-			      max = quest[5] * level,
-			      autoaccept = sys4_quests.hasDependencies(quest[1]),
-			      callback = sys4_quests.nextQuest
-			    })
-      
+      -- init quests index
+      for _, quest in pairs(registeredQuests.quests) do
+
+	 -- Register quest
+	 --print("Register quest : "..mod.." - "..quest[1])
+	 --local auto = sys4_quests.hasDependencies(quest[1])
+	 --print("Autoaccept next quest : "..dump(auto))
+
+	 local maxlevel = quest[5] * level
+	 if quest.level and not quest.level then
+	    maxlevel = quest[5]
+	 end
+	 
+	 if quests.register_quest("sys4_quests:"..quest[1],
+			       { title = modIntllib(quest[2]),
+				 description = sys4_quests.formatDescription(quest, level, modIntllib),
+				 max = maxlevel,
+				 autoaccept = sys4_quests.hasDependencies(quest[1]),
+				 callback = sys4_quests.nextQuest
+			       })
+	 then
+	    lastQuestIndex = lastQuestIndex + 1
+	    quest.index = lastQuestIndex
+	 end
+	 
+      end
    end
 end
 
@@ -204,6 +215,7 @@ function sys4_quests.hasDependencies(questName)
 end
 
 function sys4_quests.nextQuest(playername, questname)
+   print("Next quest after : "..questname)
    if questname ~= "" then
       local quest = string.split(questname, ":")[2]
       if quest and quest ~= nil and quest ~= "" and sys4_quests.hasDependencies(quest) then
@@ -213,6 +225,7 @@ function sys4_quests.nextQuest(playername, questname)
 	       local parentQuests = registeredQuest[7]
 
 	       if isParentQuestsCompleted(parentQuests, quest, playername) then
+		  print("Next quest selected : "..registeredQuest[1])
 		  nextquest = registeredQuest.index
 		  sys4_quests.setCurrentQuest(playername, nextquest)
 		  minetest.after(1, function() quests.start_quest(playername, "sys4_quests:"..registeredQuest[1]) end)
@@ -280,9 +293,9 @@ local function getCraftRecipes(item)
 		     if itemIngredient ~= nil then
 			-- local intllib = sys4_quests.intllib_by_item(itemIngredient)
 			-- str = str.."'"..intllib(itemIngredient).."' "
-			str = str.."'"..itemIngredient.."' "
+			str = str.."["..itemIngredient.."]  "
 		     else
-			str = str.."'"..S("empty").."' "
+			str = str.."[                    ]  "
 		     end
 		     if x == width then
 			str = str.."\n"
@@ -298,7 +311,7 @@ local function getCraftRecipes(item)
    return str   
 end
 
-local function writeBook(content, items)
+local function writeBook(content, items, playern)
    local txt = ""
    
    if content and content ~= nil then
@@ -306,14 +319,18 @@ local function writeBook(content, items)
    end
 
    if items and items ~= nil then
-      txt = txt..S("You have unlocked these crafts").." :"
+      txt = txt..playern.." "..S("has unlocked these crafts").." :"
 
-      local tt= "\n"
+      local tt= "\n\n"
+      
       for _, item in ipairs(items) do
+	 
 	 local intllib = sys4_quests.intllib_by_item(item)
-	 tt = tt.."\n"..getCraftRecipes(item)
-	 tt = tt..S("Output").." --> "..intllib(item).."\n\n"
-	 tt = tt.."----------OOOOOO----------\n"
+	 
+	 tt = tt..">>>> "..intllib(item).." <<<<\n\n"
+	 tt = tt..S("Craft recipes :\n")
+	 tt = tt..getCraftRecipes(item)
+	 tt = tt.."\n----------OOOOOO----------\n\n"
       end
       txt = txt..tt.."\n"
    end
@@ -342,7 +359,7 @@ local function giveBook(playerName, quest)
 
       local bookData = {}
       bookData.title = "SYS4 QUESTS : "..registeredQuest[2]
-      bookData.text = writeBook(nil, registeredQuest[6])
+      bookData.text = writeBook(nil, registeredQuest[6], playerName)
       bookData.owner = playerName
 
       bookItem:set_metadata(minetest.serialize(bookData))
@@ -424,6 +441,8 @@ minetest.register_on_craft(
 	    end
 	 end
       end
+
+      print("WasteItem state = "..dump(wasteItem))
 
       for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 	 for _, registeredQuest in ipairs(registeredQuests.quests) do
