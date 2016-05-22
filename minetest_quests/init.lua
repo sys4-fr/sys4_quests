@@ -40,7 +40,7 @@ ins(quests, {
 
 -- clay_digger
 ins(quests, {
-       'clay_digger', "Clay Crafter", nil, {"default:clay"}, 1, {"default:clay", "default:brick"}, nil, type = t
+       'clay_digger', "Clay Digger", nil, {"default:clay"}, 1, {"default:clay"}, nil, type = t
 	    })
 
 -- coal_digger
@@ -143,7 +143,7 @@ ins(quests, {
 
 -- furnace_crafter
 ins(quests, {
-       'furnace_crafter', "Furnace Crafter", nil, {"default:furnace"}, 1, {"default:stonebrick", "default:desert_stonebrick", "stairs:slab_stonebrick", "stairs:slab_desert_stonebrick", "stairs:stair_stonebrick", "stairs:stair_desert_stonebrick", "stairs:slab_stone", "stairs:slab_desert_stone", "stairs:stair_stone", "stairs:stair_desert_stone"}, "stone_digger_master", type = t, custom_level = true
+       'furnace_crafter', "Furnace Crafter", nil, {"default:furnace"}, 1, {"default:brick", "default:stonebrick", "default:desert_stonebrick", "stairs:slab_stonebrick", "stairs:slab_desert_stonebrick", "stairs:stair_stonebrick", "stairs:stair_desert_stonebrick", "stairs:slab_stone", "stairs:slab_desert_stone", "stairs:stair_stone", "stairs:stair_desert_stone"}, "stone_digger_master", type = t, custom_level = true
 	    })
 
 -- brick_crafter
