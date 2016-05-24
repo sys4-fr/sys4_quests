@@ -158,13 +158,18 @@ function sys4_quests.updateQuest(questName, targetNodes, items)
 end
 
 local function isQuestCompleted(quest, playern)
-   if quests.successfull_quests[playern] ~= nil
-      and quests.successfull_quests[playern]["sys4_quests:"..quest ] ~= nil
-   then
-      return true
+   local alternQuests = string.split(quest, "|")
+   local isCompleted = false
+
+   for _, alternQuest in ipairs(alternQuests) do
+      if quests.successfull_quests[playern] ~= nil
+	 and quests.successfull_quests[playern]["sys4_quests:"..alternQuest] ~= nil
+      then
+	 isCompleted = true
+      end
    end
 
-   return false
+   return isCompleted
 end
 
 local function isParentQuestsCompleted(parentQuests_arg, quest, playern)
@@ -179,16 +184,22 @@ local function isParentQuestsCompleted(parentQuests_arg, quest, playern)
       end
       
       for _, parentQuest in ipairs(parentQuests) do
-	 if parentQuest == quest then
-	    questCompleted = true
+	 local alternQuests = string.split(parentQuest, "|")
+	 for _, alternQuest in ipairs(alternQuests) do
+	    if alternQuest == quest then
+	       questCompleted = true
+	    end
 	 end
       end
    end
 
    if questCompleted and #parentQuests > 1 then
       for _, parentQuest in ipairs(parentQuests) do
-	 if parentQuest ~= quest and not isQuestCompleted(parentQuest, playern) then
-	    return false
+	 local alternQuests = string.split(parentQuest, "|")
+	 for __, alternQuest in ipairs(alternQuests) do
+	    if alternQuest ~= quest and not isQuestCompleted(parentQuest, playern) then
+	       return false
+	    end
 	 end
       end
    end
@@ -199,18 +210,25 @@ end
 function sys4_quests.hasDependencies(questName)
    for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
       for _, quest in ipairs(registeredQuests.quests) do
-	 if quest[7] and quest[7] ~= nil and type(quest[7]) == "string" and quest[7] == questName then
-	    return true
+	 if quest[7] and quest[7] ~= nil and type(quest[7]) == "string" then
+	    local alternQuests = string.split(quest[7], "|")
+	    for __, alternQuest in ipairs(alternQuests) do
+	       if alternQuest == questName then
+		  return true
+	       end
+	    end
 	 elseif type(quest[7]) == "table" then
 	    for __, quest_1 in ipairs(quest[7]) do
-	       if quest_1 == questName then
-		  return true
+	       local alternQuests = string.split(quest_1, "|")
+	       for ___, alternQuest in ipairs(alternQuests) do
+		  if alternQuest == questName then
+		     return true
+		  end
 	       end
 	    end
 	 end
       end
    end
-
    return false
 end
 
