@@ -75,6 +75,8 @@ function sys4_quests.registerQuests()
 end
 
 function sys4_quests.intllib_by_item(item)
+   print("In function intllib_by_item")
+   print("Item : "..item)
    local mod = string.split(item, ":")[1]
    if mod == "stairs" then
       for questsMod, registeredQuests in pairs(sys4_quests.registeredQuests) do
