@@ -46,7 +46,7 @@ ins(quests, {
 
 -- straw_crafter_pro
 ins(quests, {
-       'straw_crafter_pro', "Straw Crafter Pro", nil, {"farming:straw"}, 3, {"stairs:stair_straw"}, "straw_crafter", type = t
+       'straw_crafter_pro', "Straw Crafter Pro", nil, {"farming:straw"}, 3, {"stairs:stair_straw"}, "straw_crafter_lover", type = t
 	    })
 
 -- register quests
