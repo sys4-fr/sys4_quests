@@ -17,10 +17,33 @@ local quests = sys4_quests.initQuests(mod, S)
 
 local t = "dig"
 
--- cotton_farmer
-ins(quests, {
+if minetest.get_modpath("dye") then
+
+   -- cotton_farmer (with dye mod)
+   ins(quests, {
+	  'cotton_farmer', "Cotton Farmer", nil, {"farming:cotton"}, 4, {mod..":white", mod..":black"}, "farming_tools", type = t
+	       })
+
+   t = "craft"
+
+   -- wool_crafter
+   ins(quests, {
+	  'wool_crafter', "Wool Crafter", "black or white wools", {mod..":white", mod..":black"}, 1, {mod..":blue", mod..":orange", mod..":red", mod..":violet", mod..":yellow"}, {"cotton_farmer", "flower_digger"}, type = t
+	       })
+
+   -- wool_crafter_lover
+   ins(quests, {
+	  'wool_crafter_lover', "Wool Crafter Lover", "colored wools", {mod..":white", mod..":black", mod..":blue", mod..":orange", mod..":red", mod..":violet", mod..":yellow"}, 1, {mod..":brown", mod..":cyan", mod..":dark_green", mod..":dark_grey", mod..":green", mod..":grey", mod..":magenta", mod..":pink"}, {"wool_crafter", "dye_crafter"}, type = t
+	       })
+else
+   
+   t= "dig"
+
+   -- cotton_farmer (without dye mod)
+   ins(quests, {
        'cotton_farmer', "Cotton Farmer", nil, {"farming:cotton"}, 4, {mod..":white"}, "farming_tools", type = t
 	    })
+end
 
 -- register quests
 sys4_quests.registerQuests()
