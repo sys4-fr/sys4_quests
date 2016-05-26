@@ -1,0 +1,51 @@
+Cactus Digger = Coupe du cactus
+Sword Crafter = Fabrique des épées en Bois
+Sword Crafter Lover = Fabrique des épées en Acier
+Sword Crafter Pro = Fabrique des épées en Bronze
+Ethereal Sword Crafter = Fabrique des épées en Crystal
+
+3d_armor:boots_cactus = Bottes en cactus
+3d_armor:chestplate_cactus = Cuirasse en cactus
+3d_armor:helmet_cactus = Casque en cactus
+3d_armor:leggings_cactus = Jambières en cactus
+
+3d_armor:boots_wood = Bottes en bois
+3d_armor:chestplate_wood = Cuirasse en bois
+3d_armor:helmet_wood = Casque en bois
+3d_armor:leggings_wood = Jambières en bois
+
+3d_armor:boots_steel = Bottes en Acier
+3d_armor:chestplate_steel = Cuirasse en Acier
+3d_armor:helmet_steel = Casque en Acier
+3d_armor:leggings_steel = Jambières en Acier
+
+3d_armor:boots_bronze = Bottes en Bronze
+3d_armor:chestplate_bronze = Cuirasse en Bronze
+3d_armor:helmet_bronze = Casque en Bronze
+3d_armor:leggings_bronze = Jambières en Bronze
+
+3d_armor:boots_gold = Bottes en Or
+3d_armor:chestplate_gold = Cuirasse en Or
+3d_armor:helmet_gold = Casque en Or
+3d_armor:leggings_gold = Jambières en Or
+
+3d_armor:boots_diamond = Bottes en Diamant
+3d_armor:chestplate_diamond = Cuirasse en Diamant
+3d_armor:helmet_diamond = Casque en Diamant
+3d_armor:leggings_diamond = Jambières en Diamant
+
+3d_armor:boots_crystal = Bottes en crystal
+3d_armor:chestplate_crystal = Cuirasse en crystal
+3d_armor:helmet_crystal = Casque en crystal
+3d_armor:leggings_crystal = Jambières en crystal
+
+shields:shield_wood = Bouclier en bois
+shields:shield_enhanced_wood = Bouclier en bois amélioré
+shields:shield_cactus = Bouclier en cactus
+shields:shield_enhanced_cactus = Bouclier en cactus amélioré
+shields:shield_steel = Bouclier en acier
+shields:shield_bronze = Bouclier en bronze
+shields:shield_gold = Bouclier en or
+shields:shield_diamond = Bouclier en diamant
+shields:shield_crystal = Bouclier en crystal
+
