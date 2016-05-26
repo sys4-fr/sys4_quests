@@ -60,7 +60,7 @@ function sys4_quests.registerQuests()
 	 
 	 if quests.register_quest("sys4_quests:"..quest[1],
 			       { title = modIntllib(quest[2]),
-				 description = sys4_quests.formatDescription(quest, level, modIntllib),
+				 description = sys4_quests.formatDescription(quest, maxlevel, modIntllib),
 				 max = maxlevel,
 				 autoaccept = sys4_quests.hasDependencies(quest[1]),
 				 callback = sys4_quests.nextQuest
@@ -94,7 +94,7 @@ end
 
 function sys4_quests.formatDescription(quest, level, intllib)
    local questType = quest.type
-   local targetCount = quest[5] * level
+   local targetCount = level
    local customDesc = quest[3]
    
    local str = S(questType).." "..targetCount.." "

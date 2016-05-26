@@ -9,6 +9,14 @@ local mod_farming = minetest.get_modpath("farming")
 local mod_wool = minetest.get_modpath("wool")
 local mod_dye = minetest.get_modpath("dye")
 local mod_beds = minetest.get_modpath("beds")
+local mod_boats = minetest.get_modpath("boats")
+local mod_fire = minetest.get_modpath("fire")
+local mod_screwdriver = minetest.get_modpath("screwdriver")
+local mod_tnt = minetest.get_modpath("tnt")
+local mod_walls = minetest.get_modpath("walls")
+local mod_doors = minetest.get_modpath("doors")
+local mod_vessels = minetest.get_modpath("vessels")
+local mod_xpanes = minetest.get_modpath("xpanes")
 
 if mod_sys4_quests then
    local current_modpath = minetest.get_modpath(minetest.get_current_modname())
@@ -30,6 +38,38 @@ if mod_sys4_quests then
       
       if mod_dye then
 	 dofile(current_modpath.."/dye.lua")
+      end
+
+      if mod_boats then
+	 dofile(current_modpath.."/boats.lua")
+      end
+
+      if mod_fire then
+	 dofile(current_modpath.."/fire.lua")
+      end
+
+      if mod_screwdriver then
+	 dofile(current_modpath.."/screwdriver.lua")
+      end
+
+      if mod_tnt then
+	 dofile(current_modpath.."/tnt.lua")
+      end
+
+      if mod_walls then
+	 dofile(current_modpath.."/walls.lua")
+      end
+
+      if mod_doors then
+	 dofile(current_modpath.."/doors.lua")
+      end
+
+      if mod_vessels then
+	 dofile(current_modpath.."/vessels.lua")
+      end
+
+      if mod_xpanes then
+	 dofile(current_modpath.."/xpanes.lua")
       end
    end
 end
