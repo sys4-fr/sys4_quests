@@ -278,7 +278,7 @@ ins(quests, {
 
 -- sandstone_crafter_lover
 ins(quests, {
-       'sandstone_crafter_lover', "Sandstone Crafter Lover", nil, {mod..":sandstone"}, 2, {"stairs:slab_sand"}, "sandstone_crafter", type = t
+       'sandstone_crafter_lover', "Sandstone Crafter Lover", nil, {mod..":sandstone"}, 2, {"stairs:slab_sandstone"}, "sandstone_crafter", type = t
 	    })
 
 -- sandstone_crafter_pro
