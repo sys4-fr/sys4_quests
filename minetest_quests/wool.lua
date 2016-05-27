@@ -21,7 +21,7 @@ if minetest.get_modpath("dye") then
 
    -- cotton_farmer (with dye mod)
    ins(quests, {
-	  'cotton_farmer', "Cotton Farmer", nil, {"farming:cotton"}, 4, {mod..":white", mod..":black"}, "farming_tools", type = t
+	  'cotton_farmer', "Cotton Farmer", nil, {"farming:cotton_1","farming:cotton_2","farming:cotton_3","farming:cotton_4","farming:cotton_5","farming:cotton_6","farming:cotton_7","farming:cotton_8"}, 4, {mod..":white", mod..":black"}, "farming_tools", type = t
 	       })
 
    t = "craft"
@@ -41,7 +41,7 @@ else
 
    -- cotton_farmer (without dye mod)
    ins(quests, {
-       'cotton_farmer', "Cotton Farmer", nil, {"farming:cotton"}, 4, {mod..":white"}, "farming_tools", type = t
+       'cotton_farmer', "Cotton Farmer", nil, {"farming:cotton_1","farming:cotton_2","farming:cotton_3","farming:cotton_4","farming:cotton_5","farming:cotton_6","farming:cotton_7","farming:cotton_8"}, 4, {mod..":white"}, "farming_tools", type = t
 	    })
 end
 
