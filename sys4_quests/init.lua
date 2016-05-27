@@ -22,7 +22,7 @@ minetest.register_node("sys4_quests:waste",
 sys4_quests = {}
 
 local lastQuestIndex = 0
-local level = 10
+local level = 33
 
 function sys4_quests.initQuests(mod, intllib)
    if not intllib or intllib == nil then

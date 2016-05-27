@@ -99,17 +99,17 @@ ins(quests, {
 
 -- wood_protection
 ins(quests, {
-       'wood_protection', "Wood Protection", nil, {"default:wood", "default:junglewood", "default:pine_wood", "default:acacia_wood", "default:aspen_wood"}, 1, {mod..":helmet"}, "sword_crafter", type = t
+       'wood_protection', "Wood Protection", nil, {"default:wood", "default:junglewood", "default:pine_wood", "default:acacia_wood", "default:aspen_wood"}, 1, {mod..":helmet_wood"}, "sword_crafter", type = t
 	    })
 
 -- wood_protection_lover
 ins(quests, {
-       'wood_protection_lover', "Wood Protection Lover", nil, {"default:wood", "default:junglewood", "default:pine_wood", "default:acacia_wood", "default:aspen_wood"}, 1, {mod..":leggings"}, "wood_protection", type = t
+       'wood_protection_lover', "Wood Protection Lover", nil, {"default:wood", "default:junglewood", "default:pine_wood", "default:acacia_wood", "default:aspen_wood"}, 1, {mod..":leggings_wood"}, "wood_protection", type = t
 	    })
 
 -- wood_protection_pro
 ins(quests, {
-       'wood_protection_pro', "Wood Protection Pro", nil, {"default:wood", "default:junglewood", "default:pine_wood", "default:acacia_wood", "default:aspen_wood"}, 1, {mod..":chestplate"}, "wood_protection_lover", type = t
+       'wood_protection_pro', "Wood Protection Pro", nil, {"default:wood", "default:junglewood", "default:pine_wood", "default:acacia_wood", "default:aspen_wood"}, 1, {mod..":chestplate_wood"}, "wood_protection_lover", type = t
 	    })
 
 -- sword_crafter_lover
