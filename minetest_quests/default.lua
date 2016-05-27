@@ -35,7 +35,7 @@ ins(quests, {
 
 -- coal_digger
 ins(quests, {
-       'coal_digger', "Coal Digger", nil, {mod..":stone_with_coal"}, 1, {mod..":torch"}, "more_tools", type = t
+       'coal_digger', "Coal Digger", nil, {mod..":stone_with_coal"}, 1, {mod..":torch"}, "more_tools", type = t, custom_level = true
 	    })
 
 -- coal_digger_lover
