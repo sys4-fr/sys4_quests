@@ -22,7 +22,7 @@ minetest.register_node("sys4_quests:waste",
 sys4_quests = {}
 
 local lastQuestIndex = 0
-local level = 33
+local level = 1
 
 function sys4_quests.initQuests(mod, intllib)
    if not intllib or intllib == nil then
@@ -68,6 +68,10 @@ function sys4_quests.registerQuests()
 	 then
 	    lastQuestIndex = lastQuestIndex + 1
 	    quest.index = lastQuestIndex
+
+	 elseif not quests.registered_quests["sys4_quests:"..quest[1] ].autoaccept
+	 and sys4_quests.hasDependencies(quest[1]) then
+	    quests.registered_quests["sys4_quests:"..quest[1] ].autoaccept = true
 	 end
 	 
       end
