@@ -3,11 +3,6 @@
 
 -- This mod add quests based on 3d_armor and shields mod
 
-if not minetest.get_modpath("sys4_quests")
-and not minetest.get_modpath("3d_armor") then
-   return
-end
-
 local S
 if minetest.get_modpath("intllib") then
    S = intllib.Getter()
@@ -27,7 +22,7 @@ local t = "dig"
 
 -- cactus_digger
 ins(quests, {
-       'cactus_digger', "Cactus Digger", nil, {'default:cactus'}, 4, {mod..':boots_cactus'}, nil, type = t, custom_level = true
+       'cactus_digger', "Cactus Digger", nil, {'default:cactus'}, 4, {mod..':boots_cactus'}, "more_tools", type = t, custom_level = true
 	    })
 
 -- cactus_protection
