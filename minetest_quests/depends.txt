@@ -1,16 +1,14 @@
 sys4_quests
 default
+stairs
 intllib?
 beds?
 boats?
 bucket?
 doors?
 dye?
-farming?
 flowers?
 screwdriver?
-stairs?
 tnt?
 vessels?
-wool?
 xpanes?
