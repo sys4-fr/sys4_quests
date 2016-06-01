@@ -17,6 +17,7 @@ local mod_walls = minetest.get_modpath("walls")
 local mod_doors = minetest.get_modpath("doors")
 local mod_vessels = minetest.get_modpath("vessels")
 local mod_xpanes = minetest.get_modpath("xpanes")
+local mod_bucket = minetest.get_modpath("bucket")
 
 if mod_sys4_quests then
    local current_modpath = minetest.get_modpath(minetest.get_current_modname())
@@ -70,6 +71,10 @@ if mod_sys4_quests then
 
       if mod_xpanes then
 	 dofile(current_modpath.."/xpanes.lua")
+      end
+
+      if mod_bucket then
+	 dofile(current_modpath.."/bucket.lua")
       end
    end
 end

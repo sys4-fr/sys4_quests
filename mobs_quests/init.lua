@@ -41,9 +41,28 @@ and minetest.get_modpath("mobs") then
 
       -- unlock_net
       ins(quests, {
-	     'unlock_net', "Unlock Net", nil, {"default:stick"}, 3, {mod..":net"}, {"sticks_crafter", "farming_tools"}, type = t
+	     'unlock_net', "Unlock Net", nil, {"default:stick"}, 3, {mod..":net", mod..":beehive"}, {"sticks_crafter", "farming_tools"}, type = t
+		  })
+
+      -- beehive_crafter
+      ins(quests, {
+	     'beehive_crafter', "Beehive Crafter", nil, {mod..":beehive"}, 1, {mod..":honey", mod..":honey_block"}, "unlock_net", type = t, custom_level = true
 		  })
    end
+
+   t = "craft"
+   
+   if minetest.get_modpath("bucket") then
+      -- bucket_crafter
+      ins(quests, {
+	     'bucket_crafter', "Bucket Crafter", nil, {"bucket:bucket_empty"}, 1, {mod..":cheese", mod..":cheeseblock"}, "iron_digger_pro", type = t, custom_level = true
+		  })
+   end
+
+   -- unlock_lava_pickaxe
+   ins(quests, {
+	  'unlock_lava_pickaxe', "Unlock Lava Pickaxe", nil, {"default:obsidian_shard"}, 2, {mod..":pick_lava"}, "obsidian_digger", type = t
+	       })
 
    sys4_quests.registerQuests()
 
