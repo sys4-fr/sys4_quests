@@ -79,8 +79,6 @@ function sys4_quests.registerQuests()
 end
 
 function sys4_quests.intllib_by_item(item)
-   print("In function intllib_by_item")
-   print("Item : "..item)
    local mod = string.split(item, ":")[1]
    if mod == "stairs" then
       for questsMod, registeredQuests in pairs(sys4_quests.registeredQuests) do
@@ -239,7 +237,7 @@ function sys4_quests.hasDependencies(questName)
 end
 
 function sys4_quests.nextQuest(playername, questname)
-   print("Next quest after : "..questname)
+--   print("Next quest after : "..questname)
    if questname ~= "" then
       local quest = string.split(questname, ":")[2]
       if quest and quest ~= nil and quest ~= "" and sys4_quests.hasDependencies(quest) then
@@ -249,7 +247,7 @@ function sys4_quests.nextQuest(playername, questname)
 	       local parentQuests = registeredQuest[7]
 
 	       if isParentQuestsCompleted(parentQuests, quest, playername) then
-		  print("Next quest selected : "..registeredQuest[1])
+--		  print("Next quest selected : "..registeredQuest[1])
 		  nextquest = registeredQuest.index
 		  sys4_quests.setCurrentQuest(playername, nextquest)
 		  minetest.after(1, function() quests.start_quest(playername, "sys4_quests:"..registeredQuest[1]) end)
@@ -466,7 +464,7 @@ minetest.register_on_craft(
 	 end
       end
 
-      print("WasteItem state = "..dump(wasteItem))
+--      print("WasteItem state = "..dump(wasteItem))
 
       for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 	 for _, registeredQuest in ipairs(registeredQuests.quests) do
