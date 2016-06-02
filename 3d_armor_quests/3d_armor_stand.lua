@@ -27,7 +27,7 @@ ins(quests, {
 
 -- armor_stand_lover
 ins(quests, {
-       'armor_stand_lover', "Armor Stand Crafter", nil, {mod..":armor_stand"}, 1, {mod..":locked_armor_stand"}, "armor_stand", type = t
+       'armor_stand_lover', "Armor Stand Crafter", nil, {mod..":armor_stand"}, 1, {mod..":locked_armor_stand"}, "armor_stand", type = t, custom_level = true
 	    })
 
 sys4_quests.registerQuests()

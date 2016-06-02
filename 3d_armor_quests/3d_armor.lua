@@ -134,12 +134,12 @@ ins(quests, {
 
 -- sword_crafter_expert
 ins(quests, {
-       'sword_crafter_expert', "Sword Crafter Expert", nil, {"default:sword_mese"}, 2, {mod..":boots_gold"}, "mese_digger_lover", type = t
+       'sword_crafter_expert', "Sword Crafter Expert", nil, {"default:sword_mese"}, 2, {mod..":boots_gold"}, "mese_digger_lover", type = t, custom_level = true
 	    })
 
 -- sword_crafter_master
 ins(quests, {
-       'sword_crafter_master', "Sword Crafter Master", nil, {"default:sword_diamond"}, 2, {mod..":boots_diamond"}, "diamond_digger_lover", type = t
+       'sword_crafter_master', "Sword Crafter Master", nil, {"default:sword_diamond"}, 2, {mod..":boots_diamond"}, "diamond_digger_lover", type = t, custom_level = true
 	    })
 
 sys4_quests.registerQuests()
