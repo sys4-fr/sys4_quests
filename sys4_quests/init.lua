@@ -534,6 +534,7 @@ local nodes = {
    minetest.registered_nodes["default:jungletree"],
    minetest.registered_nodes["default:acacia_tree"],
    minetest.registered_nodes["default:pine_tree"],
+   minetest.registered_nodes["default:aspen_tree"]
 }
 
 for i=1, #nodes do
