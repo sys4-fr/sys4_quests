@@ -32,6 +32,10 @@ up('gold_protection_lover', nil, {mod..":shield_gold"})
 
 up('diamond_protection_lover', nil, {mod..":shield_diamond"})
 
+if minetest.get_modpath("moreores") then
+   up('mithril_protection_lover', nil, {mod..":shield_mithril"})
+end
+
 -- enhance_cactus_protection
 ins(quests, {
        'enhance_cactus_protection', "Enhance Cactus Protection", nil, {"default:stone_with_iron"}, 2, {mod..":shield_enhanced_cactus"}, {"cactus_protection_lover", "furnace_crafter"}, type = t

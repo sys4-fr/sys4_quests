@@ -23,6 +23,7 @@ sys4_quests = {}
 
 local lastQuestIndex = 0
 local level = 33
+--local level = 5
 
 function sys4_quests.initQuests(mod, intllib)
    if not intllib or intllib == nil then
@@ -161,56 +162,6 @@ function sys4_quests.updateQuest(questName, targetNodes, items)
    end
 end
 
-local function isQuestCompleted(quest, playern)
-   local alternQuests = string.split(quest, "|")
-   local isCompleted = false
-
-   for _, alternQuest in ipairs(alternQuests) do
-      if quests.successfull_quests[playern] ~= nil
-	 and quests.successfull_quests[playern]["sys4_quests:"..alternQuest] ~= nil
-      then
-	 isCompleted = true
-      end
-   end
-
-   return isCompleted
-end
-
-local function isParentQuestsCompleted(parentQuests_arg, quest, playern)
-   local questCompleted = false
-   local parentQuests = {}
-
-   if parentQuests_arg and parentQuests_arg ~= nil then
-      if type(parentQuests_arg) == "string" then
-	 table.insert(parentQuests, parentQuests_arg)
-      else
-	 parentQuests = parentQuests_arg
-      end
-      
-      for _, parentQuest in ipairs(parentQuests) do
-	 local alternQuests = string.split(parentQuest, "|")
-	 for _, alternQuest in ipairs(alternQuests) do
-	    if alternQuest == quest then
-	       questCompleted = true
-	    end
-	 end
-      end
-   end
-
-   if questCompleted and #parentQuests > 1 then
-      for _, parentQuest in ipairs(parentQuests) do
-	 local alternQuests = string.split(parentQuest, "|")
-	 for __, alternQuest in ipairs(alternQuests) do
-	    if alternQuest ~= quest and not isQuestCompleted(parentQuest, playern) then
-	       return false
-	    end
-	 end
-      end
-   end
-
-   return questCompleted
-end
-
 function sys4_quests.hasDependencies(questName)
    for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
       for _, quest in ipairs(registeredQuests.quests) do
@@ -236,39 +187,118 @@ function sys4_quests.hasDependencies(questName)
    return false
 end
 
-function sys4_quests.nextQuest(playername, questname)
---   print("Next quest after : "..questname)
+local function isQuestActive(questName, playern)
+   if quests.active_quests[playern] ~= nil
+   and quests.active_quests[playern]["sys4_quests:"..questName] ~= nil then
+      return true
+   else
+      return false
+   end
+end
+
+local function isQuestSuccessfull(questName, playern)
+   if quests.successfull_quests[playern] ~= nil
+   and quests.successfull_quests[playern]["sys4_quests:"..questName] ~= nil then
+      return true
+   else
+      return false
+   end
+end
+
+local function contains(quests, quest)
+   local questsList = {}
+
+   if type(quests) == "string" then
+      table.insert(questsList, quests)
+   else
+      questsList = quests
+   end
+
+   for _, currentQuest in pairs(questsList) do
+      local splittedQuests = string.split(currentQuest, "|")
+
+      for __, splittedQuest in pairs(splittedQuests) do
+	 if splittedQuest == quest then
+	    return true
+	 end
+      end
+   end
+
+   return false
+end
+
+local function isParentQuestsAreSuccessfull(parentQuests, currentQuest, playern)
+   local parentQuestsList = {}
+
+   if type(parentQuests) == "string" then
+      table.insert(parentQuestsList, parentQuests)
+   else
+      parentQuestsList = parentQuests
+   end
+
+   local isAllFinished = true
+   for _, parentQuest in pairs(parentQuestsList) do
+
+      local isFinished = false
+      local splittedParentQuests = string.split(parentQuest, "|")
+
+      for __, splittedParentQuest in pairs(splittedParentQuests) do
+	 if splittedParentQuest == currentQuest then
+	    isFinished = true
+	    break
+	 else
+	    isFinished = isFinished or isQuestSuccessfull(splittedParentQuest, playern)
+	 end
+      end
+
+      isAllFinished = isAllFinished and isFinished
+   end
+
+   return isAllFinished
+end
+
+local function getNextQuests(questname, playern)
+   local insert = table.insert
+   local nextQuests = {}
+   
    if questname ~= "" then
-      local quest = string.split(questname, ":")[2]
-      if quest and quest ~= nil and quest ~= "" and sys4_quests.hasDependencies(quest) then
-	 local nextquest = nil
-	 for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
-	    for _, registeredQuest in ipairs(registeredQuests.quests) do
+      
+      local currentQuest = string.split(questname, ":")[2]
+
+      for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+	 for _, registeredQuest in ipairs(registeredQuests.quests) do
+
+	    if registeredQuest[1] ~= currentQuest
+	       and not isQuestActive(registeredQuest[1], playern)
+	    and not isQuestSuccessfull(registeredQuest[1], playern) then
+	       
 	       local parentQuests = registeredQuest[7]
 
-	       if isParentQuestsCompleted(parentQuests, quest, playername) then
---		  print("Next quest selected : "..registeredQuest[1])
-		  nextquest = registeredQuest.index
-		  sys4_quests.setCurrentQuest(playername, nextquest)
-		  minetest.after(1, function() quests.start_quest(playername, "sys4_quests:"..registeredQuest[1]) end)
+	       if parentQuests ~= nil
+		  and contains(parentQuests, currentQuest)
+	       and isParentQuestsAreSuccessfull(parentQuests, currentQuest, playern) then
+		  insert(nextQuests, registeredQuest)
 	       end
 	    end
 	 end
       end
    end
+
+   return nextQuests
 end
 
-function sys4_quests.setCurrentQuest(playerName, nextquest)
-   if not sys4_quests.currentQuest then
-      sys4_quests.currentQuest = {}
-   end
+function sys4_quests.nextQuest(playername, questname)
+--   print("Next quest after : "..questname)
+   local nextQuests = getNextQuests(questname, playername)
 
-   if not sys4_quests.currentQuest[playerName] then
-      sys4_quests.currentQuest[playerName] = nil
+   for _, nextQuest in pairs(nextQuests) do
+--      print("Next quest selected : "..nextQuest[1])
+      --nextquest = nextQuest.index
+      --sys4_quests.setCurrentQuest(playername, nextQuest)
+      minetest.after(1, function() quests.start_quest(playername, "sys4_quests:"..nextQuest[1]) end)
    end
-
-   sys4_quests.currentQuest[playerName] = nextquest
 end
+
 
 local function isNodesEquivalent(nodeTargets, nodeDug)
    for _, nodeTarget in pairs(nodeTargets) do
