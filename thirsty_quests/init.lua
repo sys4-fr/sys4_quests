@@ -46,7 +46,7 @@ and minetest.get_modpath("thirsty") then
    
    -- water_tools_crafter_lover
    ins(quests, {
-	  'water_tools_crafter_lover', "Water Tools Crafter Lover", nil, {"default:stone_with_copper"}, 5, {mod..":water_fountain"}, {"water_tools_crafter", "bronze_crafter_pro", "mese_digger"}, type = t
+	  'water_tools_crafter_lover', "Water Tools Crafter Lover", nil, {"default:stone_with_copper"}, 5, {mod..":water_fountain"}, {"water_tools_crafter", "mese_digger"}, type = t
 	       })
 
    t = "craft"
