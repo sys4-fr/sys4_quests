@@ -23,7 +23,7 @@ sys4_quests = {}
 
 local lastQuestIndex = 0
 local level = 33
---local level = 5
+--local level = 1
 
 function sys4_quests.initQuests(mod, intllib)
    if not intllib or intllib == nil then
