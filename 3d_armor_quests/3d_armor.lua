@@ -85,6 +85,24 @@ ins(quests, {
        'diamond_protection_pro', "Diamond Protection Pro", nil, {"default:stone_with_diamond"}, 1, {mod..":chestplate_diamond"}, "diamond_protection_lover", type = t
 	    })
 
+if minetest.get_modpath("moreores") then
+   -- mithril_protection
+   ins(quests, {
+	  'mithril_protection', "Mithril Protection", nil, {"moreores:mineral_mithril"}, 5, {mod..":helmet_mithril"}, "mithril_sword_crafter", type = t, custom_level = true
+	       })
+
+   -- mithril_protection_lover
+   ins(quests, {
+	  'mithril_protection_lover', "Mithril Protection Lover", nil, {"moreores:mineral_mithril"}, 7, {mod..":leggings_mithril"}, "mithril_protection", type = t, custom_level = true
+	       })
+
+   -- mithril_protection_pro
+   ins(quests, {
+	  'mithril_protection_pro', "Mithril Protection Pro", nil, {"moreores:mineral_mithril"}, 8, {mod..":chestplate_mithril"}, "mithril_protection_lover", type = t, custom_level = true
+	       })
+
+end
+
 t = "craft"
 
 -- sword_crafter
@@ -141,5 +159,13 @@ ins(quests, {
 ins(quests, {
        'sword_crafter_master', "Sword Crafter Master", nil, {"default:sword_diamond"}, 2, {mod..":boots_diamond"}, "diamond_digger_lover", type = t, custom_level = true
 	    })
+
+if minetest.get_modpath("moreores") then
+
+   -- mithril_sword_crafter
+   ins(quests, {
+	  'mithril_sword_crafter', "Mithril Sword Crafter", nil, {"moreores:sword_mithril"}, 2, {mod..":boots_mithril"}, "mithril_digger_lover", type = t, custom_level = true
+	       })
+end
 
 sys4_quests.registerQuests()

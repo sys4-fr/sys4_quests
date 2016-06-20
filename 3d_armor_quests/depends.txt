@@ -3,3 +3,4 @@ minetest_quests
 3d_armor_stand?
 shields?
 intllib?
+moreores?

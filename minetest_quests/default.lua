@@ -78,11 +78,18 @@ ins(quests, {
        'snow_digger', "Snow Digger", nil, {mod..":snow"}, 9, {mod..":snowblock"}, nil, type = t
 	    })
 
--- chest_locker
-ins(quests, {
-       'chest_locker', "Chest Locker", nil, {mod..":stone_with_iron"}, 1, {mod..":chest_locked"}, {"furnace_crafter", "wood_crafter_master"}, type = t
-	    })
-
+if minetest.get_modpath("moreores") then
+   -- chest_locker
+   ins(quests, {
+	  'chest_locker', "Chest Locker", nil, {mod..":stone_with_iron", "moreores:mineral_silver"}, 1, {mod..":chest_locked"}, {"furnace_crafter", "wood_crafter_master"}, type = t
+	       })
+else
+   -- chest_locker
+   ins(quests, {
+	  'chest_locker', "Chest Locker", nil, {mod..":stone_with_iron"}, 1, {mod..":chest_locked"}, {"furnace_crafter", "wood_crafter_master"}, type = t
+	       })
+end
+   
 -- iron_digger
 ins(quests, {
        'iron_digger', "Iron Digger", nil, {mod..":stone_with_iron"}, 1, {mod..":shovel_steel"}, "furnace_crafter", type = t
@@ -119,9 +126,15 @@ ins(quests, {
 	    })
 
 -- bronze_era
-ins(quests, {
-       'bronze_era', "Bronze Era", nil, {mod..":stone_with_copper"}, 1, {mod..":bronze_ingot"}, {"furnace_crafter", "iron_digger"}, type = t
-	    })
+if minetest.get_modpath("moreores") then
+   ins(quests, {
+	  'bronze_era', "Bronze Era", nil, {mod..":stone_with_copper"}, 1, {mod..":bronze_ingot"}, {"furnace_crafter", "iron_digger|tin_digger"}, type = t
+	       })   
+else
+   ins(quests, {
+	  'bronze_era', "Bronze Era", nil, {mod..":stone_with_copper"}, 1, {mod..":bronze_ingot"}, {"furnace_crafter", "iron_digger"}, type = t
+	       })
+end
 
 -- gold_digger
 ins(quests, {
