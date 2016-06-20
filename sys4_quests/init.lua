@@ -22,8 +22,8 @@ minetest.register_node("sys4_quests:waste",
 sys4_quests = {}
 
 local lastQuestIndex = 0
-local level = 33
---local level = 1
+--local level = 33
+local level = 1
 
 function sys4_quests.initQuests(mod, intllib)
    if not intllib or intllib == nil then
@@ -420,6 +420,19 @@ local function giveBook(playerName, quest)
       if receiverRef == nil then return end
       receiverRef:get_inventory():add_item("main", bookItem)
    end
+end
+
+-- Replace quests.show_message function for customize central_message sounds if the mod is present
+local function show_message(t, playername, text)
+   if (quests.hud[playername].central_message_enabled) then
+      local player = minetest.get_player_by_name(playername)
+      cmsg.push_message_player(player, text, quests.colors[t])
+      minetest.sound_play("sys4_quests_" .. t, {to_player = playername})
+   end
+end
+
+if (cmsg) then
+   quests.show_message = show_message
 end
 
 local playerList = {}
