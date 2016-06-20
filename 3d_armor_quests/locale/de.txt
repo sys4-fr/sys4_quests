@@ -1,0 +1,50 @@
+Cactus Digger = Schneide Kaktus
+Sword Crafter = Fertige Holzschwerter
+Sword Crafter Lover = Fertige Stahlschwerter
+Sword Crafter Pro = Fertige Bronzeschwerter
+Ethereal Sword Crafter = Fertige Kristallschwerter
+
+3d_armor:boots_cactus = Kaktusstiefel
+3d_armor:chestplate_cactus = Kaktusharnisch
+3d_armor:helmet_cactus = Kaktushelm
+3d_armor:leggings_cactus = Kaktusbeinschutz
+
+3d_armor:boots_wood = Holzstiefel
+3d_armor:chestplate_wood = Holzharnisch
+3d_armor:helmet_wood = Holzhelm
+3d_armor:leggings_wood = Holzbeinschutz
+
+3d_armor:boots_steel = Stahlstiefel
+3d_armor:chestplate_steel = Stahlharnisch
+3d_armor:helmet_steel = Stahlhelm
+3d_armor:leggings_steel = Stahlbeinschutz
+
+3d_armor:boots_bronze = Bronzestiefel
+3d_armor:chestplate_bronze = Bronzeharnisch
+3d_armor:helmet_bronze = Bronzehelm
+3d_armor:leggings_bronze = Bronzebeinschutz
+
+3d_armor:boots_gold = Goldstiefel
+3d_armor:chestplate_gold = Goldharnisch
+3d_armor:helmet_gold = Goldhelm
+3d_armor:leggings_gold = Goldbeinschutz
+
+3d_armor:boots_diamond = Diamantstiefel
+3d_armor:chestplate_diamond = Diamantharnisch
+3d_armor:helmet_diamond = Diamanthelm
+3d_armor:leggings_diamond = Diamantbeinschutz
+
+3d_armor:boots_crystal = Kristallstiefel
+3d_armor:chestplate_crystal = Kristallharnisch
+3d_armor:helmet_crystal = Kristallhelm
+3d_armor:leggings_crystal = Kristallbeinschutz
+
+shields:shield_wood = Holzschild
+shields:shield_enhanced_wood = Verbesserter Holzschild
+shields:shield_cactus = Kaktusschild
+shields:shield_enhanced_cactus = Verbesserter Kaktusschild
+shields:shield_steel = Stahlschild
+shields:shield_bronze = Bronzeschild
+shields:shield_gold = Goldschild
+shields:shield_diamond = Diamantschild
+shields:shield_crystal = Kristallschild
