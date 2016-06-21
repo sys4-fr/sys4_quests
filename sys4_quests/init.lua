@@ -20,10 +20,82 @@ minetest.register_node("sys4_quests:waste",
 })
 
 sys4_quests = {}
+sys4_quests.questGroups = {}
+sys4_quests.questGroups[1] = {name = "global", questsIndex = {}}
 
 local lastQuestIndex = 0
 local level = 33
 --local level = 1
+
+function sys4_quests.addQuestGroup(groupName)
+
+   if groupName == nil or groupName == "" or groupName == "global" then
+      return
+   end
+
+   table.insert(sys4_quests.questGroups, {name = groupName, questsIndex = {}})
+end
+
+function sys4_quests.addQuestGroupAfter(existingGroupName, groupName)
+   if groupName == nil or groupName == "" or groupName == "global" then
+      return
+   end
+   
+   if not sys4_quests.questGroups or sys4_quests.questGroups == nil
+   or not existingGroupName or existingGroupName == nil or existingGroupName == "" then
+      sys4_quests.addQuestGroup(groupName)
+   else
+      local isExistingGroupPresent = false
+      for i = 1, #sys4_quests.questGroups do
+	 if sys4_quests.questGroups[i].name == existingGroupName then
+	    
+	    isExistingGroupPresent = true
+
+	    if i == #sys4_quests.questGroups then
+	       sys4_quests.addQuestsGroup(groupName)
+	    else
+	       for j = #sys4_quests.questGroups, i + 1, -1 do
+		  sys4_quests.questGroups[j+1] = sys4_quests.questsGroups[j]
+	       end
+	       sys4_quests.questGroups[i+1] = {name = groupName, questsIndex = {}}
+	       break
+	    end
+	 end
+      end
+      if not isExistingGroupPresent then
+	 return
+      end
+   end
+end
+
+function sys4_quests.addQuestGroupBefore(existingGroupName, groupName)
+   if groupName == nil or groupName == "" or groupName == "global" or
+   not existingGroupName or existingGroupName == "" or existingGroupName == "global" then
+      return
+   end
+
+   if not sys4_quests.questGroups or sys4_quests.questGroups == nil then
+      sys4_quests.addQuestGroup(groupName)
+   else
+      local isExistingGroupPresent = false
+      for i = 1, #sys4_quests.questGroups do
+	 if sys4_quests.questGroups[i].name == existingGroupName then
+	    
+	    isExistingGroupPresent = true
+
+	    for j = #sys4_quests.questGroups, i, -1 do
+	       sys4_quests.questGroups[j+1] = sys4_quests.questsGroups[j]
+	    end
+	    sys4_quests.questGroups[i] = {name = groupName, questsIndex = {}}
+	    break
+	 end
+      end
+      if not isExistingGroupPresent then
+	 return
+      end      
+   end
+end
+
 
 function sys4_quests.initQuests(mod, intllib)
    if not intllib or intllib == nil then
@@ -69,6 +141,8 @@ function sys4_quests.registerQuests()
 	 then
 	    lastQuestIndex = lastQuestIndex + 1
 	    quest.index = lastQuestIndex
+	    local questGroup = quest.group
+	    sys4_quests.
 
 	 elseif not quests.registered_quests["sys4_quests:"..quest[1] ].autoaccept
 	 and sys4_quests.hasDependencies(quest[1]) then
@@ -288,7 +362,7 @@ local function getNextQuests(questname, playern)
 end
 
 function sys4_quests.nextQuest(playername, questname)
---   print("Next quest after : "..questname)
+   --   print("Next quest after : "..questname)
    local nextQuests = getNextQuests(questname, playername)
 
    for _, nextQuest in pairs(nextQuests) do
@@ -440,14 +514,14 @@ local playerList = {}
 minetest.register_on_newplayer(
    function(player)
       local playern = player:get_player_name()
-      playerList[playern] = {name = playern, isNew = true, craftMode = true, bookMode = false}
+      playerList[playern] = {name = playern, isNew = true, craftMode = true, bookMode = false, activeQuestGroup = getActiveQuestGroup(playern)}
    end)
 
 minetest.register_on_joinplayer(
    function(player)
       local playern = player:get_player_name()
       if not playerList[playern] or playerList[playern] == nil then
-	 playerList[playern] = {name = playern, isNew = false, craftMode = true, bookMode = false}
+	 playerList[playern] = {name = playern, isNew = false, craftMode = true, bookMode = false, activeQuestGroup = getActiveQuestGroup(playern)}
       end
 
       if (playerList[playern].isNew) then
