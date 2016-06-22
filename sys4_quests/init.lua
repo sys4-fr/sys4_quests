@@ -19,24 +19,28 @@ minetest.register_node("sys4_quests:waste",
    groups = {crumbly=2, flammable=2},
 })
 
+local playerList = {}
+
 sys4_quests = {}
 sys4_quests.questGroups = {}
-sys4_quests.questGroups[1] = {name = "global", questsIndex = {}}
+sys4_quests.questGroups['global'] = {order = 1, questsIndex = {}}
 
 local lastQuestIndex = 0
-local level = 33
---local level = 1
+--local level = 33
+local level = 1
 
 function sys4_quests.addQuestGroup(groupName)
 
-   if groupName == nil or groupName == "" or groupName == "global" then
-      return
+   if groupName ~= nil and groupName ~= "" and groupName ~= "global" then
+      local groupLen = 0
+      for _, group in pairs(sys4_quests.questGroups) do
+	 groupLen = groupLen + 1
+      end
+      sys4_quests.questGroups[groupName] = {order = groupLen + 1, questsIndex = {}}
    end
-
-   table.insert(sys4_quests.questGroups, {name = groupName, questsIndex = {}})
 end
 
-function sys4_quests.addQuestGroupAfter(existingGroupName, groupName)
+--[[function sys4_quests.addQuestGroupAfter(existingGroupName, groupName)
    if groupName == nil or groupName == "" or groupName == "global" then
       return
    end
@@ -95,7 +99,107 @@ function sys4_quests.addQuestGroupBefore(existingGroupName, groupName)
       end      
    end
 end
+--]]
 
+local function isQuestActive(questName, playern)
+   if quests.active_quests[playern] ~= nil
+   and quests.active_quests[playern]["sys4_quests:"..questName] ~= nil then
+      return true
+   else
+      return false
+   end
+end
+
+local function isQuestSuccessfull(questName, playern)
+   if quests.successfull_quests[playern] ~= nil
+   and quests.successfull_quests[playern]["sys4_quests:"..questName] ~= nil then
+      return true
+   else
+      return false
+   end
+end
+
+local function getGroupByQuestIndex(questIndex)
+   local groupName = nil
+   local isFound = false
+   for name, group in pairs(sys4_quests.questGroups) do
+      for _, index in ipairs(group.questsIndex) do
+	 if index == questIndex and name ~= "global" then
+	    groupName = name
+	    isFound = true
+	    break
+	 end
+      end
+      if isFound then break end
+   end
+
+   return groupName
+end
+
+local function getActiveQuestGroup(playern)
+   local groupName = nil
+   local isFound = false
+   for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+      for _, quest in ipairs(registeredQuests.quests) do
+	 print("Quest : "..quest[1])
+	 if isQuestActive(quest[1], playern) then
+	    print("is ACTIVE")
+	    groupName = getGroupByQuestIndex(quest.index)
+	    print("GroupName is : "..dump(groupName))
+	    if groupName ~= nil then
+	       isFound = true
+	       break
+	    end
+	 end
+      end
+      if isFound then break end
+   end
+
+   print("Return groupName : "..dump(groupName))
+   return groupName
+end
+
+local function getFirstQuestGroup()
+   for name, group in pairs(sys4_quests.questGroups) do
+      print("NAME : "..name..", ORDER : "..group.order)
+      if group.order == 2 then
+	 return name
+      end
+   end
+end
+
+local function getQuestGroupOrder(questGroup)
+   for name, group in pairs(sys4_quests.questGroups) do
+      if name == questGroup then
+	 return group.order
+      end
+   end
+   return nil
+end
+
+local function getQuestGroupByGroupOrder(order)
+   for name, group in pairs(sys4_quests.questGroups) do
+      if group.order == order then
+	 return name
+      end
+   end
+   return nil
+end
+
+local function getNextQuestGroup(currentQuestGroup)
+   local groupTotal = 0
+   for _, group in pairs(sys4_quests.questGroups) do
+      groupTotal = groupTotal + 1
+   end
+
+   local groupOrder = getQuestGroupOrder(currentQuestGroup)
+
+   if groupOrder == groupTotal then
+      return nil
+   else
+      return getQuestGroupByGroupOrder(groupOrder + 1)
+   end
+end
 
 function sys4_quests.initQuests(mod, intllib)
    if not intllib or intllib == nil then
@@ -135,14 +239,21 @@ function sys4_quests.registerQuests()
 			       { title = modIntllib(quest[2]),
 				 description = sys4_quests.formatDescription(quest, maxlevel, modIntllib),
 				 max = maxlevel,
-				 autoaccept = sys4_quests.hasDependencies(quest[1]),
+				 --autoaccept = sys4_quests.hasDependencies(quest[1]),
+				 autoaccept = true,
 				 callback = sys4_quests.nextQuest
 			       })
 	 then
 	    lastQuestIndex = lastQuestIndex + 1
 	    quest.index = lastQuestIndex
-	    local questGroup = quest.group
-	    sys4_quests.
+
+	    -- insert quest index in specified group
+	    if not quest.group then
+	       table.insert(sys4_quests.questGroups['global'].questsIndex, quest.index)
+	    elseif sys4_quests.questGroups[quest.group] ~= nil then
+	       print("Insert New QuestGroup : "..quest.group)
+	       table.insert(sys4_quests.questGroups[quest.group].questsIndex, quest.index)
+	    end
 
 	 elseif not quests.registered_quests["sys4_quests:"..quest[1] ].autoaccept
 	 and sys4_quests.hasDependencies(quest[1]) then
@@ -261,24 +372,6 @@ function sys4_quests.hasDependencies(questName)
    return false
 end
 
-local function isQuestActive(questName, playern)
-   if quests.active_quests[playern] ~= nil
-   and quests.active_quests[playern]["sys4_quests:"..questName] ~= nil then
-      return true
-   else
-      return false
-   end
-end
-
-local function isQuestSuccessfull(questName, playern)
-   if quests.successfull_quests[playern] ~= nil
-   and quests.successfull_quests[playern]["sys4_quests:"..questName] ~= nil then
-      return true
-   else
-      return false
-   end
-end
-
 local function contains(quests, quest)
    local questsList = {}
 
@@ -336,7 +429,9 @@ local function getNextQuests(questname, playern)
    local nextQuests = {}
    
    if questname ~= "" then
-      
+
+      local playerActiveGroup = playerList[playern].activeQuestGroup
+
       local currentQuest = string.split(questname, ":")[2]
 
       for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
@@ -344,7 +439,9 @@ local function getNextQuests(questname, playern)
 
 	    if registeredQuest[1] ~= currentQuest
 	       and not isQuestActive(registeredQuest[1], playern)
-	    and not isQuestSuccessfull(registeredQuest[1], playern) then
+	       and not isQuestSuccessfull(registeredQuest[1], playern)
+	       and (getGroupByQuestIndex(registeredQuest.index) == nil or
+		    getGroupByQuestIndex(registeredQuest.index) == playerActiveGroup) then
 	       
 	       local parentQuests = registeredQuest[7]
 
@@ -361,15 +458,54 @@ local function getNextQuests(questname, playern)
    return nextQuests
 end
 
+local function isAllQuestsGroupSuccessfull(currentQuestGroup, questname, playern)
+   local successfull = true
+   local currentQuest = string.split(questname, ":")[2]
+
+   for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+      for _, registeredQuest in ipairs(registeredQuests.quests) do
+	 if registeredQuest[1] ~= currentQuest
+	 and getGroupByQuestIndex(registeredQuest.index) == currentQuestGroup then
+	    successfull = successfull and isQuestSuccessfull(registeredQuest[1], playern)
+	 end
+      end
+   end
+
+   print("Successfull ALL group quest : "..dump(successfull))
+   return successfull
+end
+
 function sys4_quests.nextQuest(playername, questname)
    --   print("Next quest after : "..questname)
    local nextQuests = getNextQuests(questname, playername)
 
-   for _, nextQuest in pairs(nextQuests) do
---      print("Next quest selected : "..nextQuest[1])
-      --nextquest = nextQuest.index
-      --sys4_quests.setCurrentQuest(playername, nextQuest)
-      minetest.after(1, function() quests.start_quest(playername, "sys4_quests:"..nextQuest[1]) end)
+   local currentQuestGroup = playerList[playername].activeQuestGroup
+   local nextQuestGroup = getNextQuestGroup(currentQuestGroup)
+
+   print("currentQuestGroup : "..currentQuestGroup)
+   print("NEXt QUEST GROUP : "..dump(nextQuestGroup))
+   
+   if nextQuestGroup ~= nil
+   and isAllQuestsGroupSuccessfull(currentQuestGroup, questname, playername) then
+      playerList[playername].activeQuestGroup = nextQuestGroup
+
+      -- start quests of the next group
+      for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+	 for _, registeredQuest in ipairs(registeredQuests.quests) do
+	    if registeredQuest[7] == nil and getGroupByQuestIndex(registeredQuest.index) == nextQuestGroup then
+	       minetest.after(1, function() quests.start_quest(playername, "sys4_quests:"..registeredQuest[1]) end)
+	    end
+	 end
+      end
+      
+   else
+      
+      for _, nextQuest in pairs(nextQuests) do
+	 --      print("Next quest selected : "..nextQuest[1])
+	 --nextquest = nextQuest.index
+	 --sys4_quests.setCurrentQuest(playername, nextQuest)
+	 minetest.after(1, function() quests.start_quest(playername, "sys4_quests:"..nextQuest[1]) end)
+      end
    end
 end
 
@@ -509,12 +645,11 @@ if (cmsg) then
    quests.show_message = show_message
 end
 
-local playerList = {}
-
 minetest.register_on_newplayer(
    function(player)
       local playern = player:get_player_name()
-      playerList[playern] = {name = playern, isNew = true, craftMode = true, bookMode = false, activeQuestGroup = getActiveQuestGroup(playern)}
+      playerList[playern] = {name = playern, isNew = true, craftMode = true, bookMode = false, activeQuestGroup = getFirstQuestGroup()}
+      print("ActiveQuestGroup for New Player : "..playerList[playern].activeQuestGroup)
    end)
 
 minetest.register_on_joinplayer(
@@ -522,12 +657,13 @@ minetest.register_on_joinplayer(
       local playern = player:get_player_name()
       if not playerList[playern] or playerList[playern] == nil then
 	 playerList[playern] = {name = playern, isNew = false, craftMode = true, bookMode = false, activeQuestGroup = getActiveQuestGroup(playern)}
+	 print("ActiveQuestGroup for Player : "..playerList[playern].activeQuestGroup)
       end
 
       if (playerList[playern].isNew) then
 	 for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 	    for _, registeredQuest in ipairs(registeredQuests.quests) do
-	       if registeredQuest[7] == nil then
+	       if registeredQuest[7] == nil and (getGroupByQuestIndex(registeredQuest.index) == nil or getGroupByQuestIndex(registeredQuest.index) == playerList[playern].activeQuestGroup) then
 		  quests.start_quest(playern, "sys4_quests:"..registeredQuest[1])
 	       end
 	    end
