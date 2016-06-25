@@ -440,9 +440,10 @@ local function getNextQuests(questname, playern)
 	    if registeredQuest[1] ~= currentQuest
 	       and not isQuestActive(registeredQuest[1], playern)
 	       and not isQuestSuccessfull(registeredQuest[1], playern)
-	       and (getGroupByQuestIndex(registeredQuest.index) == nil or
-		    getGroupByQuestIndex(registeredQuest.index) == playerActiveGroup) then
-	       
+	       --and (getGroupByQuestIndex(registeredQuest.index) == nil or
+		--       getGroupByQuestIndex(registeredQuest.index) == playerActiveGroup or
+		  --  getGroupByQuestIndexWithGlobal(registeredQuest.index) == "global") then
+	       then
 	       local parentQuests = registeredQuest[7]
 
 	       if parentQuests ~= nil
@@ -495,6 +496,12 @@ function sys4_quests.nextQuest(playername, questname)
 	    if registeredQuest[7] == nil and getGroupByQuestIndex(registeredQuest.index) == nextQuestGroup then
 	       minetest.after(1, function() quests.start_quest(playername, "sys4_quests:"..registeredQuest[1]) end)
 	    end
+	 end
+      end
+
+      if #nextQuests > 0 then
+	 for _, nextQuest in pairs(nextQuests) do
+	    minetest.after(1, function() quests.start_quest(playername, "sys4_quests:"..nextQuest[1]) end)
 	 end
       end
       
