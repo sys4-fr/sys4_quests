@@ -664,7 +664,7 @@ minetest.register_on_joinplayer(
       local playern = player:get_player_name()
       if not playerList[playern] or playerList[playern] == nil then
 	 playerList[playern] = {name = playern, isNew = false, craftMode = true, bookMode = false, activeQuestGroup = getActiveQuestGroup(playern)}
-	 print("ActiveQuestGroup for Player : "..playerList[playern].activeQuestGroup)
+	 --print("ActiveQuestGroup for Player : "..playerList[playern].activeQuestGroup)
       end
 
       if (playerList[playern].isNew) then

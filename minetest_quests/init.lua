@@ -28,19 +28,19 @@ if mod_sys4_quests then
       if mod_farming then
 	 dofile(current_modpath.."/farming.lua")
 	 
-	 if mod_wool then
-	    dofile(current_modpath.."/wool.lua")
+	 if mod_dye then
+	    dofile(current_modpath.."/dye.lua")
+	 
+	    if mod_wool then
+	       dofile(current_modpath.."/wool.lua")
 
-	    if mod_beds then
-	       dofile(current_modpath.."/beds.lua")
+	       if mod_beds then
+		  dofile(current_modpath.."/beds.lua")
+	       end
 	    end
 	 end
       end
       
-      if mod_dye then
-	 dofile(current_modpath.."/dye.lua")
-      end
-
       if mod_boats then
 	 dofile(current_modpath.."/boats.lua")
       end

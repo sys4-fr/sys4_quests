@@ -199,7 +199,7 @@ ins(quests, {
 
 -- wood_builder
 ins(quests, {
-       'wood_builder', "Wood Builder", nil, {mod..":wood", mod..":junglewood", mod..":acacia_wood", mod..":pine_wood", mod..":aspen_wood"}, 3, {"stairs:slab_wood", "stairs:stair_wood","stairs:slab_junglewood", "stairs:stair_junglewood","stairs:slab_acacia_wood", "stairs:stair_acacia_wood","stairs:slab_pine_wood", "stairs:stair_pine_wood","stairs:slab_aspen_wood", "stairs:stair_aspen_wood"}, "tree_digger", type = t
+       'wood_builder', "Wood Builder", nil, {mod..":wood", mod..":junglewood", mod..":acacia_wood", mod..":pine_wood", mod..":aspen_wood"}, 3, {"stairs:slab_wood", "stairs:stair_wood","stairs:slab_junglewood", "stairs:stair_junglewood","stairs:slab_acacia_wood", "stairs:stair_acacia_wood","stairs:slab_pine_wood", "stairs:stair_pine_wood","stairs:slab_aspen_wood", "stairs:stair_aspen_wood"}, nil, type = t, group = wood
 	    })
 
 -- sandstonebrick_builder
@@ -224,7 +224,7 @@ ins(quests, {
 
 -- cobble_builder
 ins(quests, {
-       'cobble_builder', "Cobble Builder", nil, {mod..":cobble", mod..":desert_cobble"}, 3, {"stairs:slab_cobble", "stairs:stair_cobble", "stairs:slab_desert_cobble", "stairs:stair_desert_cobble"}, "stone_digger", type = t
+       'cobble_builder', "Cobble Builder", nil, {mod..":cobble", mod..":desert_cobble"}, 3, {"stairs:slab_cobble", "stairs:stair_cobble", "stairs:slab_desert_cobble", "stairs:stair_desert_cobble"}, nil, type = t, group = stone
 	    })
 
 -- copperblock_builder
@@ -282,7 +282,7 @@ ins(quests, {
 
 -- sticks_crafter
 ins(quests, {
-       'sticks_crafter', "Sticks Crafter", nil, {mod..":stick"}, 4, {mod..":fence_wood"}, "wood_crafter", type = t, group = wood
+       'sticks_crafter', "Sticks Crafter", nil, {mod..":stick"}, 4, {mod..":fence_wood", mod..":fence_junglewood", mod..":fence_acacia_wood", mod..":fence_pine_wood", mod..":fence_aspen_wood"}, "wood_crafter", type = t, group = wood
 	    })
 
 -- sticks_crafter_lover

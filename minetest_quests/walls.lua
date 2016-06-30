@@ -12,7 +12,15 @@ local up = sys4_quests.updateQuest
 ---------- Quests for walls mod ----------
 local mod = "walls"
 
+----- Quests Groups -----
+local stone = "Stone Age"
+
 -- Get variable for register quests
 local quests = sys4_quests.initQuests(mod, S)
 
-up('stone_digger_expert', nil, {mod..":cobble", mod..":desertcobble", mod..":mossycobble"})
+ins(quests, {
+       'cobble_builder_lover', "Cobble Builder Lover", nil, {"default:cobble", "default:desertcobble", "default:mossycobble"}, 3, {mod..":cobble", mod..":desertcobble", mod..":mossycobble"}, "cobble_builder", type = "place", group = stone
+	    })
+
+sys4_quests.registerQuests()
+

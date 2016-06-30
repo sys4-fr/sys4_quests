@@ -8,8 +8,10 @@ boats?
 bucket?
 doors?
 dye?
+fire?
 flowers?
 screwdriver?
 tnt?
 vessels?
+walls?
 xpanes?
