@@ -13,7 +13,7 @@ Diamond Digger = Trouve du Diamant
 Obsidian Digger = Trouve de l'Obsidienne
 
 Wood Crafter = Fait des Planches
-Sticks Crafter = Fait des Batons
+Sticks Crafter = Fait des Bâtons
 Sandstone Crafter = Fait du gré
 Papers Crafter = Fait du Papier
 Books Crafter = Fait des livres
@@ -26,7 +26,7 @@ Tools Crafter Master = Outils en Diamant
 
 Furnace Builder = Pose de Four
 Wood Builder = Pose des Planches
-Wood Builder Lover = Pose des Dalles en Bois
+Wood Builder Lover = Pose des éléments en Bois
 
 ### Custom Descriptions ###
 

@@ -35,7 +35,7 @@ local t = "dig"
 
 -- snow_digger
 ins(quests, {
-       'snow_digger', "Snow Digger", nil, {mod..":snow"}, 9, {mod..":snowblock", mod..":snow"}, nil, type = t, group = dark
+       'snow_digger', "Snow Digger", nil, {mod..":snow"}, 9, {mod..":snowblock", mod..":snow"}, nil, type = t
 	    })
 
 -- clay_digger
@@ -45,7 +45,7 @@ ins(quests, {
 
 -- papyrus_digger
 ins(quests, {
-       'papyrus_digger', "Papyrus Digger", nil, {mod..":papyrus"}, 3, {mod..":paper"}, nil, type = t, group = dark
+       'papyrus_digger', "Papyrus Digger", nil, {mod..":papyrus"}, 3, {mod..":paper"}, nil, type = t, group = farm
 	    })
 
 -- sand_digger
@@ -204,7 +204,7 @@ ins(quests, {
 
 -- sandstonebrick_builder
 ins(quests, {
-       'sandstonebrick_builder', "Sandstone Bricks Builder", nil, {mod..":sandstonebrick"}, 3, {"stairs:slab_sandstonebrick", "stairs:stair_sandstonebrick"}, "sandstone_crafter", type = t
+       'sandstonebrick_builder', "Sandstone Bricks Builder", nil, {mod..":sandstonebrick"}, 3, {"stairs:slab_sandstonebrick", "stairs:stair_sandstonebrick"}, "sandstone_crafter", type = t, group = stone
 	    })
 
 -- stone_builder
@@ -214,7 +214,7 @@ ins(quests, {
 
 -- brick_builder
 ins(quests, {
-       'brick_builder', "Brick Builder", nil, {mod..":brick"}, 3, {"stairs:slab_brick", "stairs:stair_brick"}, "furnace_crafter", type = t
+       'brick_builder', "Brick Builder", nil, {mod..":brick"}, 3, {"stairs:slab_brick", "stairs:stair_brick"}, "furnace_crafter", type = t, group = stone
 	    })
 
 --stonebrick_builder
@@ -262,7 +262,7 @@ t = "craft"
 
 -- paper_crafter
 ins(quests, {
-       'paper_crafter', "Paper Crafter", nil, {mod..":paper"}, 3, {mod..":book"}, nil, type = t, group = farm
+       'paper_crafter', "Paper Crafter", nil, {mod..":paper"}, 3, {mod..":book"}, "papyrus_digger", type = t, group = farm
 	    })
 
 -- book_crafter

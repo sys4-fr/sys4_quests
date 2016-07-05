@@ -30,7 +30,7 @@ local t = "place"
 
 -- wood_builder_lover
 ins(quests, {
-       'wood_builder_lover', "Wood Builder Lover", nil, {"default:wood", "default:junglewood", "default:acacia_wood", "default:pine_wood", "default:aspen_wood"}, 3, {mod..":door_wood", mod..":trapdoor"}, "wood_builder", type = t, group = wood
+       'wood_builder_lover', "Wood Builder Lover", nil, {"default:wood", "stairs:slab_wood", "stairs:stair_wood", "default:junglewood", "stairs:slab_junglewood", "stairs:stair_junglewood", "default:acacia_wood", "stairs:slab_acacia_wood", "stairs:stair_acacia_wood", "default:pine_wood", "stairs:slab_pine_wood", "stairs:stair_pine_wood", "default:aspen_wood", "stairs:slab_aspen_wood", "stairs:stair_aspen_wood"}, 3, {mod..":door_wood", mod..":trapdoor"}, "wood_builder", type = t, group = wood
 	    })
 
 -- fence_placer

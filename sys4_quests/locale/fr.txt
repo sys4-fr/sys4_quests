@@ -1,4 +1,4 @@
 dig = Récolte
 place = Pose
 craft = Fabrique
-The end of the Quest Unlock this Items = La fin de la quete débloque les crafts
+The end of the Quest Unlock this Items = La fin de la quête débloque les crafts

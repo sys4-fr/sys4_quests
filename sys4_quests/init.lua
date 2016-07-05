@@ -27,7 +27,7 @@ sys4_quests.questGroups['global'] = {order = 1, questsIndex = {}}
 
 local lastQuestIndex = 0
 --local level = 33
-local level = 1
+local level = 12
 
 function sys4_quests.addQuestGroup(groupName)
 
@@ -141,11 +141,11 @@ local function getActiveQuestGroup(playern)
    local isFound = false
    for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
       for _, quest in ipairs(registeredQuests.quests) do
-	 print("Quest : "..quest[1])
+--	 print("Quest : "..quest[1])
 	 if isQuestActive(quest[1], playern) then
-	    print("is ACTIVE")
+--	    print("is ACTIVE")
 	    groupName = getGroupByQuestIndex(quest.index)
-	    print("GroupName is : "..dump(groupName))
+--	    print("GroupName is : "..dump(groupName))
 	    if groupName ~= nil then
 	       isFound = true
 	       break
@@ -155,13 +155,13 @@ local function getActiveQuestGroup(playern)
       if isFound then break end
    end
 
-   print("Return groupName : "..dump(groupName))
+--   print("Return groupName : "..dump(groupName))
    return groupName
 end
 
 local function getFirstQuestGroup()
    for name, group in pairs(sys4_quests.questGroups) do
-      print("NAME : "..name..", ORDER : "..group.order)
+--      print("NAME : "..name..", ORDER : "..group.order)
       if group.order == 2 then
 	 return name
       end
@@ -251,7 +251,7 @@ function sys4_quests.registerQuests()
 	    if not quest.group then
 	       table.insert(sys4_quests.questGroups['global'].questsIndex, quest.index)
 	    elseif sys4_quests.questGroups[quest.group] ~= nil then
-	       print("Insert New QuestGroup : "..quest.group)
+--	       print("Insert New QuestGroup : "..quest.group)
 	       table.insert(sys4_quests.questGroups[quest.group].questsIndex, quest.index)
 	    end
 
@@ -472,7 +472,7 @@ local function isAllQuestsGroupSuccessfull(currentQuestGroup, questname, playern
       end
    end
 
-   print("Successfull ALL group quest : "..dump(successfull))
+--   print("Successfull ALL group quest : "..dump(successfull))
    return successfull
 end
 
@@ -483,8 +483,8 @@ function sys4_quests.nextQuest(playername, questname)
    local currentQuestGroup = playerList[playername].activeQuestGroup
    local nextQuestGroup = getNextQuestGroup(currentQuestGroup)
 
-   print("currentQuestGroup : "..currentQuestGroup)
-   print("NEXt QUEST GROUP : "..dump(nextQuestGroup))
+--   print("currentQuestGroup : "..currentQuestGroup)
+--   print("NEXt QUEST GROUP : "..dump(nextQuestGroup))
    
    if nextQuestGroup ~= nil
    and isAllQuestsGroupSuccessfull(currentQuestGroup, questname, playername) then
@@ -656,7 +656,7 @@ minetest.register_on_newplayer(
    function(player)
       local playern = player:get_player_name()
       playerList[playern] = {name = playern, isNew = true, craftMode = true, bookMode = false, activeQuestGroup = getFirstQuestGroup()}
-      print("ActiveQuestGroup for New Player : "..playerList[playern].activeQuestGroup)
+--      print("ActiveQuestGroup for New Player : "..playerList[playern].activeQuestGroup)
    end)
 
 minetest.register_on_joinplayer(
