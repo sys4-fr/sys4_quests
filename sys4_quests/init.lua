@@ -945,3 +945,85 @@ minetest.register_chatcommand("rquest",
 				    end
 				 end
 			      })
+
+local function getModQuest(questName)
+   for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+      for _, quest in ipairs(registeredQuests.quests) do
+	 if quest[1] == questName then
+	    return mod
+	 end
+      end
+   end
+   return nil
+end
+
+minetest.register_chatcommand("iquest",
+			      {
+				 params = "<quest_name>",
+				 description = "Display info of the quest.",
+				 func = function(name, param)
+				    local quest = getRegisteredQuest(param)
+				    if quest ~= nil then
+				       local qMod = getModQuest(quest[1])
+				       local modIntllib = sys4_quests.registeredQuests[qMod].intllib
+				       local groupName = getGroupByQuestIndex(quest.index)
+				       local modIntllid = getIntllib
+				       if groupName == nil then
+					  groupName = "global"
+				       end
+				       minetest.chat_send_player(name, "> Index: "..quest.index)
+				       minetest.chat_send_player(name, "> Name: "..quest[1])
+				       minetest.chat_send_player(name, "> Title: "..modIntllib(quest[2]))
+				       local cDesc = quest[3]
+				       if cDesc == nil then cDesc = "" end
+				       minetest.chat_send_player(name, "> Custom Desc.: "..modIntllib(cDesc))
+				       minetest.chat_send_player(name, "> Group: "..groupName)
+				       minetest.chat_send_player(name, "> Mod: "..qMod)
+				       minetest.chat_send_player(name, "> Action Type: "..S(quest.type))
+				       minetest.chat_send_player(name, "> Target Nodes: "..dump(quest[4]))
+				       local maxLevel = quest[5] * level
+				       if quest.custom_level then
+					  maxLevel = quest[5]
+				       end
+				       minetest.chat_send_player(name, "> Target count: "..maxLevel)
+				       minetest.chat_send_player(name, "> Custom Level: "..dump(quest.custom_level))
+				       minetest.chat_send_player(name, "> Parent quests: "..dump(quest[7]))
+				       
+				       local childQuests = {}
+				       for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+					  for _, rQuest in ipairs(registeredQuests.quests) do
+					     if rQuest[7] and rQuest[7] ~= nil and type(rQuest[7]) == "string" then
+						local alternQuests = string.split(rQuest[7], "|")
+						for __, alternQuest in ipairs(alternQuests) do
+						   if alternQuest == quest[1] then
+						      table.insert(childQuests, rQuest[1])
+						   end
+						end
+					     elseif type(rQuest[7]) == "table" then
+						for __, quest_1 in ipairs(rQuest[7]) do
+						   local alternQuests = string.split(quest_1, "|")
+						   for ___, alternQuest in ipairs(alternQuests) do
+						      if alternQuest == quest[1] then
+							 table.insert(childQuests, rQuest[1])
+						      end
+						   end
+						end
+					     end
+					  end
+				       end
+				       minetest.chat_send_player(name, "> Child Quests: "..dump(childQuests))
+				       
+				       minetest.chat_send_player(name, "> Items to unlock: "..dump(quest[6]))
+				       local questState = "Inactive"
+				       if isQuestActive(quest[1], name) then
+					  questState = "Active"
+				       end
+				       if isQuestSuccessfull(quest[1], name) then
+					  questState = "Successfull"
+				       end
+				       minetest.chat_send_player(name, "> State: "..questState)
+				    else
+				       minetest.chat_send_player(name, "Sorry, but this quest doesn't exist.")
+				    end
+				 end
+			      })
