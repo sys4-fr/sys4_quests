@@ -967,7 +967,6 @@ minetest.register_chatcommand("iquest",
 				       local qMod = getModQuest(quest[1])
 				       local modIntllib = sys4_quests.registeredQuests[qMod].intllib
 				       local groupName = getGroupByQuestIndex(quest.index)
-				       local modIntllid = getIntllib
 				       if groupName == nil then
 					  groupName = "global"
 				       end
