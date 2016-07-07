@@ -156,7 +156,7 @@ ins(quests, {
 
 -- mese_digger_expert
 ins(quests, {
-       'mese_digger_expert', "Mese Digger Expert", nil, {mod..":stone_with_mese"}, 6, {mod..":mese", mod..":mese_crystal"}, "mese_digger_pro", type = t
+       'mese_digger_expert', "Mese Digger Expert", nil, {mod..":stone_with_mese"}, 6, {mod..":mese", mod..":mese_crystal"}, "mese_digger_pro", type = t, group = middle
 	    })
 
 -- diamond_digger

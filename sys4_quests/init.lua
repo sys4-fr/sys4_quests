@@ -803,7 +803,7 @@ end
 
 minetest.register_chatcommand("craftmode",
 {
-   params = "on or off",
+   params = "[on|off]",
    description = "Enable or not locked crafts.",
    func = function(name, param)
       if param == "on" then
@@ -818,7 +818,7 @@ minetest.register_chatcommand("craftmode",
 
 minetest.register_chatcommand("bookmode",
 {
-   params = "on or off",
+   params = "[on|off]",
    description = "Enable or not books that describe unlocked craft recipes.",
    func = function(name, param)
       if param == "on" then
@@ -830,3 +830,118 @@ minetest.register_chatcommand("bookmode",
       end
    end
 })
+
+minetest.register_chatcommand("lqg",
+			      {
+				 params = "[group index]",
+				 description = "Display groups of quests or display quests of a group if group index is given as argument.",
+				 func = function(name, param)
+				    if param ~= "" then
+				       local isGroupValid = false
+				       for groupName, group in pairs(sys4_quests.questGroups) do
+					  if ""..group.order == param then
+					     isGroupValid = true
+					     minetest.chat_send_player(name, "Quests of group \""..groupName.."\" : ")
+					     for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+						local modIntllib = registeredQuests.intllib
+						for _, quest in ipairs(registeredQuests.quests) do
+						   local qIndex = quest.index
+						   for __, index in ipairs(group.questsIndex) do
+						      if index == qIndex then
+							 local questState = ""
+							 if isQuestActive(quest[1], name) then
+							    questState = "<-- Active"
+							 end
+							 if isQuestSuccessfull(quest[1], name) then
+							    questState = "<-- Successfull"
+							 end
+							 
+							 minetest.chat_send_player(name, "  "..modIntllib(quest[2]).." ["..quest[1].."]".." {mod: "..mod.."} "..questState)
+						      end
+						   end
+						end
+					     end
+					  end
+				       end
+
+				       if not isGroupValid then
+					  minetest.chat_send_player(name, "Sorry, but this group doesn't exist.")
+				       end
+				    else
+				       local groups = {}
+				       for groupName, group in pairs(sys4_quests.questGroups) do
+					  groups[group.order] = groupName
+					  if playerList[name].activeQuestGroup == groupName then
+					     groups[group.order] = groupName.." <-- Active Quests Group"
+					  end
+				       end
+				       
+				       for i = 1, #groups do
+					  minetest.chat_send_player(name, i.." - "..groups[i])
+				       end
+				    end
+				 end
+			      })
+
+
+minetest.register_chatcommand("quitem",
+			      {
+				 params = "<item>",
+				 description = "Display quest to reach for unlock an item.",
+				 func = function(name, param)
+				    local isItemFound = false
+				    for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+				       local modIntllib = registeredQuests.intllib
+				       for _, quest in ipairs(registeredQuests.quests) do
+					  for __, uItem in ipairs(quest[6]) do
+					     if uItem == param then
+						isItemFound = true
+						minetest.chat_send_player(name, "Quest to reach for unlock \""..modIntllib(uItem).."\" :")
+
+						local groupName = getGroupByQuestIndex(quest.index)
+						if groupName == nil then
+						   groupName = "global"
+						end
+
+						local questState = ""
+						if isQuestActive(quest[1], name) then
+						   questState = "<-- Active"
+						end
+						if isQuestSuccessfull(quest[1], name) then
+						   questState = "<-- Successfull"
+						end
+						
+						minetest.chat_send_player(name, "  "..modIntllib(quest[2]).." ["..quest[1].."]".." {mod: "..mod.."} in group "..groupName.." "..questState)
+						break
+					     end
+					  end
+					  if isItemFound then break end
+				       end
+				       if isItemFound then break end
+				    end
+				    if not isItemFound then
+				       minetest.chat_send_player(name, "Sorry, but this item is not unlockable.")
+				    end
+				 end
+			      })
+
+minetest.register_chatcommand("rquest",
+			      {
+				 params = "<quest_name>",
+				 description = "Force an active quest to be immediately reached.",
+				 func = function(name, param)
+				    local quest = getRegisteredQuest(param)
+				    local maxValue
+				    if quest.custom_level then
+				       maxValue = quest[5]
+				    else
+				       maxValue = quest[5] * level
+				    end
+				    
+				    if quests.update_quest(name, "sys4_quests:"..param, maxValue) then
+				       minetest.chat_send_player(name, "The quest has been reached successfully.")
+				    else
+				       minetest.chat_send_player(name, "The quest must be active to do that.")
+				    end
+				 end
+			      })
