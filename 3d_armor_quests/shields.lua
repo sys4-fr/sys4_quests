@@ -29,10 +29,14 @@ up('gold_protection_pro', nil, {mod..":shield_gold"})
 
 up('diamond_protection_lover', nil, {mod..":shield_diamond"})
 
-if minetest.get_modpath("moreores") then
+if minetest.get_modpath("moreores_quests") then
    up('mithril_protection_lover', nil, {mod..":shield_mithril"})
+end
+
+if minetest.get_modpath("ethereal_quests") then
+
+   up('crystal_protection_lover', nil, {mod..":shield_crystal"})
 end
 
 -- enhance cactus and wood protection
 up('iron_digger_lover', nil, {mod..":shield_enhanced_wood", mod..":shield_enhanced_cactus"})
-

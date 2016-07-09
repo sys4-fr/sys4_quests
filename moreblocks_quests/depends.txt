@@ -1,5 +1,3 @@
 minetest_quests
-thirsty
-ethereal?
+moreblocks
 intllib?
-

@@ -175,4 +175,27 @@ if minetest.get_modpath("moreores") then
 	       })
 end
 
+if minetest.get_modpath("ethereal_quests") then
+
+   -- crystal_sword_crafter
+   ins(quests, {
+	  'crystal_sword_crafter', "Crystal Sword Crafter", nil, {"ethereal:sword_crystal"}, 1, {mod..":bootd_crystal"}, "crystal_crafter_lover", type = t, custom_level = true, group = middle
+	       })
+
+   -- crystal_protection
+   ins(quests, {
+	  'crystal_protection', "Crystal Protection", nil, {"ethereal:crystal_ingot"}, 5, {mod..":helmet_crystal"}, "crystal_sword_crafter", type = t, custom_level = true, group = middle
+	       })
+
+   -- crystal_protection_lover
+   ins(quests, {
+	  'crystal_protection_lover', "Crystal Protection Lover", nil, {"ethereal:crystal_ingot"}, 7, {mod..":leggings_crystal"}, "crystal_protection", type = t, custom_level = true, group = middle
+	       })
+
+   -- crystal_protection_pro
+   ins(quests, {
+	  'crystal_protection_pro', "Crystal Protection Pro", nil, {"ethereal:crystal_ingot"}, 8, {mod..":chestplate_crystal"}, "crystal_protection_lover", type = t, custom_level = true, group = middle
+	       })
+end
+
 sys4_quests.registerQuests()

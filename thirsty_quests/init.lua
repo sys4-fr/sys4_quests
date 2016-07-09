@@ -5,6 +5,34 @@
 
 if minetest.get_modpath("minetest_quests")
 and minetest.get_modpath("thirsty") then
+
+   -- if ethereal is detected then define the ethereal:bowl as a drinkable container
+   -- and make it craftable over thus defined by thirsty mod.
+   -- TODO use the minetest.clear_craft if it is commited one day...
+   if minetest.get_modpath("ethereal") then
+      thirsty.config.register_bowl = false
+      thirsty.config.drink_from_container['ethereal:bowl'] =
+	    thirsty.config.drink_from_container['thirsty:wooden_bowl']
+
+      minetest.override_item('ethereal:bowl', {
+				liquids_pointable = true,
+				on_use = thirsty.on_use(nil)
+					      })
+      minetest.register_craft({
+				 output = "thirsty:wooden_bowl 0",
+				 recipe = {
+				    {"group:wood", "", "group:wood"},
+				    {"", "group:wood", ""}
+				 }
+			      })
+      minetest.register_craft({
+				 output = "ethereal:bowl",
+				 recipe = {
+				    {"group:wood", "", "group:wood"},
+				    {"", "group:wood", ""}
+				 }
+			      })
+   end
    
    local S
    if minetest.get_modpath("intllib") then
@@ -29,7 +57,9 @@ and minetest.get_modpath("thirsty") then
    local middle = "Middle Age"
 
    -- update quests from default
-   up('wood_crafter', nil, {mod..":wooden_bowl"})
+   if not minetest.get_modpath("ethereal") then
+      up('wood_crafter', nil, {mod..":wooden_bowl"})
+   end
 
    up('mese_digger', nil, {mod..":water_fountain"})
    

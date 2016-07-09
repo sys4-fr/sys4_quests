@@ -234,9 +234,11 @@ function sys4_quests.registerQuests()
 	 if quest.custom_level then
 	    maxlevel = quest[5]
 	 end
+
+	 --print(dump(quest))
 	 
 	 if quests.register_quest("sys4_quests:"..quest[1],
-			       { title = modIntllib(quest[2]),
+				  { title = modIntllib(quest[2]),
 				 description = sys4_quests.formatDescription(quest, maxlevel, modIntllib),
 				 max = maxlevel,
 				 --autoaccept = sys4_quests.hasDependencies(quest[1]),
