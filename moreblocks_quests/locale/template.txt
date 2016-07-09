@@ -1,0 +1,71 @@
+### Quests Title ###
+
+Dirt Digger =
+Jungle Grass Digger =
+Stone Digger Master = 
+Tree Digger Lover =
+
+Unlock Copper Patina =
+Unlock Trap Glow Glass =
+Unlock Trap Super Glow Glass =
+
+Coal Stone Builder = 
+Glow Glass Builder = 
+Iron Stone Builder =
+Torch Placer =
+Wood Tile Builder = 
+
+### Items Name ###
+
+# Bricks
+moreblocks:cactus_brick =
+moreblocks:coal_stone_bricks = 
+moreblocks:grey_bricks =
+moreblocks:iron_stone_bricks = 
+
+# Checkers
+moreblocks:cactus_checker =
+moreblocks:coal_checker =
+moreblocks:iron_checker = 
+
+# Glass
+moreblocks:clean_glass =
+moreblocks:coal_glass =
+moreblocks:glow_glass = 
+moreblocks:iron_glass =
+moreblocks:super_glow_glass = 
+moreblocks:trap_glass =
+moreblocks:trap_glow_glass =
+moreblocks:trap_super_glow_glass = 
+
+# Others
+moreblocks:circular_saw =
+moreblocks:copperpatina = 
+moreblocks:empty_bookshelf = 
+moreblocks:plankstone =
+moreblocks:rope =
+moreblocks:sweeper = 
+
+# Stone
+moreblocks:circle_stone_bricks =
+moreblocks:coal_stone =
+moreblocks:cobble_compressed = 
+moreblocks:iron_stone = 
+moreblocks:split_stone_tile =
+moreblocks:split_stone_tile_alt = 
+moreblocks:stone_tile =
+moreblocks:trap_stone = 
+
+# Wood
+moreblocks:all_faces_jungle_tree = 
+moreblocks:all_faces_tree = 
+moreblocks:fence_jungle_wood = 
+moreblocks:jungle_stick =
+moreblocks:wood_tile =
+moreblocks:wood_tile_center =
+moreblocks:wood_tile_down =
+moreblocks:wood_tile_flipped =
+moreblocks:wood_tile_full = 
+moreblocks:wood_tile_left =
+moreblocks:wood_tile_right = 
+moreblocks:wood_tile_up = 

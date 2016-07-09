@@ -357,6 +357,8 @@ dye:white = Teintures blanches
 dye:yellow = Teintures jaunes
 
 # Farming
+farming:cotton = Cotons
+farming:cotton_1 = Plants de cotons
 farming:flour = Farine de blé
 farming:hoe_bronze = Houes en bronze
 farming:hoe_diamond = Houes en diamant
@@ -379,7 +381,7 @@ flowers:dandelion_yellow = Pissenlits
 flowers:geranium = Géraniums
 flowers:rose = Roses
 flowers:tulip = Tulipes
-flowers:violet = Violettes
+flowers:viola = Violettes
 
 # Screwdriver
 screwdriver:screwdriver = Tournevis

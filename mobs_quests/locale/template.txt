@@ -1,0 +1,20 @@
+### Quests Title ###
+
+Beehive Crafter =
+Bucket Crafter =
+Unlock Lava Pickaxe = 
+Unlock Magic Lasso =
+Unlock Nametag =
+Unlock Net = 
+
+### Items Name ###
+mobs:beehive =
+mobs:cheese =
+mobs:cheeseblock = 
+mobs:honey =
+mobs:honey_block = 
+mobs:magic_lasso =
+mobs:nametag =
+mobs:net =
+mobs:pick_lava = 
+mobs:shears = 

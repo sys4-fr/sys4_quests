@@ -357,6 +357,8 @@ dye:white =
 dye:yellow =
 
 # Farming
+farming:cotton =
+farming:cotton_1 = 
 farming:flour = 
 farming:hoe_bronze =
 farming:hoe_diamond =
@@ -379,7 +381,7 @@ flowers:dandelion_yellow =
 flowers:geranium =
 flowers:rose =
 flowers:tulip =
-flowers:violet =
+flowers:viola =
 
 # Screwdriver
 screwdriver:screwdriver =

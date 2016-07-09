@@ -1,0 +1,45 @@
+### Quests Title ###
+
+Mithril Digger =
+Mithril Digger Lover =
+Mithril Digger Pro =
+Mithril Digger Expert = 
+Silver Digger =
+Silver Digger Lover =
+Silver Digger Pro =
+Silver Digger Expert = 
+Tin Digger =
+Unlock Copper Rail = 
+
+### Items Name ###
+
+# Blocks
+moreores:mithril_block = 
+moreores:silver_block = 
+moreores:tin_block =
+
+# Ingots
+moreores:mithril_ingot = 
+moreores:silver_ingot = 
+moreores:tin_ingot =
+
+# Mineral
+moreores:mineral_mithril = 
+moreores:mineral_silver = 
+moreores:mineral_tin =
+
+# Others
+moreores:copper_rail = 
+
+# Tools
+moreores:axe_mithril = 
+moreores:hoe_mithril =
+moreores:pick_mithril = 
+moreores:shovel_mithril =
+moreores:sword_mithril =
+
+moreores:axe_silver = 
+moreores:hoe_silver =
+moreores:pick_silver = 
+moreores:shovel_silver =
+moreores:sword_silver = 

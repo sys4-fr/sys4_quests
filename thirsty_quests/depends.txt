@@ -1,5 +1,5 @@
 minetest_quests
 thirsty
-ethereal?
+ethereal_quests?
 intllib?
 

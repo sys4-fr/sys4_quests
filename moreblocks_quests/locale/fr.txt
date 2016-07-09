@@ -1,0 +1,71 @@
+### Quests Title ###
+
+Dirt Digger = Ramasse de le terre
+Jungle Grass Digger = Cueille de l'herbe de jungle
+Stone Digger Master = Mine de la roche - Maître
+Tree Digger Lover = Coupe du bois - Amateur
+
+Unlock Copper Patina = Débloque la patine de cuivre
+Unlock Trap Glow Glass = Débloque le bloc de verre luisant piégé
+Unlock Trap Super Glow Glass = Débloque le super bloc de verre luisant piégé
+
+Coal Stone Builder = Pose de la roche charbonneuse
+Glow Glass Builder = Pose du verre luisant
+Iron Stone Builder = Pose de la roche ferreuse
+Torch Placer = Pose des torches
+Wood Tile Builder = Pose des blocs à carreaux de bois
+
+### Items Name ###
+
+# Bricks
+moreblocks:cactus_brick = Briques de cactus
+moreblocks:coal_stone_bricks = Briques de roche charbonneuse
+moreblocks:grey_bricks = Briques grises
+moreblocks:iron_stone_bricks = Briques de roche ferreuse
+
+# Checkers
+moreblocks:cactus_checker = Blocs en damiers de cactus
+moreblocks:coal_checker = Blocs en damiers de charbon
+moreblocks:iron_checker = Blocs en damiers de fer
+
+# Glass
+moreblocks:clean_glass = Blocs de verre propre
+moreblocks:coal_glass = Blocs de verre au charbon
+moreblocks:glow_glass = Blocs de verre luisant
+moreblocks:iron_glass = Blocs de verre ferreux
+moreblocks:super_glow_glass = Blocs de verre super luisant
+moreblocks:trap_glass = Blocs de verre piégé
+moreblocks:trap_glow_glass = Blocs de verre luisant piégé
+moreblocks:trap_super_glow_glass = Blocs de verre super luisant piégé
+
+# Others
+moreblocks:circular_saw = Cie circulaire
+moreblocks:copperpatina = Blocs de cuivre patiné
+moreblocks:empty_bookshelf = Bibliothèques vides
+moreblocks:plankstone = Planches avec roche
+moreblocks:rope = Cordes
+moreblocks:sweeper = Balais
+
+# Stone
+moreblocks:circle_stone_bricks = Briques de roche en cercle
+moreblocks:coal_stone = Roches charbonneuses
+moreblocks:cobble_compressed = Pavés compressés
+moreblocks:iron_stone = Roches ferreuses
+moreblocks:split_stone_tile = Blocs de carreaux de roche ciselée
+moreblocks:split_stone_tile_alt = Blocs de carreaux de roche ciselée alternatif
+moreblocks:stone_tile = Blocs de carreaux de roches
+moreblocks:trap_stone = Roches piégées
+
+# Wood
+moreblocks:all_faces_jungle_tree = Troncs de jungle multi faces
+moreblocks:all_faces_tree = Troncs d'arbres multi faces
+moreblocks:fence_jungle_wood = Barrières en bois de jungle
+moreblocks:jungle_stick = Bâtons de jungle
+moreblocks:wood_tile = Blocs de carreaux de bois
+moreblocks:wood_tile_center = Blocs de carreaux de bois centré
+moreblocks:wood_tile_down = Blocs de carreaux de bois vers le bas
+moreblocks:wood_tile_flipped = Blocs de carreaux de bois retourné
+moreblocks:wood_tile_full = Blocs de carreaux de bois plein
+moreblocks:wood_tile_left = Blocs de carreaux de bois vers la gauche
+moreblocks:wood_tile_right = Blocs de carreaux de bois vers la droite
+moreblocks:wood_tile_up = Blocs de carreaux de bois vers le haut

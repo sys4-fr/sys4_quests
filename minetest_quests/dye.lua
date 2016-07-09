@@ -25,7 +25,7 @@ local t = "dig"
 
 -- flower_digger
 ins(quests, {
-       'flower_digger', "Flower Digger", "flowers", {"flowers:geranium", "flowers:rose", "flowers:tulip", "flowers:violet", "flowers:dandelion_white", "flowers:dandelion_yellow"}, 1, {mod..":blue", mod..":orange", mod..":red", mod..":violet", mod..":white", mod..":yellow"}, nil, type = t, group = farm
+       'flower_digger', "Flower Digger", "flowers", {"flowers:geranium", "flowers:rose", "flowers:tulip", "flowers:viola", "flowers:dandelion_white", "flowers:dandelion_yellow"}, 1, {mod..":blue", mod..":orange", mod..":red", mod..":violet", mod..":white", mod..":yellow"}, nil, type = t, group = farm
 	    })
 
 t = "craft"
