@@ -292,7 +292,7 @@ ins(quests, {
 
 -- tools_crafter
 ins(quests, {
-       'tools_crafter', "Tools Crafter", "Wooden Tools", {mod..":sword_wood", mod..":axe_wood", mod..":shovel_wood"}, 3, {mod..":pick_wood"}, {"wood_crafter_lover", "sticks_crafter_lover"}, type = t, group = wood, custom_level = true
+       'tools_crafter', "Tools Crafter", "wooden tools", {mod..":sword_wood", mod..":axe_wood", mod..":shovel_wood"}, 3, {mod..":pick_wood"}, {"wood_crafter_lover", "sticks_crafter_lover"}, type = t, group = wood, custom_level = true
 	    })
 
 -- furnace_crafter

@@ -1,8 +1,40 @@
+### Quests Title ###
+
 Cactus Digger =
+Cactus Protection =
+Cactus Protection Lover =
+Cactus Protection Pro =
+Diamond Protection =
+Diamond Protection Lover =
+Diamond Protection Pro =
+Gold Protection =
+Gold Protection Lover =
+Gold Protection Pro =
+Gold Protection Expert =
+Mithril Protection =
+Mithril Protection Lover =
+Mithril Protection Pro =
+Steel Protection =
+Steel Protection Lover =
+Steel Protection Pro =
+
+Bronze Protection =
+Bronze Protection Lover =
+Bronze Protection Pro =
+Crystal Protection =
+Crystal Protection Lover =
+Crystal Protection Pro = 
+Crystal Sword Crafter = 
+Mithril Sword Crafter = 
 Sword Crafter =
 Sword Crafter Lover =
 Sword Crafter Pro =
-Ethereal Sword Crafter =
+Sword Crafter Expert = 
+Wood Protection =
+Wood Protection Lover =
+Wood Protection Pro =
+
+### 3d_armor items ###
 
 3d_armor:boots_cactus =
 3d_armor:chestplate_cactus =
@@ -39,6 +71,18 @@ Ethereal Sword Crafter =
 3d_armor:helmet_crystal =
 3d_armor:leggings_crystal =
 
+3d_armor:boots_mithril =
+3d_armor:chestplate_mithril =
+3d_armor:helmet_mithril =
+3d_armor:leggings_mithril =
+
+### 3d_armor_stand ###
+
+3d_armor_stand:armor_stand =
+3d_armor_stand:locked_armor_stand =
+
+### Shields items ###
+
 shields:shield_wood =
 shields:shield_enhanced_wood =
 shields:shield_cactus =
@@ -48,3 +92,4 @@ shields:shield_bronze =
 shields:shield_gold =
 shields:shield_diamond =
 shields:shield_crystal =
+shields:shield_mithril =

@@ -32,7 +32,7 @@ t = "craft"
 
 -- dye_crafter
 ins(quests, {
-       'dye_crafter', "Dye Crafter", "colored dyes", {mod..":black", mod..":blue", mod..":orange", mod..":red", mod..":violet", mod..":white", mod..":yellow"}, 1, {mod..":brown", mod..":cyan", mod..":dark_green", mod..":dark_grey", mod..":green", mod..":grey", mod..":magenta", mod..":pink"}, "coal_digger", type = t
+       'dye_crafter', "Dye Crafter", "dyes", {mod..":black", mod..":blue", mod..":orange", mod..":red", mod..":violet", mod..":white", mod..":yellow"}, 1, {mod..":brown", mod..":cyan", mod..":dark_green", mod..":dark_grey", mod..":green", mod..":grey", mod..":magenta", mod..":pink"}, "coal_digger", type = t
 	    })
 
 sys4_quests.registerQuests()

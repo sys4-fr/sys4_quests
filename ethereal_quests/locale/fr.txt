@@ -1,0 +1,165 @@
+### Quests title ###
+
+Banana Digger = Cueille des bananes
+Bamboo Digger = Coupe du bambou
+Crystal Digger = Mine du cristal
+Dirt Digger = Ramasse de la terre
+Leaves Digger = Ceuille des feuilles
+Mushroom Digger = Cueille des champignons
+Unlock Moss = Débloque les blocs moussus
+Vegetable Digger = Cueille des légumes
+
+Crystal Crafter = Transforme du cristal
+Crystal Crafter Lover = Transforme du cristal - Amateur
+Crystal Crafter Pro = Transforme du cristal - Pro
+Crystal Crafter Expert = Transforme du cristal - Expert
+
+Torch Placer = Pose des torches
+
+### Custom Desc. ###
+
+dirt blocks = blocs de terre
+frost/jungle leaves or dry shrub/snowy grass = feuilles de jungle/arbre gelé ou arbustes rouges/herbe enneigée
+mushrooms = champignons
+vegetables = légumes
+
+### Items Name ###
+
+# Crystal
+ethereal:axe_crystal = Haches en cristal
+ethereal:crystal_block = Blocs en cristal
+ethereal:crystal_ingot = Lingots de cristal
+ethereal:crystal_spike = Pointes de cristal
+ethereal:pick_crystal = Pioches en cristal
+ethereal:shovel_crystal = Pelles en cristal
+ethereal:sword_crystal = Épées en cristal
+
+# dirt
+ethereal:bamboo_dirt = Blocs de terre de bamboo
+ethereal:cold_dirt = Blocs de terre gelée
+ethereal:crystal_dirt = Blocs de terre de cristal
+ethereal:dry_dirt = Blocs de terre sèche
+ethereal:fiery_dirt = Blocs de terre ardente
+ethereal:gray_dirt = Blocs de terre cendrée
+ethereal:green_dirt = Blocs de terre verte
+ethereal:grove_dirt = Blocs de terre du verger
+ethereal:jungle_dirt = Blocs de terre de jungle
+ethereal:mushroom_dirt = Blocs de terre de champignon
+ethereal:prairie_dirt = Blocs de terre de prairie
+
+# ice
+ethereal:icebrick = Briques de glace
+ethereal:snowbrick = Briques de neige
+
+# Leaves
+ethereal:bamboo_leaves = Feuilles de Bambou
+ethereal:bananaleaves = Feuilles de Bananier
+ethereal:birch_leaves = Feuilles de Bouleau
+ethereal:frost_leaves = Feuilles givrées
+ethereal:orange_leaves = Feuilles d'oranger
+ethereal:palmleaves = Feuilles de Palmiers
+ethereal:redwood_leaves = Feuilles de Séquoia
+ethereal:willow_twig = Feuilles de Saule
+ethereal:yellowleaves = Feuilles jaunes
+
+# Magical Objects
+ethereal:crystal_gilly_staff = Bâtons de guide en crystal
+ethereal:light_staff = Bâtons de lumière
+
+# Metal Objects
+ethereal:bucket_cactus = Seaux de cactus
+
+# Moss
+ethereal:crystal_moss = Blocs moussus de cristal
+ethereal:fiery_moss = Blocs moussus ardent
+ethereal:gray_moss = Blocs moussus cendré
+ethereal:green_moss = Blocs de mousse verte
+ethereal:mushroom_moss = Blocs moussus de champignon
+
+# others
+ethereal:banana_dough = Pâte de bananes
+ethereal:candle = Bougies
+ethereal:charcoal_lump = Morceaux de charbon de bois
+ethereal:fire_dust = Poudre de feu
+ethereal:fishing_rod = Cannes à pêche
+ethereal:fishing_rod_baited = Cannes à pêche avec appât
+ethereal:glostone = Roches luisantes
+ethereal:hearty_stew = Pot-au-feu revigorant
+ethereal:lightstring = Cordages luisants
+ethereal:mushroom_soup = Soupes de champignon
+ethereal:paper_wall = Murs en papier
+ethereal:sashimi = Sashimis
+ethereal:worm = Vers de terre
+
+# Stone Objects
+ethereal:stone_ladder = Échelles en pierre
+
+# Trees
+ethereal:banana_trunk = Troncs de Bananiers
+ethereal:birch_trunk = Troncs de Bouleaux
+ethereal:frost_tree = Troncs d'arbres gelés
+ethereal:palm_trunk = Troncs de Palmiers
+ethereal:redwood_trunk = Troncs de Séquoias
+ethereal:scorched_tree = Troncs d'arbres calcinés
+ethereal:willow_trunk = Troncs de Saules
+ethereal:yellow_trunk = Troncs d'arbres jaunes
+
+# Vegetation
+ethereal:bamboo = Bambous
+ethereal:banana = Bananes
+ethereal:bush = Buissons Bambous
+ethereal:bush2 = Buissons de Trembles
+ethereal:bush3 = Buissons de Sapins
+ethereal:dry_shrub = Arbustes rouges
+ethereal:fern = Racines de Fougères
+ethereal:fire_flower = Fleurs de feu
+ethereal:mushroom = Blocs de champignons
+ethereal:onion_4 = Oignons
+ethereal:snowygrass = Touffes d'herbe enneigée
+ethereal:vine = Plantes grimpantes
+
+# Wood
+ethereal:banana_wood = Planches de Bananiers
+ethereal:birch_wood = Planches de Bouleaux
+ethereal:frost_wood = Planches gelées
+ethereal:palm_wood = Planches de Palmiers
+ethereal:redwood_wood = Planches de Séquoias
+ethereal:willow_wood = Planches de Saules
+ethereal:yellow_wood = Planches jaunes
+stairs:slab_banana_wood = Dalles en planches de bananier
+stairs:slab_birch_wood = Dalles en planches de Bouleau
+stairs:slab_frost_wood = Dalles en planches gelées
+stairs:slab_palm_wood = Dalles en planches de Palmier
+stairs:slab_redwood_wood = Dalles en planches de Séquoia
+stairs:slab_willow_wood = Dalles en planches de Saule
+stairs:slab_yellow_wood = Dalles en planches jaunes
+stairs:stair_banana_wood = Escaliers en planches de Bananier
+stairs:stair_birch_wood = Escaliers en planches de Bouleau
+stairs:stair_frost_wood = Escaliers en planches gelées
+stairs:stair_palm_wood = Escaliers en planches de Palmier
+stairs:stair_redwood_wood = Escaliers en planches de Séquoia
+stairs:stair_willow_wood = Escaliers en planches de Saule
+stairs:stair_yellow_wood = Escaliers en planches jaunes
+
+# Wooden Objects
+ethereal:bamboo_floor = Sols en bambou
+ethereal:bowl = Bols
+ethereal:fence_banana = Barrières en Bananier
+ethereal:fence_birch = Barrières en Bouleau
+ethereal:fence_frostwood = Barrières gelées
+ethereal:fence_mushroom = Barrières en champignon
+ethereal:fence_palm = Barrières en Palmier
+ethereal:fence_redwood = Barrières en Séquoia
+ethereal:fence_scorched = Barrières calcinées
+ethereal:fence_willow = Barrières en Saule
+ethereal:fence_yelowwood = Barrières en bois jaune
+ethereal:fencegate_banana_closed = Portails en Bananier
+ethereal:fencegate_birch_closed = Portails en Bouleau
+ethereal:fencegate_frostwood_closed = Portails gelés
+ethereal:fencegate_mushroom_closed = Portails en champignon
+ethereal:fencegate_palm_closed = Portails en Palmier
+ethereal:fencegate_redwood_closed = Portails en Séquoia
+ethereal:fencegate_scorched_closed = Portails calcinés
+ethereal:fencegate_willow_closed = Portails en Saule
+ethereal:fencegate_yelowwood_closed = Portails en bois jaune
+

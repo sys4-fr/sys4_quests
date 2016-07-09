@@ -297,7 +297,7 @@ function sys4_quests.formatDescription(quest, level, intllib)
    end
 
    -- Print Unlocked Items
-   str = str.."\n \n"..S("The end of the Quest Unlock this Items").." :\n"
+   str = str.."\n \n"..S("The end of the quest unlock this items").." :\n"
    return str..sys4_quests.printUnlockedItems(quest[6])
 end
 
@@ -575,9 +575,9 @@ local function getCraftRecipes(item)
 	       end
 	    end
 	 end
+      else
+	       str = S("No craft for this item").."\n"
       end
-   else
-      str = S("No craft for this item").."\n"
    end
    return str   
 end
@@ -599,7 +599,7 @@ local function writeBook(content, items, playern)
 	 local intllib = sys4_quests.intllib_by_item(item)
 	 
 	 tt = tt..">>>> "..intllib(item).." <<<<\n\n"
-	 tt = tt..S("Craft recipes :\n")
+	 tt = tt..S("Craft recipes").." :\n"
 	 tt = tt..getCraftRecipes(item)
 	 tt = tt.."\n----------OOOOOO----------\n\n"
       end
@@ -806,14 +806,14 @@ end
 minetest.register_chatcommand("craftmode",
 {
    params = "[on|off]",
-   description = "Enable or not locked crafts.",
+   description = S("Enable or not locked crafts")..".",
    func = function(name, param)
       if param == "on" then
 	 playerList[name].craftMode = true
-	 minetest.chat_send_player(name, "Craft Mode Enabled.")
+	 minetest.chat_send_player(name, S("Craft Mode Enabled")..".")
       else
 	 playerList[name].craftMode = false
-	 minetest.chat_send_player(name, "Craft Mode Disabled.")
+	 minetest.chat_send_player(name, S("Craft Mode Disabled")..".")
       end
    end
 })
@@ -821,29 +821,29 @@ minetest.register_chatcommand("craftmode",
 minetest.register_chatcommand("bookmode",
 {
    params = "[on|off]",
-   description = "Enable or not books that describe unlocked craft recipes.",
+   description = S("Enable or not books that describe unlocked craft recipes")..".",
    func = function(name, param)
       if param == "on" then
 	 playerList[name].bookMode = true
-	 minetest.chat_send_player(name, "Book Mode Enabled.")
+	 minetest.chat_send_player(name, S("Book Mode Enabled")..".")
       else
 	 playerList[name].bookMode = false
-	 minetest.chat_send_player(name, "Book Mode Disabled.")
+	 minetest.chat_send_player(name, S("Book Mode Disabled")..".")
       end
    end
 })
 
 minetest.register_chatcommand("lqg",
 			      {
-				 params = "[group index]",
-				 description = "Display groups of quests or display quests of a group if group index is given as argument.",
+				 params = "["..S("group index").."]",
+				 description = S("Display groups of quests or display quests of a group if group index is given as argument")..".",
 				 func = function(name, param)
 				    if param ~= "" then
 				       local isGroupValid = false
 				       for groupName, group in pairs(sys4_quests.questGroups) do
 					  if ""..group.order == param then
 					     isGroupValid = true
-					     minetest.chat_send_player(name, "Quests of group \""..groupName.."\" : ")
+					     minetest.chat_send_player(name, S("Quests of group").." \""..groupName.."\" : ")
 					     for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 						local modIntllib = registeredQuests.intllib
 						for _, quest in ipairs(registeredQuests.quests) do
@@ -852,10 +852,10 @@ minetest.register_chatcommand("lqg",
 						      if index == qIndex then
 							 local questState = ""
 							 if isQuestActive(quest[1], name) then
-							    questState = "<-- Active"
+							    questState = "<-- "..S("Active")
 							 end
 							 if isQuestSuccessfull(quest[1], name) then
-							    questState = "<-- Successfull"
+							    questState = "<-- "..S("Successfull")
 							 end
 							 
 							 minetest.chat_send_player(name, "  "..modIntllib(quest[2]).." ["..quest[1].."]".." {mod: "..mod.."} "..questState)
@@ -867,14 +867,14 @@ minetest.register_chatcommand("lqg",
 				       end
 
 				       if not isGroupValid then
-					  minetest.chat_send_player(name, "Sorry, but this group doesn't exist.")
+					  minetest.chat_send_player(name, S("Sorry, but this group doesn't exist")..".")
 				       end
 				    else
 				       local groups = {}
 				       for groupName, group in pairs(sys4_quests.questGroups) do
 					  groups[group.order] = groupName
 					  if playerList[name].activeQuestGroup == groupName then
-					     groups[group.order] = groupName.." <-- Active Quests Group"
+					     groups[group.order] = groupName.." <-- "..S("Active Quests Group")
 					  end
 				       end
 				       
@@ -888,8 +888,8 @@ minetest.register_chatcommand("lqg",
 
 minetest.register_chatcommand("quitem",
 			      {
-				 params = "<item>",
-				 description = "Display quest to reach for unlock an item.",
+				 params = "<"..S("item")..">",
+				 description = S("Display quest to reach for unlock an item")..".",
 				 func = function(name, param)
 				    local isItemFound = false
 				    for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
@@ -898,7 +898,7 @@ minetest.register_chatcommand("quitem",
 					  for __, uItem in ipairs(quest[6]) do
 					     if uItem == param then
 						isItemFound = true
-						minetest.chat_send_player(name, "Quest to reach for unlock \""..modIntllib(uItem).."\" :")
+						minetest.chat_send_player(name, S("Quest to reach for unlock").." \""..modIntllib(uItem).."\" :")
 
 						local groupName = getGroupByQuestIndex(quest.index)
 						if groupName == nil then
@@ -907,13 +907,13 @@ minetest.register_chatcommand("quitem",
 
 						local questState = ""
 						if isQuestActive(quest[1], name) then
-						   questState = "<-- Active"
+						   questState = "<-- "..S("Active")
 						end
 						if isQuestSuccessfull(quest[1], name) then
-						   questState = "<-- Successfull"
+						   questState = "<-- "..S("Successfull")
 						end
 						
-						minetest.chat_send_player(name, "  "..modIntllib(quest[2]).." ["..quest[1].."]".." {mod: "..mod.."} in group "..groupName.." "..questState)
+						minetest.chat_send_player(name, "  "..modIntllib(quest[2]).." ["..quest[1].."]".." {mod: "..mod.."} "..S("in group").." "..groupName.." "..questState)
 						break
 					     end
 					  end
@@ -922,15 +922,15 @@ minetest.register_chatcommand("quitem",
 				       if isItemFound then break end
 				    end
 				    if not isItemFound then
-				       minetest.chat_send_player(name, "Sorry, but this item is not unlockable.")
+				       minetest.chat_send_player(name, S("Sorry, but this item is not unlockable")..".")
 				    end
 				 end
 			      })
 
 minetest.register_chatcommand("rquest",
 			      {
-				 params = "<quest_name>",
-				 description = "Force an active quest to be immediately reached.",
+				 params = "<"..S("quest_name")..">",
+				 description = S("Force an active quest to be immediately reached")..".",
 				 func = function(name, param)
 				    local quest = getRegisteredQuest(param)
 				    local maxValue
@@ -941,9 +941,9 @@ minetest.register_chatcommand("rquest",
 				    end
 				    
 				    if quests.update_quest(name, "sys4_quests:"..param, maxValue) then
-				       minetest.chat_send_player(name, "The quest has been reached successfully.")
+				       minetest.chat_send_player(name, S("The quest has been reached successfully")..".")
 				    else
-				       minetest.chat_send_player(name, "The quest must be active to do that.")
+				       minetest.chat_send_player(name, S("The quest must be active to do that")..".")
 				    end
 				 end
 			      })
@@ -961,8 +961,8 @@ end
 
 minetest.register_chatcommand("iquest",
 			      {
-				 params = "<quest_name>",
-				 description = "Display info of the quest.",
+				 params = "<"..S("quest_name")..">",
+				 description = S("Display info of the quest")..".",
 				 func = function(name, param)
 				    local quest = getRegisteredQuest(param)
 				    if quest ~= nil then
@@ -972,23 +972,23 @@ minetest.register_chatcommand("iquest",
 				       if groupName == nil then
 					  groupName = "global"
 				       end
-				       minetest.chat_send_player(name, "> Index: "..quest.index)
-				       minetest.chat_send_player(name, "> Name: "..quest[1])
-				       minetest.chat_send_player(name, "> Title: "..modIntllib(quest[2]))
+				       minetest.chat_send_player(name, "> "..S("Index")..": "..quest.index)
+				       minetest.chat_send_player(name, "> "..S("Name")..": "..quest[1])
+				       minetest.chat_send_player(name, "> "..S("Title")..": "..modIntllib(quest[2]))
 				       local cDesc = quest[3]
 				       if cDesc == nil then cDesc = "" end
-				       minetest.chat_send_player(name, "> Custom Desc.: "..modIntllib(cDesc))
-				       minetest.chat_send_player(name, "> Group: "..groupName)
-				       minetest.chat_send_player(name, "> Mod: "..qMod)
-				       minetest.chat_send_player(name, "> Action Type: "..S(quest.type))
-				       minetest.chat_send_player(name, "> Target Nodes: "..dump(quest[4]))
+				       minetest.chat_send_player(name, "> "..S("Custom Desc.")..": "..modIntllib(cDesc))
+				       minetest.chat_send_player(name, "> "..S("Group")..": "..groupName)
+				       minetest.chat_send_player(name, "> "..S("Mod")..": "..qMod)
+				       minetest.chat_send_player(name, "> "..S("Action Type")..": "..S(quest.type))
+				       minetest.chat_send_player(name, "> "..S("Target Nodes")..": "..dump(quest[4]))
 				       local maxLevel = quest[5] * level
 				       if quest.custom_level then
 					  maxLevel = quest[5]
 				       end
-				       minetest.chat_send_player(name, "> Target count: "..maxLevel)
-				       minetest.chat_send_player(name, "> Custom Level: "..dump(quest.custom_level))
-				       minetest.chat_send_player(name, "> Parent quests: "..dump(quest[7]))
+				       minetest.chat_send_player(name, "> "..S("Target count")..": "..maxLevel)
+				       minetest.chat_send_player(name, "> "..S("Custom Level")..": "..dump(quest.custom_level))
+				       minetest.chat_send_player(name, "> "..S("Parent quests")..": "..dump(quest[7]))
 				       
 				       local childQuests = {}
 				       for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
@@ -1012,9 +1012,9 @@ minetest.register_chatcommand("iquest",
 					     end
 					  end
 				       end
-				       minetest.chat_send_player(name, "> Child Quests: "..dump(childQuests))
+				       minetest.chat_send_player(name, "> "..S("Child Quests")..": "..dump(childQuests))
 				       
-				       minetest.chat_send_player(name, "> Items to unlock: "..dump(quest[6]))
+				       minetest.chat_send_player(name, "> "..S("Items to unlock")..": "..dump(quest[6]))
 				       local questState = "Inactive"
 				       if isQuestActive(quest[1], name) then
 					  questState = "Active"
@@ -1022,9 +1022,9 @@ minetest.register_chatcommand("iquest",
 				       if isQuestSuccessfull(quest[1], name) then
 					  questState = "Successfull"
 				       end
-				       minetest.chat_send_player(name, "> State: "..questState)
+				       minetest.chat_send_player(name, "> "..S("State")..": "..S(questState))
 				    else
-				       minetest.chat_send_player(name, "Sorry, but this quest doesn't exist.")
+				       minetest.chat_send_player(name, S("Sorry, but this quest doesn't exist")..".")
 				    end
 				 end
 			      })
