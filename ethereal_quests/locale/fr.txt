@@ -78,6 +78,8 @@ ethereal:mushroom_moss = Blocs moussus de champignon
 
 # others
 ethereal:banana_dough = Pâte de bananes
+ethereal:bone = Os
+ethereal:bonemeal = Poudre d'os
 ethereal:candle = Bougies
 ethereal:charcoal_lump = Morceaux de charbon de bois
 ethereal:fire_dust = Poudre de feu

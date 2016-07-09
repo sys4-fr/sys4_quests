@@ -34,14 +34,14 @@ if minetest.get_modpath("minetest_quests") and
    local dirtNodes = {mod..":bamboo_dirt", mod..":cold_dirt", mod..":crystal_dirt", mod..":dry_dirt", mod..":fiery_dirt", mod..":gray_dirt", mod..":green_dirt", mod..":grove_dirt", mod..":jungle_dirt", mod..":mushroom_dirt", mod..":prairie_dirt"}
    
    if minetest.get_modpath("moreblocks_quests") then
-      up('dirt_digger', dirtNodes, {mod..":worm", "default:desert_sand"})
+      up('dirt_digger', dirtNodes, {mod..":bonemeal", mod..":worm", "default:desert_sand"})
       
       up('torch_placer', nil, {mod..":glostone"})
    else
       ins(dirtNodes, {"default:dirt", "default:dirt_with_grass", "default:dirt_with_dry_grass", "default:dirt_with_snow"})
       
       ins(quests, {
-	     'dirt_digger', "Dirt Digger", "dirt blocks", dirtNodes, 1, {"default:desert_sand", mod..":worm"}, nil, type = "dig", group = dark
+	     'dirt_digger', "Dirt Digger", "dirt blocks", dirtNodes, 1, {"default:desert_sand", mod..":bonemeal", mod..":worm"}, nil, type = "dig", group = dark
 		  })
       
       ins(quests, {
