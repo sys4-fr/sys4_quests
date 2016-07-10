@@ -11,7 +11,7 @@ This modpack provide :
 * It also provide already written quests. (minetest_quests, ...)
 
 ##TARGET :
-you have to follow proposed quests and finish them to unlock craft of items they unlock.
+You have to follow proposed quests and finish them to unlock craft of items they unlock.
 Otherwise if you intent to craft a locked item, you will obtain a waste item.
 
 ##INSTALLATION :
@@ -92,7 +92,7 @@ Download the source code and place it in a new folder named "sys4_quests" into t
 * /craftmode [on|off]  : Enable or not locked crafts. (default is on)
 * /bookmode [on|off]   : Enable or not written books that shows you how to craft unlocked items when you finish a quest. (default is off)
 * /lqg [group index]   : Display groups of quests or display quests of a group if group index is given as argument.
-* /iquest <quest_name> : Display infos of the quest.
-* /fquest <quest_name> : Force an active quest to be immediately finished.
-* /itemqq <item>       : Display the quest to finish which unlock the item.
-* /getcraft <item>     : Display craft recipes of the item.
+* /iquest "quest_name" : Display infos of the quest.
+* /fquest "quest_name" : Force an active quest to be immediately finished.
+* /itemqq "item"       : Display the quest to finish which unlock the item.
+* /getcraft "item"     : Display craft recipes of the item.
