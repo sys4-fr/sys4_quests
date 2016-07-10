@@ -886,10 +886,10 @@ minetest.register_chatcommand("lqg",
 			      })
 
 
-minetest.register_chatcommand("quitem",
+minetest.register_chatcommand("itemqq",
 			      {
 				 params = "<"..S("item")..">",
-				 description = S("Display quest to reach for unlock an item")..".",
+				 description = S("Display the quest to finish which unlock the item")..".",
 				 func = function(name, param)
 				    local isItemFound = false
 				    for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
@@ -898,7 +898,7 @@ minetest.register_chatcommand("quitem",
 					  for __, uItem in ipairs(quest[6]) do
 					     if uItem == param then
 						isItemFound = true
-						minetest.chat_send_player(name, S("Quest to reach for unlock").." \""..modIntllib(uItem).."\" :")
+						minetest.chat_send_player(name, S("Quest to finish for unlock").." \""..modIntllib(uItem).."\" :")
 
 						local groupName = getGroupByQuestIndex(quest.index)
 						if groupName == nil then
@@ -1027,4 +1027,14 @@ minetest.register_chatcommand("iquest",
 				       minetest.chat_send_player(name, S("Sorry, but this quest doesn't exist")..".")
 				    end
 				 end
+			      })
+
+minetest.register_chatcommand("getcraft",
+			      {
+				 params = "<"..S("item")..">",
+				 description = S("Display craft recipes of the item")..".",
+				 func = function(name, param)
+				    minetest.chat_send_player(name, getCraftRecipes(param))
+				 end
+
 			      })
