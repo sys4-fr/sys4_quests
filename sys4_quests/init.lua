@@ -927,10 +927,10 @@ minetest.register_chatcommand("quitem",
 				 end
 			      })
 
-minetest.register_chatcommand("rquest",
+minetest.register_chatcommand("fquest",
 			      {
 				 params = "<"..S("quest_name")..">",
-				 description = S("Force an active quest to be immediately reached")..".",
+				 description = S("Force an active quest to be immediately finished")..".",
 				 func = function(name, param)
 				    local quest = getRegisteredQuest(param)
 				    local maxValue
@@ -941,7 +941,7 @@ minetest.register_chatcommand("rquest",
 				    end
 				    
 				    if quests.update_quest(name, "sys4_quests:"..param, maxValue) then
-				       minetest.chat_send_player(name, S("The quest has been reached successfully")..".")
+				       minetest.chat_send_player(name, S("The quest has been finished successfully")..".")
 				    else
 				       minetest.chat_send_player(name, S("The quest must be active to do that")..".")
 				    end
