@@ -1,0 +1,9 @@
+### Quests Title ###
+
+Rail Installer = Poseur de rails
+
+### Items Name ###
+
+carts:brakerail = Rails ralentisseurs
+carts:cart = Chariots
+carts:powerrail = Rails accelérateurs

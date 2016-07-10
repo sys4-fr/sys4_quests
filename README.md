@@ -76,6 +76,13 @@ Download the source code and place it in a new folder named "sys4_quests" into t
     moreores (by Calinou),
     intllib?
 
+* carts_quests
+
+    minetest_quests,
+    carts (by PilzAdam) or boost_cart (by SmallJoker)
+    moreores_quests?
+    intllib?
+
 ##CONFIGURATION :
 * You can change the level of difficulty by editing the local variable "level" in sys4_quests/init.lua" file.
 * By default the level is 12 but for an easier gameplay you can set it down to 1. Or above 12 if you want a more difficult gameplay.
