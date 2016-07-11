@@ -12,40 +12,41 @@ local up = sys4_quests.updateQuest
 ---------- Quests for doors mod ----------
 local mod = "doors"
 
+----- Quests Groups -----
+local dark = "Dark Age"
+local wood = "Wood Age"
+local farm = "Farming Age"
+local stone = "Stone Age"
+local metal = "Metal Age"
+local middle = "Middle Age"
+
 -- Get variable for register quests
 local quests = sys4_quests.initQuests(mod, S)
 
-t = "dig"
+-- update Quests from default
+up('iron_digger_expert', nil, {mod..":door_steel", mod..":trapdoor_steel"})
 
-if minetest.get_modpath("vessels") then
+local t = "place"
 
-   ins(quests, {
-	  'glass_blower_lover', "Glass Blower Lover", nil, {"default:sand", "default:desert_sand"}, 1, {mod..":door_glass"}, "glass_blower", type = t
-	       })
-else
-
-   ins(quests, {
-	  'glass_blower', "Glass Blower", nil, {"default:sand", "default:desert_sand"}, 2, {mod..":door_glass"}, {"sand_digger", "furnace_crafter"}, type = t
-	       })
-
-end
-
+-- wood_builder_lover
 ins(quests, {
-       'steel_architect', "Steel Architect", nil, {"default:stone_with_iron"}, 1, {mod..":trapdoor_steel"}, "iron_digger_pro", type = t
+       'wood_builder_lover', "Wood Builder Lover", nil, {"default:wood", "stairs:slab_wood", "stairs:stair_wood", "default:junglewood", "stairs:slab_junglewood", "stairs:stair_junglewood", "default:acacia_wood", "stairs:slab_acacia_wood", "stairs:stair_acacia_wood", "default:pine_wood", "stairs:slab_pine_wood", "stairs:stair_pine_wood", "default:aspen_wood", "stairs:slab_aspen_wood", "stairs:stair_aspen_wood"}, 3, {mod..":door_wood", mod..":trapdoor"}, "wood_builder", type = t, group = wood
 	    })
 
-t = "craft"
-
+-- fence_placer
 ins(quests, {
-       'obsidian_blower', "Obsidian Blower", nil, {"default:obsidian_shard"}, 6, {mod..":door_obsidian_glass"}, "obsidian_digger", type = t
+       'fence_placer', "Fence Placer", nil, {"default:fence_wood", "default:fence_junglewood", "default:fence_acacia_wood", "default:fence_pine_wood", "default:fence_aspen_wood"}, 3, {mod..":gate_wood_closed", mod..":gate_junglewood_closed", mod..":gate_acacia_wood_closed", mod..":gate_pine_wood_closed", mod..":gate_aspen_wood_closed"}, "sticks_crafter", type = t, group = wood
 	    })
 
+-- glass_builder
 ins(quests, {
-       'wood_architect_lover', "Wood Architect Lover", nil, {"default:stick"}, 2, {mod..":gate_acacia_wood_closed", mod..":gate_junglewood_closed", mod..":gate_pine_wood_closed", mod..":gate_aspen_wood_closed", mod..":gate_wood_closed"}, "wood_architect", type = t
+       'glass_builder', "Glass Builder", nil, {"default:glass"}, 3, {mod..":door_glass"}, "furnace_crafter", type = t, group = stone
+	    })
+
+-- obsidian_glass_builder
+ins(quests, {
+       'obsidian_glass_builder', "Obsidian Glass Builder", nil, {"default:obsidian_glass"}, 3, {mod..":door_obsidian_glass"}, "obsidian_digger", type = t, group = middle
 	    })
 
 sys4_quests.registerQuests()
 
-up("wood_crafter_expert", nil, {mod..":door_wood", mod..":trapdoor"})
-
-up("iron_digger_expert", nil, {mod..":door_steel"})

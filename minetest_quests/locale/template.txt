@@ -1,42 +1,89 @@
-
 ### Quests Title ###
 
-Tree Digger =
-Crumbly Nodes Digger =
-Papyrus Digger =
+Bronze Discover =
+Clay Digger =
 Coal Digger =
-Stone Digger =
-Iron Digger =
+Coal Digger Lover = 
 Copper Digger =
-Gold Digger =
-Mese Digger =
+Cotton Digger =
 Diamond Digger =
+Diamond Digger Lover =
+Diamond Digger Pro =
+Diamond Digger Expert =
+Flower Digger =
+Gold Digger =
+Gravel Digger = 
+Iron Digger =
+Iron Digger Lover =
+Iron Digger Pro =
+Iron Digger Expert =
+Iron Digger Master =
+Iron Digger God = 
+Mese Digger =
+Mese Digger Lover =
+Mese Digger Pro =
+Mese Digger Expert = 
 Obsidian Digger =
+Obsidian Digger Lover = 
+Papyrus Digger =
+Sand Digger = 
+Snow Digger = 
+Steel Blower = 
+Stone Digger =
+Stone Digger Lover =
+Stone Digger Pro =
+Stone Digger Expert = 
+Tree Digger =
+Wheat Digger =
 
-Wood Crafter =
-Sticks Crafter =
-Sandstone Crafter =
-Papers Crafter =
-Books Crafter =
+Book Crafter =
 Bronze Crafter =
+Bronze Crafter Lover =
+Bronze Crafter Pro =
+Bronze Crafter Expert =
+Dye Crafter =
+Furnace Crafter =
+Glass Blower = 
+Gunpowder Crafter =
+Interior Decorator =
+Obsidian Shard Crafter =
+Paper Crafter =
+Sandstone Crafter =
+Sticks Crafter =
+Sticks Crafter Lover =
 Tools Crafter =
-Tools Crafter Lover =
-Tools Crafter Pro =
-Tools Crafter Expert =
-Tools Crafter Master =
+Wood Crafter =
+Wood Crafter Lover =
+Wool Crafter =
+Wool Crafter Lover = 
 
-Furnace Builder =
+Brick Builder =
+Bronze Block Builder =
+Cobble Builder =
+Cobble Builder Lover =
+Copper Block Builder =
+Fence Placer =
+Glass Builder = 
+Gold Block Builder =
+Obsidian Builder =
+Obsidian Brick Builder =
+Obsidian Glass Builder = 
+Sandstone Builder =
+Sandstone Bricks Builder =
+Steel Block Builder = 
+Stone Builder =
+Stone Brick Builder =
+Straw Builder = 
 Wood Builder =
 Wood Builder Lover =
 
 ### Custom Descriptions ###
 
-Blocks of Crumbly Nodes =
-Wooden Tools =
-Stone Tools =
-Steel or Bronze Tools =
-Mese Tools =
-Diamond Tools =
+colored wools =
+dyes =
+flowers =
+vessels items =
+wooden tools =
 
 ### Nodes names ###
 
@@ -46,6 +93,7 @@ default:tree =
 default:acacia_tree =
 default:jungletree =
 default:pine_tree =
+default:aspen_tree =
 
 # Stick
 group:stick =
@@ -53,12 +101,15 @@ default:stick =
 
 # Wood
 group:wood =
-default:wood =
 default:acacia_wood =
+default:aspen_wood =
 default:junglewood =
 default:pine_wood =
+default:wood =
 stairs:slab_acacia_wood =
 stairs:stair_acacia_wood =
+stairs:slab_aspen_wood =
+stairs:stair_aspen_wood =
 stairs:slab_junglewood =
 stairs:stair_junglewood =
 stairs:slab_pine_wood =
@@ -68,12 +119,14 @@ stairs:stair_wood =
 
 # Leaves
 default:acacia_leaves =
+default:aspen_leaves =
 default:jungleleaves =
 default:leaves =
 default:pine_needles =
 
 # Saplings
 default:acacia_sapling =
+default:aspen_sapling = 
 default:junglesapling =
 default:pine_sapling =
 default:sapling =
@@ -150,10 +203,6 @@ stairs:stair_steelblock =
 
 # Cactus
 default:cactus =
-
-# Chests
-default:chest =
-default:chest_locked =
 
 # Clays
 default:clay =
@@ -234,12 +283,26 @@ default:junglegrass =
 default:papyrus =
 
 # Wooden Objects
+default:chest =
+default:chest_locked =
+default:fence_acacia_wood =
+default:fence_aspen_wood =
+default:fence_junglewood =
+default:fence_pine_wood =
 default:fence_wood =
-default:ladder =
-default:sign_wall =
+default:ladder_wood =
+default:sign_wall_wood =
 
 # Stone Objects
 default:furnace =
+
+# Metal Objects
+default:ladder_steel =
+default:rail =
+default:sign_wall_steel =
+
+# Mese Objects
+default:meselamp =
 
 # Verre
 default:glass =
@@ -247,13 +310,114 @@ default:glass =
 # Others
 default:ice =
 default:lava_source =
-default:meselamp =
 default:nyancat =
 default:nyancat_rainbow =
 default:paper =
-default:rail =
 default:river_water_source =
 default:snow =
 default:snowblock =
 default:torch =
 default:water_source =
+
+# Beds
+beds:bed_bottom = 
+beds:fancy_bed_bottom =
+
+# Boats
+boats:boat =
+
+# Doors
+doors:door_glass =
+doors:door_obsidian_glass =
+doors:door_steel =
+doors:door_wood =
+doors:gate_acacia_wood_closed =
+doors:gate_aspen_wood_closed =
+doors:gate_junglewood_closed =
+doors:gate_pine_wood_closed =
+doors:gate_wood_closed =
+doors:trapdoor =
+doors:trapdoor_steel =
+
+# Dyes
+dye:black =
+dye:blue =
+dye:brown =
+dye:cyan =
+dye:dark_green =
+dye:dark_grey =
+dye:green =
+dye:grey =
+dye:magenta =
+dye:orange =
+dye:pink =
+dye:red =
+dye:violet =
+dye:white =
+dye:yellow =
+
+# Farming
+farming:cotton =
+farming:cotton_1 = 
+farming:flour = 
+farming:hoe_bronze =
+farming:hoe_diamond =
+farming:hoe_mese =
+farming:hoe_steel =
+farming:hoe_stone = 
+farming:hoe_wood =
+farming:straw =
+farming:wheat =
+farming:wheat_1 =
+stairs:slab_straw =
+stairs:stair_straw =
+
+# Fire
+fire:flint_and_steel =
+
+# Flowers
+flowers:dandelion_white =
+flowers:dandelion_yellow =
+flowers:geranium =
+flowers:rose =
+flowers:tulip =
+flowers:viola =
+
+# Screwdriver
+screwdriver:screwdriver =
+
+# TNT
+tnt:gunpowder = 
+tnt:tnt = 
+
+# Vessels
+vessels:drinking_glass = 
+vessels:glass_bottle =
+vessels:shelf = 
+vessels:steel_bottle =
+
+# Walls
+walls:cobble =
+walls:desertcobble =
+walls:mossycobble =
+
+# Wools
+wool:black =
+wool:blue =
+wool:brown =
+wool:cyan =
+wool:dark_green =
+wool:dark_grey =
+wool:green =
+wool:grey =
+wool:magenta =
+wool:orange =
+wool:pink =
+wool:red =
+wool:violet =
+wool:white =
+wool:yellow =
+
+# Xpanes
+xpanes:bar =
+xpanes:pane =

@@ -1,0 +1,166 @@
+### Quests title ###
+
+Banana Digger = 
+Bamboo Digger =
+Crystal Digger = 
+Dirt Digger =
+Leaves Digger =
+Mushroom Digger = 
+Unlock Moss = 
+Vegetable Digger = 
+
+Crystal Crafter =
+Crystal Crafter Lover =
+Crystal Crafter Pro =
+Crystal Crafter Expert =
+
+Torch Placer =
+
+### Custom Desc. ###
+
+dirt blocks =
+frost/jungle leaves or dry shrub/snowy grass = 
+mushrooms = 
+vegetables = 
+
+### Items Name ###
+
+# Crystal
+ethereal:axe_crystal =
+ethereal:crystal_block = 
+ethereal:crystal_ingot =
+ethereal:crystal_spike =
+ethereal:pick_crystal = 
+ethereal:shovel_crystal =
+ethereal:sword_crystal =
+
+# dirt
+ethereal:bamboo_dirt =
+ethereal:cold_dirt =
+ethereal:crystal_dirt =
+ethereal:dry_dirt =
+ethereal:fiery_dirt =
+ethereal:gray_dirt =
+ethereal:green_dirt =
+ethereal:grove_dirt =
+ethereal:jungle_dirt =
+ethereal:mushroom_dirt =
+ethereal:prairie_dirt =
+
+# ice
+ethereal:icebrick =
+ethereal:snowbrick =
+
+# Leaves
+ethereal:bamboo_leaves =
+ethereal:bananaleaves =
+ethereal:birch_leaves =
+ethereal:frost_leaves =
+ethereal:orange_leaves =
+ethereal:palmleaves =
+ethereal:redwood_leaves =
+ethereal:willow_twig =
+ethereal:yellowleaves =
+
+# Magical Objects
+ethereal:crystal_gilly_staff = 
+ethereal:light_staff =
+
+# Metal Objects
+ethereal:bucket_cactus =
+
+# Moss
+ethereal:crystal_moss =
+ethereal:fiery_moss =
+ethereal:gray_moss =
+ethereal:green_moss =
+ethereal:mushroom_moss = 
+
+# others
+ethereal:banana_dough =
+ethereal:bone =
+ethereal:bonemeal =
+ethereal:candle = 
+ethereal:charcoal_lump =
+ethereal:fire_dust = 
+ethereal:fishing_rod =
+ethereal:fishing_rod_baited =
+ethereal:glostone =
+ethereal:hearty_stew =
+ethereal:lightstring =
+ethereal:mushroom_soup = 
+ethereal:paper_wall =
+ethereal:sashimi = 
+ethereal:worm =
+
+# Stone Objects
+ethereal:stone_ladder = 
+
+# Trees
+ethereal:banana_trunk =
+ethereal:birch_trunk =
+ethereal:frost_tree =
+ethereal:palm_trunk =
+ethereal:redwood_trunk =
+ethereal:scorched_tree =
+ethereal:willow_trunk =
+ethereal:yellow_trunk =
+
+# Vegetation
+ethereal:bamboo =
+ethereal:banana = 
+ethereal:bush =
+ethereal:bush2 =
+ethereal:bush3 =
+ethereal:dry_shrub =
+ethereal:fern = 
+ethereal:fire_flower =
+ethereal:mushroom =
+ethereal:onion_4 =
+ethereal:snowygrass =
+ethereal:vine = 
+
+# Wood
+ethereal:banana_wood =
+ethereal:birch_wood =
+ethereal:frost_wood =
+ethereal:palm_wood =
+ethereal:redwood_wood =
+ethereal:willow_wood =
+ethereal:yellow_wood =
+stairs:slab_banana_wood =
+stairs:slab_birch_wood =
+stairs:slab_frost_wood =
+stairs:slab_palm_wood =
+stairs:slab_redwood_wood =
+stairs:slab_willow_wood =
+stairs:slab_yellow_wood =
+stairs:stair_banana_wood =
+stairs:stair_birch_wood =
+stairs:stair_frost_wood =
+stairs:stair_palm_wood =
+stairs:stair_redwood_wood =
+stairs:stair_willow_wood =
+stairs:stair_yellow_wood =
+
+# Wooden Objects
+ethereal:bamboo_floor = 
+ethereal:bowl =
+ethereal:fence_banana =
+ethereal:fence_birch =
+ethereal:fence_frostwood =
+ethereal:fence_mushroom =
+ethereal:fence_palm =
+ethereal:fence_redwood =
+ethereal:fence_scorched =
+ethereal:fence_willow =
+ethereal:fence_yelowwood =
+ethereal:fencegate_banana_closed =
+ethereal:fencegate_birch_closed =
+ethereal:fencegate_frostwood_closed =
+ethereal:fencegate_mushroom_closed =
+ethereal:fencegate_palm_closed =
+ethereal:fencegate_redwood_closed =
+ethereal:fencegate_scorched_closed =
+ethereal:fencegate_willow_closed =
+ethereal:fencegate_yelowwood_closed =

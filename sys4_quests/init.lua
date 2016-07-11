@@ -19,11 +19,187 @@ minetest.register_node("sys4_quests:waste",
    groups = {crumbly=2, flammable=2},
 })
 
+local playerList = {}
+
 sys4_quests = {}
+sys4_quests.questGroups = {}
+sys4_quests.questGroups['global'] = {order = 1, questsIndex = {}}
 
 local lastQuestIndex = 0
-local level = 33
---local level = 1
+--local level = 33
+local level = 12
+
+function sys4_quests.addQuestGroup(groupName)
+
+   if groupName ~= nil and groupName ~= "" and groupName ~= "global" then
+      local groupLen = 0
+      for _, group in pairs(sys4_quests.questGroups) do
+	 groupLen = groupLen + 1
+      end
+      sys4_quests.questGroups[groupName] = {order = groupLen + 1, questsIndex = {}}
+   end
+end
+
+--[[function sys4_quests.addQuestGroupAfter(existingGroupName, groupName)
+   if groupName == nil or groupName == "" or groupName == "global" then
+      return
+   end
+   
+   if not sys4_quests.questGroups or sys4_quests.questGroups == nil
+   or not existingGroupName or existingGroupName == nil or existingGroupName == "" then
+      sys4_quests.addQuestGroup(groupName)
+   else
+      local isExistingGroupPresent = false
+      for i = 1, #sys4_quests.questGroups do
+	 if sys4_quests.questGroups[i].name == existingGroupName then
+	    
+	    isExistingGroupPresent = true
+
+	    if i == #sys4_quests.questGroups then
+	       sys4_quests.addQuestsGroup(groupName)
+	    else
+	       for j = #sys4_quests.questGroups, i + 1, -1 do
+		  sys4_quests.questGroups[j+1] = sys4_quests.questsGroups[j]
+	       end
+	       sys4_quests.questGroups[i+1] = {name = groupName, questsIndex = {}}
+	       break
+	    end
+	 end
+      end
+      if not isExistingGroupPresent then
+	 return
+      end
+   end
+end
+
+function sys4_quests.addQuestGroupBefore(existingGroupName, groupName)
+   if groupName == nil or groupName == "" or groupName == "global" or
+   not existingGroupName or existingGroupName == "" or existingGroupName == "global" then
+      return
+   end
+
+   if not sys4_quests.questGroups or sys4_quests.questGroups == nil then
+      sys4_quests.addQuestGroup(groupName)
+   else
+      local isExistingGroupPresent = false
+      for i = 1, #sys4_quests.questGroups do
+	 if sys4_quests.questGroups[i].name == existingGroupName then
+	    
+	    isExistingGroupPresent = true
+
+	    for j = #sys4_quests.questGroups, i, -1 do
+	       sys4_quests.questGroups[j+1] = sys4_quests.questsGroups[j]
+	    end
+	    sys4_quests.questGroups[i] = {name = groupName, questsIndex = {}}
+	    break
+	 end
+      end
+      if not isExistingGroupPresent then
+	 return
+      end      
+   end
+end
+--]]
+
+local function isQuestActive(questName, playern)
+   if quests.active_quests[playern] ~= nil
+   and quests.active_quests[playern]["sys4_quests:"..questName] ~= nil then
+      return true
+   else
+      return false
+   end
+end
+
+local function isQuestSuccessfull(questName, playern)
+   if quests.successfull_quests[playern] ~= nil
+   and quests.successfull_quests[playern]["sys4_quests:"..questName] ~= nil then
+      return true
+   else
+      return false
+   end
+end
+
+local function getGroupByQuestIndex(questIndex)
+   local groupName = nil
+   local isFound = false
+   for name, group in pairs(sys4_quests.questGroups) do
+      for _, index in ipairs(group.questsIndex) do
+	 if index == questIndex and name ~= "global" then
+	    groupName = name
+	    isFound = true
+	    break
+	 end
+      end
+      if isFound then break end
+   end
+
+   return groupName
+end
+
+local function getActiveQuestGroup(playern)
+   local groupName = nil
+   local isFound = false
+   for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+      for _, quest in ipairs(registeredQuests.quests) do
+--	 print("Quest : "..quest[1])
+	 if isQuestActive(quest[1], playern) then
+--	    print("is ACTIVE")
+	    groupName = getGroupByQuestIndex(quest.index)
+--	    print("GroupName is : "..dump(groupName))
+	    if groupName ~= nil then
+	       isFound = true
+	       break
+	    end
+	 end
+      end
+      if isFound then break end
+   end
+
+--   print("Return groupName : "..dump(groupName))
+   return groupName
+end
+
+local function getFirstQuestGroup()
+   for name, group in pairs(sys4_quests.questGroups) do
+--      print("NAME : "..name..", ORDER : "..group.order)
+      if group.order == 2 then
+	 return name
+      end
+   end
+end
+
+local function getQuestGroupOrder(questGroup)
+   for name, group in pairs(sys4_quests.questGroups) do
+      if name == questGroup then
+	 return group.order
+      end
+   end
+   return nil
+end
+
+local function getQuestGroupByGroupOrder(order)
+   for name, group in pairs(sys4_quests.questGroups) do
+      if group.order == order then
+	 return name
+      end
+   end
+   return nil
+end
+
+local function getNextQuestGroup(currentQuestGroup)
+   local groupTotal = 0
+   for _, group in pairs(sys4_quests.questGroups) do
+      groupTotal = groupTotal + 1
+   end
+
+   local groupOrder = getQuestGroupOrder(currentQuestGroup)
+
+   if groupOrder == groupTotal then
+      return nil
+   else
+      return getQuestGroupByGroupOrder(groupOrder + 1)
+   end
+end
 
 function sys4_quests.initQuests(mod, intllib)
    if not intllib or intllib == nil then
@@ -58,17 +234,28 @@ function sys4_quests.registerQuests()
 	 if quest.custom_level then
 	    maxlevel = quest[5]
 	 end
+
+	 --print(dump(quest))
 	 
 	 if quests.register_quest("sys4_quests:"..quest[1],
-			       { title = modIntllib(quest[2]),
+				  { title = modIntllib(quest[2]),
 				 description = sys4_quests.formatDescription(quest, maxlevel, modIntllib),
 				 max = maxlevel,
-				 autoaccept = sys4_quests.hasDependencies(quest[1]),
+				 --autoaccept = sys4_quests.hasDependencies(quest[1]),
+				 autoaccept = true,
 				 callback = sys4_quests.nextQuest
 			       })
 	 then
 	    lastQuestIndex = lastQuestIndex + 1
 	    quest.index = lastQuestIndex
+
+	    -- insert quest index in specified group
+	    if not quest.group then
+	       table.insert(sys4_quests.questGroups['global'].questsIndex, quest.index)
+	    elseif sys4_quests.questGroups[quest.group] ~= nil then
+--	       print("Insert New QuestGroup : "..quest.group)
+	       table.insert(sys4_quests.questGroups[quest.group].questsIndex, quest.index)
+	    end
 
 	 elseif not quests.registered_quests["sys4_quests:"..quest[1] ].autoaccept
 	 and sys4_quests.hasDependencies(quest[1]) then
@@ -110,7 +297,7 @@ function sys4_quests.formatDescription(quest, level, intllib)
    end
 
    -- Print Unlocked Items
-   str = str.."\n \n"..S("The end of the Quest Unlock this Items").." :\n"
+   str = str.."\n \n"..S("The end of the quest unlock this items").." :\n"
    return str..sys4_quests.printUnlockedItems(quest[6])
 end
 
@@ -187,24 +374,6 @@ function sys4_quests.hasDependencies(questName)
    return false
 end
 
-local function isQuestActive(questName, playern)
-   if quests.active_quests[playern] ~= nil
-   and quests.active_quests[playern]["sys4_quests:"..questName] ~= nil then
-      return true
-   else
-      return false
-   end
-end
-
-local function isQuestSuccessfull(questName, playern)
-   if quests.successfull_quests[playern] ~= nil
-   and quests.successfull_quests[playern]["sys4_quests:"..questName] ~= nil then
-      return true
-   else
-      return false
-   end
-end
-
 local function contains(quests, quest)
    local questsList = {}
 
@@ -262,7 +431,9 @@ local function getNextQuests(questname, playern)
    local nextQuests = {}
    
    if questname ~= "" then
-      
+
+      local playerActiveGroup = playerList[playern].activeQuestGroup
+
       local currentQuest = string.split(questname, ":")[2]
 
       for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
@@ -270,8 +441,11 @@ local function getNextQuests(questname, playern)
 
 	    if registeredQuest[1] ~= currentQuest
 	       and not isQuestActive(registeredQuest[1], playern)
-	    and not isQuestSuccessfull(registeredQuest[1], playern) then
-	       
+	       and not isQuestSuccessfull(registeredQuest[1], playern)
+	       --and (getGroupByQuestIndex(registeredQuest.index) == nil or
+		--       getGroupByQuestIndex(registeredQuest.index) == playerActiveGroup or
+		  --  getGroupByQuestIndexWithGlobal(registeredQuest.index) == "global") then
+	       then
 	       local parentQuests = registeredQuest[7]
 
 	       if parentQuests ~= nil
@@ -287,15 +461,60 @@ local function getNextQuests(questname, playern)
    return nextQuests
 end
 
+local function isAllQuestsGroupSuccessfull(currentQuestGroup, questname, playern)
+   local successfull = true
+   local currentQuest = string.split(questname, ":")[2]
+
+   for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+      for _, registeredQuest in ipairs(registeredQuests.quests) do
+	 if registeredQuest[1] ~= currentQuest
+	 and getGroupByQuestIndex(registeredQuest.index) == currentQuestGroup then
+	    successfull = successfull and isQuestSuccessfull(registeredQuest[1], playern)
+	 end
+      end
+   end
+
+--   print("Successfull ALL group quest : "..dump(successfull))
+   return successfull
+end
+
 function sys4_quests.nextQuest(playername, questname)
---   print("Next quest after : "..questname)
+   --   print("Next quest after : "..questname)
    local nextQuests = getNextQuests(questname, playername)
 
-   for _, nextQuest in pairs(nextQuests) do
---      print("Next quest selected : "..nextQuest[1])
-      --nextquest = nextQuest.index
-      --sys4_quests.setCurrentQuest(playername, nextQuest)
-      minetest.after(1, function() quests.start_quest(playername, "sys4_quests:"..nextQuest[1]) end)
+   local currentQuestGroup = playerList[playername].activeQuestGroup
+   local nextQuestGroup = getNextQuestGroup(currentQuestGroup)
+
+--   print("currentQuestGroup : "..currentQuestGroup)
+--   print("NEXt QUEST GROUP : "..dump(nextQuestGroup))
+   
+   if nextQuestGroup ~= nil
+   and isAllQuestsGroupSuccessfull(currentQuestGroup, questname, playername) then
+      playerList[playername].activeQuestGroup = nextQuestGroup
+
+      -- start quests of the next group
+      for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+	 for _, registeredQuest in ipairs(registeredQuests.quests) do
+	    if registeredQuest[7] == nil and getGroupByQuestIndex(registeredQuest.index) == nextQuestGroup then
+	       minetest.after(1, function() quests.start_quest(playername, "sys4_quests:"..registeredQuest[1]) end)
+	    end
+	 end
+      end
+
+      if #nextQuests > 0 then
+	 for _, nextQuest in pairs(nextQuests) do
+	    minetest.after(1, function() quests.start_quest(playername, "sys4_quests:"..nextQuest[1]) end)
+	 end
+      end
+      
+   else
+      
+      for _, nextQuest in pairs(nextQuests) do
+	 --      print("Next quest selected : "..nextQuest[1])
+	 --nextquest = nextQuest.index
+	 --sys4_quests.setCurrentQuest(playername, nextQuest)
+	 minetest.after(1, function() quests.start_quest(playername, "sys4_quests:"..nextQuest[1]) end)
+      end
    end
 end
 
@@ -356,9 +575,9 @@ local function getCraftRecipes(item)
 	       end
 	    end
 	 end
+      else
+	       str = S("No craft for this item").."\n"
       end
-   else
-      str = S("No craft for this item").."\n"
    end
    return str   
 end
@@ -380,7 +599,7 @@ local function writeBook(content, items, playern)
 	 local intllib = sys4_quests.intllib_by_item(item)
 	 
 	 tt = tt..">>>> "..intllib(item).." <<<<\n\n"
-	 tt = tt..S("Craft recipes :\n")
+	 tt = tt..S("Craft recipes").." :\n"
 	 tt = tt..getCraftRecipes(item)
 	 tt = tt.."\n----------OOOOOO----------\n\n"
       end
@@ -435,25 +654,25 @@ if (cmsg) then
    quests.show_message = show_message
 end
 
-local playerList = {}
-
 minetest.register_on_newplayer(
    function(player)
       local playern = player:get_player_name()
-      playerList[playern] = {name = playern, isNew = true, craftMode = true, bookMode = false}
+      playerList[playern] = {name = playern, isNew = true, craftMode = true, bookMode = false, activeQuestGroup = getFirstQuestGroup()}
+--      print("ActiveQuestGroup for New Player : "..playerList[playern].activeQuestGroup)
    end)
 
 minetest.register_on_joinplayer(
    function(player)
       local playern = player:get_player_name()
       if not playerList[playern] or playerList[playern] == nil then
-	 playerList[playern] = {name = playern, isNew = false, craftMode = true, bookMode = false}
+	 playerList[playern] = {name = playern, isNew = false, craftMode = true, bookMode = false, activeQuestGroup = getActiveQuestGroup(playern)}
+	 --print("ActiveQuestGroup for Player : "..playerList[playern].activeQuestGroup)
       end
 
       if (playerList[playern].isNew) then
 	 for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 	    for _, registeredQuest in ipairs(registeredQuests.quests) do
-	       if registeredQuest[7] == nil then
+	       if registeredQuest[7] == nil and (getGroupByQuestIndex(registeredQuest.index) == nil or getGroupByQuestIndex(registeredQuest.index) == playerList[playern].activeQuestGroup) then
 		  quests.start_quest(playern, "sys4_quests:"..registeredQuest[1])
 	       end
 	    end
@@ -586,30 +805,241 @@ end
 
 minetest.register_chatcommand("craftmode",
 {
-   params = "on or off",
-   description = "Enable or not locked crafts.",
+   params = "[on|off]",
+   description = S("Enable or not locked crafts")..".",
    func = function(name, param)
       if param == "on" then
 	 playerList[name].craftMode = true
-	 minetest.chat_send_player(name, "Craft Mode Enabled.")
+	 minetest.chat_send_player(name, S("Craft Mode Enabled")..".")
       else
 	 playerList[name].craftMode = false
-	 minetest.chat_send_player(name, "Craft Mode Disabled.")
+	 minetest.chat_send_player(name, S("Craft Mode Disabled")..".")
       end
    end
 })
 
 minetest.register_chatcommand("bookmode",
 {
-   params = "on or off",
-   description = "Enable or not books that describe unlocked craft recipes.",
+   params = "[on|off]",
+   description = S("Enable or not books that describe unlocked craft recipes")..".",
    func = function(name, param)
       if param == "on" then
 	 playerList[name].bookMode = true
-	 minetest.chat_send_player(name, "Book Mode Enabled.")
+	 minetest.chat_send_player(name, S("Book Mode Enabled")..".")
       else
 	 playerList[name].bookMode = false
-	 minetest.chat_send_player(name, "Book Mode Disabled.")
+	 minetest.chat_send_player(name, S("Book Mode Disabled")..".")
       end
    end
 })
+
+minetest.register_chatcommand("lqg",
+			      {
+				 params = "["..S("group index").."]",
+				 description = S("Display groups of quests or display quests of a group if group index is given as argument")..".",
+				 func = function(name, param)
+				    if param ~= "" then
+				       local isGroupValid = false
+				       for groupName, group in pairs(sys4_quests.questGroups) do
+					  if ""..group.order == param then
+					     isGroupValid = true
+					     minetest.chat_send_player(name, S("Legend")..":")
+					     minetest.chat_send_player(name, " [*] <-- "..S("Successfull quest"))
+					     minetest.chat_send_player(name, " [!] <-- "..S("Active quest"))
+					     minetest.chat_send_player(name, " [ ] <-- "..S("Not reached quest"))
+					     minetest.chat_send_player(name, " ")
+					     minetest.chat_send_player(name, S("Quests of group").." \""..groupName.."\" : ")
+					     for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+						local modIntllib = registeredQuests.intllib
+						for _, quest in ipairs(registeredQuests.quests) do
+						   local qIndex = quest.index
+						   for __, index in ipairs(group.questsIndex) do
+						      if index == qIndex then
+							 local questState = "[ ]"
+							 if isQuestActive(quest[1], name) then
+							    questState = "[!]"
+							 end
+							 if isQuestSuccessfull(quest[1], name) then
+							    questState = "[*]"
+							 end
+							 
+							 minetest.chat_send_player(name, questState.." "..modIntllib(quest[2]).." ["..quest[1].."]".." {mod: "..mod.."}")
+						      end
+						   end
+						end
+					     end
+					  end
+				       end
+
+				       if not isGroupValid then
+					  minetest.chat_send_player(name, S("Sorry, but this group doesn't exist")..".")
+				       end
+				    else
+				       local groups = {}
+				       for groupName, group in pairs(sys4_quests.questGroups) do
+					  groups[group.order] = groupName
+					  if playerList[name].activeQuestGroup == groupName then
+					     groups[group.order] = groupName.." <-- "..S("Active Quests Group")
+					  end
+				       end
+				       
+				       for i = 1, #groups do
+					  minetest.chat_send_player(name, i.." - "..groups[i])
+				       end
+				    end
+				 end
+			      })
+
+
+minetest.register_chatcommand("itemqq",
+			      {
+				 params = "<"..S("item")..">",
+				 description = S("Display the quest to finish which will unlock this item")..".",
+				 func = function(name, param)
+				    local isItemFound = false
+				    for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+				       local modIntllib = registeredQuests.intllib
+				       for _, quest in ipairs(registeredQuests.quests) do
+					  for __, uItem in ipairs(quest[6]) do
+					     if uItem == param then
+						isItemFound = true
+						minetest.chat_send_player(name, S("Quest to finish for unlock").." \""..modIntllib(uItem).."\" :")
+
+						local groupName = getGroupByQuestIndex(quest.index)
+						if groupName == nil then
+						   groupName = "global"
+						end
+
+						local questState = ""
+						if isQuestActive(quest[1], name) then
+						   questState = "<-- "..S("Active")
+						end
+						if isQuestSuccessfull(quest[1], name) then
+						   questState = "<-- "..S("Successfull")
+						end
+						
+						minetest.chat_send_player(name, "  "..modIntllib(quest[2]).." ["..quest[1].."]".." {mod: "..mod.."} "..S("in group").." "..groupName.." "..questState)
+						break
+					     end
+					  end
+					  if isItemFound then break end
+				       end
+				       if isItemFound then break end
+				    end
+				    if not isItemFound then
+				       minetest.chat_send_player(name, S("Sorry, but this item is not unlockable")..".")
+				    end
+				 end
+			      })
+
+minetest.register_chatcommand("fquest",
+			      {
+				 params = "<"..S("quest_name")..">",
+				 description = S("Force an active quest to be immediately finished")..".",
+				 func = function(name, param)
+				    local quest = getRegisteredQuest(param)
+				    local maxValue
+				    if quest.custom_level then
+				       maxValue = quest[5]
+				    else
+				       maxValue = quest[5] * level
+				    end
+				    
+				    if quests.update_quest(name, "sys4_quests:"..param, maxValue) then
+				       minetest.chat_send_player(name, S("The quest has been finished successfully")..".")
+				    else
+				       minetest.chat_send_player(name, S("The quest must be active to do that")..".")
+				    end
+				 end
+			      })
+
+local function getModQuest(questName)
+   for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+      for _, quest in ipairs(registeredQuests.quests) do
+	 if quest[1] == questName then
+	    return mod
+	 end
+      end
+   end
+   return nil
+end
+
+minetest.register_chatcommand("iquest",
+			      {
+				 params = "<"..S("quest_name")..">",
+				 description = S("Display info of the quest")..".",
+				 func = function(name, param)
+				    local quest = getRegisteredQuest(param)
+				    if quest ~= nil then
+				       local qMod = getModQuest(quest[1])
+				       local modIntllib = sys4_quests.registeredQuests[qMod].intllib
+				       local groupName = getGroupByQuestIndex(quest.index)
+				       if groupName == nil then
+					  groupName = "global"
+				       end
+				       minetest.chat_send_player(name, "> "..S("Index")..": "..quest.index)
+				       minetest.chat_send_player(name, "> "..S("Name")..": "..quest[1])
+				       minetest.chat_send_player(name, "> "..S("Title")..": "..modIntllib(quest[2]))
+				       local cDesc = quest[3]
+				       if cDesc == nil then cDesc = "" end
+				       minetest.chat_send_player(name, "> "..S("Custom Desc.")..": "..modIntllib(cDesc))
+				       minetest.chat_send_player(name, "> "..S("Group")..": "..groupName)
+				       minetest.chat_send_player(name, "> "..S("Mod")..": "..qMod)
+				       minetest.chat_send_player(name, "> "..S("Action Type")..": "..S(quest.type))
+				       minetest.chat_send_player(name, "> "..S("Target Nodes")..": "..dump(quest[4]))
+				       local maxLevel = quest[5] * level
+				       if quest.custom_level then
+					  maxLevel = quest[5]
+				       end
+				       minetest.chat_send_player(name, "> "..S("Target count")..": "..maxLevel)
+				       minetest.chat_send_player(name, "> "..S("Custom Level")..": "..dump(quest.custom_level))
+				       minetest.chat_send_player(name, "> "..S("Parent quests")..": "..dump(quest[7]))
+				       
+				       local childQuests = {}
+				       for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+					  for _, rQuest in ipairs(registeredQuests.quests) do
+					     if rQuest[7] and rQuest[7] ~= nil and type(rQuest[7]) == "string" then
+						local alternQuests = string.split(rQuest[7], "|")
+						for __, alternQuest in ipairs(alternQuests) do
+						   if alternQuest == quest[1] then
+						      table.insert(childQuests, rQuest[1])
+						   end
+						end
+					     elseif type(rQuest[7]) == "table" then
+						for __, quest_1 in ipairs(rQuest[7]) do
+						   local alternQuests = string.split(quest_1, "|")
+						   for ___, alternQuest in ipairs(alternQuests) do
+						      if alternQuest == quest[1] then
+							 table.insert(childQuests, rQuest[1])
+						      end
+						   end
+						end
+					     end
+					  end
+				       end
+				       minetest.chat_send_player(name, "> "..S("Child Quests")..": "..dump(childQuests))
+				       
+				       minetest.chat_send_player(name, "> "..S("Items to unlock")..": "..dump(quest[6]))
+				       local questState = "Inactive"
+				       if isQuestActive(quest[1], name) then
+					  questState = "Active"
+				       end
+				       if isQuestSuccessfull(quest[1], name) then
+					  questState = "Successfull"
+				       end
+				       minetest.chat_send_player(name, "> "..S("State")..": "..S(questState))
+				    else
+				       minetest.chat_send_player(name, S("Sorry, but this quest doesn't exist")..".")
+				    end
+				 end
+			      })
+
+minetest.register_chatcommand("getcraft",
+			      {
+				 params = "<"..S("item")..">",
+				 description = S("Display craft recipes of this item")..".",
+				 func = function(name, param)
+				    minetest.chat_send_player(name, getCraftRecipes(param))
+				 end
+
+			      })

@@ -1,0 +1,20 @@
+### Quests Title ###
+
+Water Drinker = Buveur d'eau
+
+Water Drinker Lover = Buveur d'eau - Amateur
+Water Tools Crafter = Gérer l'eau
+Water Tools Crafter Lover = Gérer l'eau en amateur
+Water Tools Crafter Pro = Gérer l'eau en pro
+Water Tools Crafter Master = Gérer l'eau en maître
+
+### Items Name ###
+
+thirsty:bronze_canteen = Gourdes en bronze
+thirsty:drinking_fountain = Fontaines pour boire
+thirsty:extractor = Extracteurs d'eau
+thirsty:injector = Injecteurs d'eau
+thirsty:steel_canteen = Gourdes en acier
+thirsty:water_extender = Extensions de fontaines
+thirsty:water_fountain = Fontaines à eau
+thirsty:wooden_bowl = Bol en bois

@@ -1,51 +1,95 @@
+### Quests Title ###
+
 Cactus Digger = Coupe du cactus
-Sword Crafter = Fabrique des épées en Bois
-Sword Crafter Lover = Fabrique des épées en Acier
-Sword Crafter Pro = Fabrique des épées en Bronze
-Ethereal Sword Crafter = Fabrique des épées en Crystal
+Cactus Protection = Protection en cactus
+Cactus Protection Lover = Protection en cactus - Amateur
+Cactus Protection Pro = Protection en cactus - Pro
+Diamond Protection = Protection en diamant
+Diamond Protection Lover = Protection en diamant - Amateur
+Diamond Protection Pro = Protection en diamant - Pro
+Gold Protection = Protection en or
+Gold Protection Lover = Protection en or - Amateur
+Gold Protection Pro = Protection en or - Pro
+Gold Protection Expert = Protection en or - Expert
+Mithril Protection = Protection en mithril
+Mithril Protection Lover = Protection en mithril - Amateur
+Mithril Protection Pro = Protection en mithril - Pro
+Steel Protection = Protection en acier
+Steel Protection Lover = Protection en acier - Amateur
+Steel Protection Pro = Protection en acier - Pro
+
+Bronze Protection = Protection en bronze
+Bronze Protection Lover = Protection en bronze - Amateur
+Bronze Protection Pro = Protection en bronze - Pro
+Crystal Protection = Protection en cristal
+Crystal Protection Lover = Protection en cristal - Amateur
+Crystal Protection Pro = Protection en cristal - Pro
+Crystal Sword Crafter = Fait des épées en cristal
+Mithril Sword Crafter = Fait des épées en mithril
+Sword Crafter = Fait des épées
+Sword Crafter Lover = Fait des épées - Amateur
+Sword Crafter Pro = Fait des épées - Pro
+Sword Crafter Expert = Fait des épées - Expert
+Wood Protection = Protection en bois
+Wood Protection Lover = Protection en bois - Amateur
+Wood Protection Pro = Protection en bois - Pro
+
+### 3d_armor items ###
 
 3d_armor:boots_cactus = Bottes en cactus
-3d_armor:chestplate_cactus = Cuirasse en cactus
-3d_armor:helmet_cactus = Casque en cactus
+3d_armor:chestplate_cactus = Cuirasses en cactus
+3d_armor:helmet_cactus = Casques en cactus
 3d_armor:leggings_cactus = Jambières en cactus
 
-3d_armor:boots_wood = Bottes en bois
-3d_armor:chestplate_wood = Cuirasse en bois
-3d_armor:helmet_wood = Casque en bois
+3d_armor:boots_wood = Bootes en bois
+3d_armor:chestplate_wood = Cuirasses en bois
+3d_armor:helmet_wood = Casques en bois
 3d_armor:leggings_wood = Jambières en bois
 
-3d_armor:boots_steel = Bottes en Acier
-3d_armor:chestplate_steel = Cuirasse en Acier
-3d_armor:helmet_steel = Casque en Acier
-3d_armor:leggings_steel = Jambières en Acier
+3d_armor:boots_steel = Bottes en acier
+3d_armor:chestplate_steel = Cuirasses en acier
+3d_armor:helmet_steel = Casques en acier
+3d_armor:leggings_steel = Jambières en acier
 
-3d_armor:boots_bronze = Bottes en Bronze
-3d_armor:chestplate_bronze = Cuirasse en Bronze
-3d_armor:helmet_bronze = Casque en Bronze
-3d_armor:leggings_bronze = Jambières en Bronze
+3d_armor:boots_bronze = Bootes en bronze
+3d_armor:chestplate_bronze = Cuirasses en bronzes
+3d_armor:helmet_bronze = Casques en bronze
+3d_armor:leggings_bronze = Jambières en bronzes
 
-3d_armor:boots_gold = Bottes en Or
-3d_armor:chestplate_gold = Cuirasse en Or
-3d_armor:helmet_gold = Casque en Or
-3d_armor:leggings_gold = Jambières en Or
+3d_armor:boots_gold = Bottes en or
+3d_armor:chestplate_gold = Cuirasses en or
+3d_armor:helmet_gold = Casques en or
+3d_armor:leggings_gold = Jambières en or
 
-3d_armor:boots_diamond = Bottes en Diamant
-3d_armor:chestplate_diamond = Cuirasse en Diamant
-3d_armor:helmet_diamond = Casque en Diamant
-3d_armor:leggings_diamond = Jambières en Diamant
+3d_armor:boots_diamond = Bottes en diamant
+3d_armor:chestplate_diamond = Cuirasses en diamant
+3d_armor:helmet_diamond = Casques en diamant
+3d_armor:leggings_diamond = Jambières en diamant
 
-3d_armor:boots_crystal = Bottes en crystal
-3d_armor:chestplate_crystal = Cuirasse en crystal
-3d_armor:helmet_crystal = Casque en crystal
-3d_armor:leggings_crystal = Jambières en crystal
+3d_armor:boots_crystal = Bottes en cristal
+3d_armor:chestplate_crystal = Cuirasses en cristal
+3d_armor:helmet_crystal = Casques en cristal
+3d_armor:leggings_crystal = Jambières en cristal
 
-shields:shield_wood = Bouclier en bois
-shields:shield_enhanced_wood = Bouclier en bois amélioré
-shields:shield_cactus = Bouclier en cactus
-shields:shield_enhanced_cactus = Bouclier en cactus amélioré
-shields:shield_steel = Bouclier en acier
-shields:shield_bronze = Bouclier en bronze
-shields:shield_gold = Bouclier en or
-shields:shield_diamond = Bouclier en diamant
-shields:shield_crystal = Bouclier en crystal
+3d_armor:boots_mithril = Bottes en mithril
+3d_armor:chestplate_mithril = Cuirasses en mithril
+3d_armor:helmet_mithril = Casques en mithril
+3d_armor:leggings_mithril = Jambières en mithril
 
+### 3d_armor_stand ###
+
+3d_armor_stand:armor_stand = Stands d'armure
+3d_armor_stand:locked_armor_stand = Stands d'armure protégé
+
+### Shields items ###
+
+shields:shield_wood = Boucliers en bois
+shields:shield_enhanced_wood = Boucliers en bois améliorés
+shields:shield_cactus = Boucliers en cactus
+shields:shield_enhanced_cactus = Boucliers en cactus améliorés
+shields:shield_steel = Boucliers en acier
+shields:shield_bronze = Boucliers en bronze
+shields:shield_gold = Boucliers en or
+shields:shield_diamond = Boucliers en diamant
+shields:shield_crystal = Boucliers en cristal
+shields:shield_mithril = Boucliers en mithril

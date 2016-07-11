@@ -1,0 +1,20 @@
+### Quests Title ###
+
+Beehive Crafter = Fait des ruches
+Bucket Crafter = Fait des seaux
+Unlock Lava Pickaxe = Débloque la pioche de lave
+Unlock Magic Lasso = Débloque le lasso magique
+Unlock Nametag = Débloque le badge
+Unlock Net = Débloque le filet
+
+### Items Name ###
+mobs:beehive = Ruches
+mobs:cheese = Morceaux de fromage
+mobs:cheeseblock = Blocs de fromage
+mobs:honey = Portions de miel
+mobs:honey_block = Blocs de miel
+mobs:magic_lasso = Lassos magiques
+mobs:nametag = Badges
+mobs:net = Filets
+mobs:pick_lava = Pioches de lave
+mobs:shears = Cisailles

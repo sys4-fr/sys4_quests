@@ -1,0 +1,20 @@
+### Quests Title ###
+
+Water Drinker =
+
+Water Drinker Lover =
+Water Tools Crafter =
+Water Tools Crafter Lover =
+Water Tools Crafter Pro =
+Water Tools Crafter Master =
+
+### Items Name ###
+
+thirsty:bronze_canteen =
+thirsty:drinking_fountain =
+thirsty:extractor =
+thirsty:injector = 
+thirsty:steel_canteen =
+thirsty:water_extender = 
+thirsty:water_fountain = 
+thirsty:wooden_bowl = 

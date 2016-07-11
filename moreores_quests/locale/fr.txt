@@ -1,0 +1,45 @@
+### Quests Title ###
+
+Mithril Digger = Mine du mithril
+Mithril Digger Lover = Mine du mithril - Amateur
+Mithril Digger Pro = Mine du mithril - Pro
+Mithril Digger Expert = Mine du mithril - Expert
+Silver Digger = Mine de l'argent
+Silver Digger Lover = Mine de l'argent - Amateur
+Silver Digger Pro = Mine de l'argent - Pro
+Silver Digger Expert = Mine de l'argent - Expert
+Tin Digger = Mine de l'étain
+Unlock Copper Rail = Débloque les rails en cuivre
+
+### Items Name ###
+
+# Blocks
+moreores:mithril_block = Blocs en mithril
+moreores:silver_block = Blocs en argent
+moreores:tin_block = Blocs en étain
+
+# Ingots
+moreores:mithril_ingot = Lingots de mithril
+moreores:silver_ingot = Lingots d'argent
+moreores:tin_ingot = Lingots d'étain
+
+# Mineral
+moreores:mineral_mithril = Minerais de mithril
+moreores:mineral_silver = Minerais d'argent
+moreores:mineral_tin = Minerais d'étain
+
+# Others
+moreores:copper_rail = Rails en cuivre
+
+# Tools
+moreores:axe_mithril = Haches en mithril
+moreores:hoe_mithril = Houes en mithril
+moreores:pick_mithril = Pioches en mithril
+moreores:shovel_mithril = Pelles en mithril
+moreores:sword_mithril = Épées en mithril
+
+moreores:axe_silver = Haches en argent
+moreores:hoe_silver = Houes en argent
+moreores:pick_silver = Pioches en argent
+moreores:shovel_silver = Pelles en argent
+moreores:sword_silver = Épées en argent

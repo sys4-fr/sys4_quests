@@ -1,5 +1,5 @@
 This mod provide an API for easily write quests.
 
-Quests have to be reached to unlock defined craftable items.
+Quests have to be finished to unlock defined craftable items.
 
 See "example.lua" file as an introduction to write quests. 

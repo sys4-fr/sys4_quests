@@ -3,7 +3,7 @@
 
 -- This mod add quests based on unified_inventory mod
 
-if minetest.get_modpath("sys4_quests")
+if minetest.get_modpath("minetest_quests")
    and minetest.get_modpath("unified_inventory") then
    
    local S
@@ -23,19 +23,19 @@ if minetest.get_modpath("sys4_quests")
    ----- Quests with type="dig" -----
    local t = "craft"
 
-   -- wool_crafter_pro
+   -- textile_worker
    ins(quests, {
-	  'wool_crafter_pro', "Wool Crafter Pro", "wools", {"wool:white", "wool:black", "wool:blue", "wool:orange", "wool:red", "wool:violet", "wool:yellow", "wool:brown", "wool:cyan", "wool:dark_green", "wool:dar_grey", "wool:green", "wool:grey", "wool:magenta", "wool:pink"}, 4, {mod..":bag_small"}, "wool_crafter_lover", type = t
+	  'textile_worker', "Textile Worker", "wools", {"wool:white", "wool:black", "wool:blue", "wool:orange", "wool:red", "wool:violet", "wool:yellow", "wool:brown", "wool:cyan", "wool:dark_green", "wool:dar_grey", "wool:green", "wool:grey", "wool:magenta", "wool:pink"}, 6, {mod..":bag_small"}, "cotton_digger", type = t
 	       })
 
    -- bag_crafter
    ins(quests, {
-	  'bag_crafter', "Bag Crafter", nil, {mod..":bag_small"}, 4, {mod..":bag_medium"}, "wool_crafter_pro", type = t, custum_level = true
+	  'bag_crafter', "Bag Crafter", nil, {mod..":bag_small"}, 2, {mod..":bag_medium"}, "textile_worker", type = t, custom_level = true
 	       })
 
    -- bag_crafter_lover
    ins(quests, {
-	  'bag_crafter_lover', "Bag Crafter Lover", nil, {mod..":bag_medium"}, 4, {mod..":bag_large"}, "bag_crafter", type = t, custum_level = true
+	  'bag_crafter_lover', "Bag Crafter Lover", nil, {mod..":bag_medium"}, 2, {mod..":bag_large"}, "bag_crafter", type = t, custom_level = true
 	       })
 
    sys4_quests.registerQuests()
