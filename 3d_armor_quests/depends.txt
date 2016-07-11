@@ -2,6 +2,6 @@ minetest_quests
 3d_armor
 3d_armor_stand?
 shields?
-intllib?
-moreores_quests?
 ethereal_quests?
+moreores_quests?
+intllib?

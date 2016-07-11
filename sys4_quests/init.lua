@@ -843,6 +843,11 @@ minetest.register_chatcommand("lqg",
 				       for groupName, group in pairs(sys4_quests.questGroups) do
 					  if ""..group.order == param then
 					     isGroupValid = true
+					     minetest.chat_send_player(name, S("Legend")..":")
+					     minetest.chat_send_player(name, " [*] <-- "..S("Successfull quest"))
+					     minetest.chat_send_player(name, " [!] <-- "..S("Active quest"))
+					     minetest.chat_send_player(name, " [ ] <-- "..S("Not reached quest"))
+					     minetest.chat_send_player(name, " ")
 					     minetest.chat_send_player(name, S("Quests of group").." \""..groupName.."\" : ")
 					     for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 						local modIntllib = registeredQuests.intllib
@@ -850,15 +855,15 @@ minetest.register_chatcommand("lqg",
 						   local qIndex = quest.index
 						   for __, index in ipairs(group.questsIndex) do
 						      if index == qIndex then
-							 local questState = ""
+							 local questState = "[ ]"
 							 if isQuestActive(quest[1], name) then
-							    questState = "<-- "..S("Active")
+							    questState = "[!]"
 							 end
 							 if isQuestSuccessfull(quest[1], name) then
-							    questState = "<-- "..S("Successfull")
+							    questState = "[*]"
 							 end
 							 
-							 minetest.chat_send_player(name, "  "..modIntllib(quest[2]).." ["..quest[1].."]".." {mod: "..mod.."} "..questState)
+							 minetest.chat_send_player(name, questState.." "..modIntllib(quest[2]).." ["..quest[1].."]".." {mod: "..mod.."}")
 						      end
 						   end
 						end
@@ -889,7 +894,7 @@ minetest.register_chatcommand("lqg",
 minetest.register_chatcommand("itemqq",
 			      {
 				 params = "<"..S("item")..">",
-				 description = S("Display the quest to finish which unlock the item")..".",
+				 description = S("Display the quest to finish which will unlock this item")..".",
 				 func = function(name, param)
 				    local isItemFound = false
 				    for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
@@ -1032,7 +1037,7 @@ minetest.register_chatcommand("iquest",
 minetest.register_chatcommand("getcraft",
 			      {
 				 params = "<"..S("item")..">",
-				 description = S("Display craft recipes of the item")..".",
+				 description = S("Display craft recipes of this item")..".",
 				 func = function(name, param)
 				    minetest.chat_send_player(name, getCraftRecipes(param))
 				 end

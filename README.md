@@ -30,7 +30,7 @@ Download the source code and place it in a new folder named "sys4_quests" into t
     moreores?,
     intllib?
 
-* 3d_armor_quests mod
+* 3d_armor_quests
 
     minetest_quests,
     3d_armor mod pack by (stujones11),
@@ -73,7 +73,7 @@ Download the source code and place it in a new folder named "sys4_quests" into t
 * moreblocks_quests
 
     minetest_quests,
-    moreores (by Calinou),
+    moreblocks (by Calinou),
     intllib?
 
 * carts_quests
@@ -94,5 +94,5 @@ Download the source code and place it in a new folder named "sys4_quests" into t
 * /lqg [group index]   : Display groups of quests or display quests of a group if group index is given as argument.
 * /iquest "quest_name" : Display infos of the quest.
 * /fquest "quest_name" : Force an active quest to be immediately finished.
-* /itemqq "item"       : Display the quest to finish which unlock the item.
-* /getcraft "item"     : Display craft recipes of the item.
+* /itemqq "item"       : Display the quest to finish which unlock this item.
+* /getcraft "item"     : Display craft recipes of this item.

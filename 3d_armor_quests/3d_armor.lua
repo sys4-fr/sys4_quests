@@ -122,19 +122,28 @@ ins(quests, {
        'sword_crafter', "Sword Crafter", nil, {"default:sword_wood"}, 1, {mod..":boots_wood"}, "wood_crafter", type = t, custom_level = true, group = wood
 	    })
 
+local woods = {"default:wood", "default:junglewood", "default:pine_wood", "default:acacia_wood", "default:aspen_wood"}
+
+if minetest.get_modpath("ethereal_quests") then
+   local etherealWoods = {"ethereal:banana_wood", "ethereal:birch_wood", "ethereal:frost_wood", "ethereal:palm_wood", "ethereal:redwood_wood", "ethereal:willow_wood", "ethereal:yellow_wood"}
+   for i = 1, #etherealWoods do
+      ins(woods, etherealWoods[i])
+   end
+end
+
 -- wood_protection
 ins(quests, {
-       'wood_protection', "Wood Protection", nil, {"default:wood", "default:junglewood", "default:pine_wood", "default:acacia_wood", "default:aspen_wood"}, 1, {mod..":helmet_wood"}, "sword_crafter", type = t, group = wood
+       'wood_protection', "Wood Protection", nil, woods, 1, {mod..":helmet_wood"}, "sword_crafter", type = t, group = wood
 	    })
 
 -- wood_protection_lover
 ins(quests, {
-       'wood_protection_lover', "Wood Protection Lover", nil, {"default:wood", "default:junglewood", "default:pine_wood", "default:acacia_wood", "default:aspen_wood"}, 1, {mod..":leggings_wood"}, "wood_protection", type = t, group = wood
+       'wood_protection_lover', "Wood Protection Lover", nil, woods, 1, {mod..":leggings_wood"}, "wood_protection", type = t, group = wood
 	    })
 
 -- wood_protection_pro
 ins(quests, {
-       'wood_protection_pro', "Wood Protection Pro", nil, {"default:wood", "default:junglewood", "default:pine_wood", "default:acacia_wood", "default:aspen_wood"}, 1, {mod..":chestplate_wood"}, "wood_protection_lover", type = t, group = wood
+       'wood_protection_pro', "Wood Protection Pro", nil, woods, 1, {mod..":chestplate_wood"}, "wood_protection_lover", type = t, group = wood
 	    })
 
 -- sword_crafter_lover

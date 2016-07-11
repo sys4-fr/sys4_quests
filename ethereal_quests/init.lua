@@ -55,6 +55,7 @@ if minetest.get_modpath("minetest_quests") and
    up('tree_digger', treeNodes, woodNodes)
 
    up('wood_crafter', woodNodes, {mod..":bowl"})
+   up('wood_crafter_lover', woodNodes, nil)
 
    local fenceNodes = {mod..":fence_banana", mod..":fence_birch", mod..":fence_frostwood", mod..":fence_mushroom", mod..":fence_palm", mod..":fence_redwood", mod..":fence_scorched", mod..":fence_willow", mod..":fence_yelowwood"}
    local fenceGates = {mod..":fencegate_banana_closed", mod..":fencegate_birch_closed", mod..":fencegate_frostwood_closed", mod..":fencegate_mushroom_closed", mod..":fencegate_palm_closed", mod..":fencegate_redwood_closed", mod..":fencegate_scorched_closed", mod..":fencegate_willow_closed", mod..":fencegate_yelowwood_closed"}
