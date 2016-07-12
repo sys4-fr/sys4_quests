@@ -27,7 +27,7 @@ if minetest.get_modpath("minetest_quests") and
    -- Update default quests
    up('mese_digger', nil, {mod..":powerrail"})
 
-   ----- Quests with type="dig" -----
+   ----- Quests with type="place" -----
    local t = "place"
 
    if minetest.get_modpath("moreores_quests") then
@@ -37,7 +37,7 @@ if minetest.get_modpath("minetest_quests") and
    elseif minetest.get_modpath("boost_cart") then
 	 -- unlock_copper_rail
 	 ins(quests, {
-		'unlock_copper_rail', "Unlock Copper Rail", nil, {"default:stone_with_copper"}, 6, {mod..":copperrail"}, nil, type = t, group = metal
+		'unlock_copper_rail', "Unlock Copper Rail", nil, {"default:stone_with_copper"}, 6, {mod..":copperrail"}, nil, type = "dig", group = metal
 		     })
 
 	 ins(quests, {
