@@ -4,8 +4,8 @@
 -- This mod add quests based on carts mod
 
 if minetest.get_modpath("minetest_quests") and
-   minetest.get_modpath("carts") or
-minetest.get_modpath("boost_cart") then
+   (minetest.get_modpath("carts") or
+    minetest.get_modpath("boost_cart")) then
    
    local S
    if minetest.get_modpath("intllib") then
