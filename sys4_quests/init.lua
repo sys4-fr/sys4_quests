@@ -803,17 +803,17 @@ for i=1, #nodes do
    nodes[i].on_place = register_on_place
 end
 
-minetest.register_chatcommand("craftmode",
+minetest.register_chatcommand("lcraft",
 {
    params = "[on|off]",
    description = S("Enable or not locked crafts")..".",
    func = function(name, param)
       if param == "on" then
 	 playerList[name].craftMode = true
-	 minetest.chat_send_player(name, S("Craft Mode Enabled")..".")
+	 minetest.chat_send_player(name, S("Locked crafts Enabled")..".")
       else
 	 playerList[name].craftMode = false
-	 minetest.chat_send_player(name, S("Craft Mode Disabled")..".")
+	 minetest.chat_send_player(name, S("Locked crafts Disabled")..".")
       end
    end
 })

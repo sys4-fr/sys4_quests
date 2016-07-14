@@ -29,9 +29,6 @@ and minetest.get_modpath("moreblocks") then
    local middle = "Middle Age"
 
    -- update quests from default
-   up('wood_crafter', nil, {mod..":jungle_stick"})
-   up('sticks_crafter', {mod..":jungle_stick"}, {mod..":fence_jungle_wood"})
-   up('sticks_crafter_lover', {mod..":jungle_stick"}, nil)
    up('wood_builder', nil, {mod..":wood_tile"})
 
    up('stone_digger', nil, {"default:mossycobble"})
