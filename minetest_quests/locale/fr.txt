@@ -74,7 +74,7 @@ Steel Block Builder = Pose des blocs en acier
 Stone Builder = Pose de la roche
 Stone Brick Builder = Pose des briques en roche
 Straw Builder = Pose des blocs de paille
-Wood Builder = Pose des plances
+Wood Builder = Pose des planches
 Wood Builder Lover = Pose des planches - Amateur
 
 ### Custom Descriptions ###
