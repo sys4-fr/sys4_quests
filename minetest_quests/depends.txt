@@ -1,6 +1,7 @@
 sys4_quests
 default
 stairs
+farming?
 intllib?
 moreores?
 beds?

@@ -29,6 +29,16 @@ local lastQuestIndex = 0
 --local level = 33
 local level = 12
 
+function sys4_quests.addInitialStuff(stack)
+   if not sys4_quests.stuff or sys4_quests.stuff == nil then
+      sys4_quests.stuff = {}
+   end
+
+   if stack ~= nil then
+      table.insert(sys4_quests.stuff, stack)
+   end
+end
+
 function sys4_quests.addQuestGroup(groupName)
 
    if groupName ~= nil and groupName ~= "" and groupName ~= "global" then
@@ -658,7 +668,17 @@ minetest.register_on_newplayer(
    function(player)
       local playern = player:get_player_name()
       playerList[playern] = {name = playern, isNew = true, craftMode = true, bookMode = false, activeQuestGroup = getFirstQuestGroup()}
---      print("ActiveQuestGroup for New Player : "..playerList[playern].activeQuestGroup)
+      --      print("ActiveQuestGroup for New Player : "..playerList[playern].activeQuestGroup)
+      -- give initial stuff
+      if minetest.get_modpath("give_initial_stuff") and sys4_quests.stuff then
+	 give_initial_stuff.clear()
+	 local stuff = sys4_quests.stuff
+	 for i = 1, #stuff do
+	    give_initial_stuff.add(stuff[i])
+	 end
+
+	 give_initial_stuff.give(player)
+      end
    end)
 
 minetest.register_on_joinplayer(
@@ -845,7 +865,7 @@ minetest.register_chatcommand("lqg",
 					     isGroupValid = true
 					     minetest.chat_send_player(name, S("Legend")..":")
 					     minetest.chat_send_player(name, " [*] <-- "..S("Successfull quest"))
-					     minetest.chat_send_player(name, " [!] <-- "..S("Active quest"))
+					     minetest.chat_send_player(name, " [>] <-- "..S("Active quest"))
 					     minetest.chat_send_player(name, " [ ] <-- "..S("Not reached quest"))
 					     minetest.chat_send_player(name, " ")
 					     minetest.chat_send_player(name, S("Quests of group").." \""..groupName.."\" : ")
@@ -857,7 +877,7 @@ minetest.register_chatcommand("lqg",
 						      if index == qIndex then
 							 local questState = "[ ]"
 							 if isQuestActive(quest[1], name) then
-							    questState = "[!]"
+							    questState = "[>]"
 							 end
 							 if isQuestSuccessfull(quest[1], name) then
 							    questState = "[*]"
@@ -939,16 +959,20 @@ minetest.register_chatcommand("fquest",
 				 func = function(name, param)
 				    local quest = getRegisteredQuest(param)
 				    local maxValue
-				    if quest.custom_level then
-				       maxValue = quest[5]
-				    else
-				       maxValue = quest[5] * level
-				    end
+				    if quest ~= nil then
+				       if quest.custom_level then
+					  maxValue = quest[5]
+				       else
+					  maxValue = quest[5] * level
+				       end
 				    
-				    if quests.update_quest(name, "sys4_quests:"..param, maxValue) then
-				       minetest.chat_send_player(name, S("The quest has been finished successfully")..".")
+				       if quests.update_quest(name, "sys4_quests:"..param, maxValue) then
+					  minetest.chat_send_player(name, S("The quest has been finished successfully")..".")
+				       else
+					  minetest.chat_send_player(name, S("The quest must be active to do that")..".")
+				       end
 				    else
-				       minetest.chat_send_player(name, S("The quest must be active to do that")..".")
+				       minetest.chat_send_player(name, S("Sorry, but this quest doesn't exist")..".")
 				    end
 				 end
 			      })

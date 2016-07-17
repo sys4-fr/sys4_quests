@@ -3,8 +3,58 @@
 
 -- This mod add quests based on ethereal mod
 
-if minetest.get_modpath("minetest_quests") and
-      minetest.get_modpath("ethereal") then
+if minetest.get_modpath("minetest_quests")
+and minetest.get_modpath("ethereal") then
+   
+   -- give initial stuff
+   sys4_quests.addInitialStuff("default:junglesapling")
+   sys4_quests.addInitialStuff("ethereal:bamboo_sprout")
+
+   -- Redefine ethereal.grow_sapling for the bamboo_sprout grow on ethereal:green_moss --
+
+   -- check if sapling has enough height room to grow
+   local function enough_height(pos, height)
+
+      local nod = minetest.line_of_sight(
+	 {x = pos.x, y = pos.y + 1, z = pos.z},
+	 {x = pos.x, y = pos.y + height, z = pos.z})
+
+      if not nod then
+	 return false -- obstructed
+      else
+	 return true -- can grow
+      end
+   end
+
+   local grow_sapling = ethereal.grow_sapling
+   
+   ethereal.grow_sapling = function(pos, node)
+      grow_sapling(pos, node)
+      
+      local under =  minetest.get_node({
+					  x = pos.x,
+					  y = pos.y - 1,
+					  z = pos.z
+				       }).name
+      
+      if not minetest.registered_nodes[node.name] then
+	 return
+      end
+      
+      local height = minetest.registered_nodes[node.name].grown_height
+      
+      -- do we have enough height to grow sapling into tree?
+      if not height or not enough_height(pos, height) then
+	 return
+      end
+      
+      -- Check if Ethereal Sapling is growing on correct substrate
+      
+      if node.name == "ethereal:bamboo_sprout"
+      and under == "ethereal:bamboo_dirt" or under == "ethereal:green_moss" then
+	 ethereal.grow_bamboo_tree(pos)
+      end   
+   end
    
    local S
    if minetest.get_modpath("intllib") then

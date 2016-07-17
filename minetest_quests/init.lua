@@ -21,17 +21,28 @@ local mod_bucket = minetest.get_modpath("bucket")
 
 if mod_sys4_quests then
    local current_modpath = minetest.get_modpath(minetest.get_current_modname())
+
+   -- add initial stuff
+   sys4_quests.addInitialStuff("default:torch 4")
+   sys4_quests.addInitialStuff("default:sapling")
+   sys4_quests.addInitialStuff("default:papyrus")
    
    if mod_default then
       dofile(current_modpath.."/default.lua")
       
       if mod_farming then
+	 -- initial stuff
+	 sys4_quests.addInitialStuff("default:grass_1 2")
+	 
 	 dofile(current_modpath.."/farming.lua")
 	 
 	 if mod_dye then
 	    dofile(current_modpath.."/dye.lua")
 	 
 	    if mod_wool then
+	       -- initial stuff
+	       sys4_quests.addInitialStuff("default:junglegrass 2")
+	       
 	       dofile(current_modpath.."/wool.lua")
 
 	       if mod_beds then

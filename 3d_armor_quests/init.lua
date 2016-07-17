@@ -11,6 +11,8 @@ local mod_3d_armor_stand = minetest.get_modpath("3d_armor_stand")
 if mod_sys4_quests and mod_3d_armor then
    local current_modpath = minetest.get_modpath(minetest.get_current_modname())
 
+   sys4_quests.addInitialStuff("default:cactus")
+
    dofile(current_modpath.."/3d_armor.lua")
 
    if mod_shields then

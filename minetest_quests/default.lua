@@ -55,7 +55,7 @@ ins(quests, {
 
 -- tree_digger
 ins(quests, {
-       'tree_digger', "Tree Digger", nil, {mod..":tree", mod..":jungletree", mod..":acacia_tree", mod..":pine_tree", mod..":aspen_tree"}, 1, {mod..":wood", mod..":junglewood", mod..":acacia_wood", mod..":pine_wood", mod..":aspen_wood"}, nil, type = t, group = dark
+       'tree_digger', "Tree Digger", nil, {mod..":tree", mod..":jungletree", mod..":acacia_tree", mod..":pine_tree", mod..":aspen_tree"}, 1, {mod..":wood", mod..":junglewood", mod..":acacia_wood", mod..":pine_wood", mod..":aspen_wood"}, nil, type = t, group = wood
 	    })
 
 -- coal_digger
@@ -199,7 +199,7 @@ ins(quests, {
 
 -- wood_builder
 ins(quests, {
-       'wood_builder', "Wood Builder", nil, {mod..":wood", mod..":junglewood", mod..":acacia_wood", mod..":pine_wood", mod..":aspen_wood"}, 3, {"stairs:slab_wood", "stairs:stair_wood","stairs:slab_junglewood", "stairs:stair_junglewood","stairs:slab_acacia_wood", "stairs:stair_acacia_wood","stairs:slab_pine_wood", "stairs:stair_pine_wood","stairs:slab_aspen_wood", "stairs:stair_aspen_wood"}, nil, type = t, group = wood
+       'wood_builder', "Wood Builder", nil, {mod..":wood", mod..":junglewood", mod..":acacia_wood", mod..":pine_wood", mod..":aspen_wood"}, 3, {"stairs:slab_wood", "stairs:stair_wood","stairs:slab_junglewood", "stairs:stair_junglewood","stairs:slab_acacia_wood", "stairs:stair_acacia_wood","stairs:slab_pine_wood", "stairs:stair_pine_wood","stairs:slab_aspen_wood", "stairs:stair_aspen_wood"}, "tree_digger", type = t, group = wood
 	    })
 
 -- sandstonebrick_builder
@@ -272,7 +272,7 @@ ins(quests, {
 
 -- wood_crafter
 ins(quests, {
-       'wood_crafter', "Wood Crafter", nil, {mod..":wood", mod..":junglewood", mod..":acacia_wood", mod..":pine_wood", mod..":aspen_wood"}, 4, {mod..":stick", mod..":sword_wood", mod..":axe_wood", mod..":shovel_wood"}, nil, type = t, group = wood
+       'wood_crafter', "Wood Crafter", nil, {mod..":wood", mod..":junglewood", mod..":acacia_wood", mod..":pine_wood", mod..":aspen_wood"}, 4, {mod..":stick", mod..":sword_wood", mod..":axe_wood", mod..":shovel_wood"}, "tree_digger", type = t, group = wood
 	    })
 
 -- wood_crafter_lover

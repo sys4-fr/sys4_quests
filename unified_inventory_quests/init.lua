@@ -4,8 +4,8 @@
 -- This mod add quests based on unified_inventory mod
 
 if minetest.get_modpath("minetest_quests")
-   and minetest.get_modpath("unified_inventory") then
-   
+and minetest.get_modpath("unified_inventory") then
+
    local S
    if minetest.get_modpath("intllib") then
       S = intllib.Getter()
