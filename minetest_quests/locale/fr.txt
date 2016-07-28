@@ -458,6 +458,7 @@ farming:donut_chocolate = Donuts au chocolat
 farming:drinking_cup = Tasses à café
 farming:jackolantern = Citrouilles d'Halloween
 farming:melon_8 = Melons
+farming:melon_slice = Tranches de melon
 farming:muffin_blueberry = Muffins aux myrtilles
 farming:pumpkin = Citrouilles
 farming:pumpkin_dough = Pâte de citrouille
