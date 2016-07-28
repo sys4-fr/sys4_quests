@@ -421,3 +421,47 @@ wool:yellow = Blocs de laine jaune
 # Xpanes
 xpanes:bar = Barres de fer
 xpanes:pane = Vitres
+
+### Farming Redo ###
+
+# Quests Titles #
+
+Cocoa Digger = Récolte du cacao
+Corn Digger = Récolte du maïs
+Squash Digger = Récolte des courges
+Unlock Coffee = Un café ?
+Unlock Gold Carrot = Débloque la carotte dorée
+
+Donut Crafter = Fait des donuts
+
+# Custom desc. #
+
+pumpkins or melons = citrouilles ou melons
+
+# Items #
+
+farming:beanpole = Tuteurs pour haricots
+farming:bottle_ethanol = Bouteilles d'éthanol
+farming:carrot_gold = Corrottes dorées
+farming:chocolate_dark = Barres de chocolat noir
+farming:cocoa_1 = Fèves de cacao
+farming:cocoa_2 = Fèves de cacao
+farming:cocoa_3 = Fèves de cacao
+farming:coffee_5 = Graines de caféier
+farming:coffee_cup = Tasses de café
+farming:cookie = Cookies
+farming:corn_7 = Épis de maïs
+farming:corn_8 = Épis de maïs
+farming:donut = Donuts
+farming:donut_apple = Donuts à la pomme
+farming:donut_chocolate = Donuts au chocolat
+farming:drinking_cup = Tasses à café
+farming:jackolantern = Citrouilles d'Halloween
+farming:melon_8 = Melons
+farming:muffin_blueberry = Muffins aux myrtilles
+farming:pumpkin = Citrouilles
+farming:pumpkin_dough = Pâte de citrouille
+farming:pumpkin_slice = Tranches de citrouille
+farming:rhubarb_pie = Tarte à la rhubarbe
+farming:smoothie_raspberry = Frappés à la framboise
+farming:trellis = Treillis

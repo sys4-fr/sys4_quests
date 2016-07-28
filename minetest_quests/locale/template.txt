@@ -421,3 +421,47 @@ wool:yellow =
 # Xpanes
 xpanes:bar =
 xpanes:pane =
+
+### Farming Redo ###
+
+# Quests Titles #
+
+Cocoa Digger =
+Corn Digger =
+Squash Digger =
+Unlock Coffee =
+Unlock Gold Carrot = 
+
+Donut Crafter = 
+
+# Custom desc. #
+
+pumpkins or melons =
+
+# Items #
+
+farming:beanpole =
+farming:bottle_ethanol =
+farming:carrot_gold = 
+farming:chocolate_dark = 
+farming:cocoa_1 =
+farming:cocoa_2 =
+farming:cocoa_3 =
+farming:coffee_5 =
+farming:coffee_cup = 
+farming:cookie =
+farming:corn_7 =
+farming:corn_8 = 
+farming:donut =
+farming:donut_apple =
+farming:donut_chocolate =
+farming:drinking_cup =
+farming:jackolantern =
+farming:melon_8 = 
+farming:muffin_blueberry =
+farming:pumpkin =
+farming:pumpkin_dough =
+farming:pumpkin_slice = 
+farming:rhubarb_pie =
+farming:smoothie_raspberry = 
+farming:trellis = 
