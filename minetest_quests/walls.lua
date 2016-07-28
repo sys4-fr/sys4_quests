@@ -19,7 +19,7 @@ local stone = "Stone Age"
 local quests = sys4_quests.initQuests(mod, S)
 
 ins(quests, {
-       'cobble_builder_lover', "Cobble Builder Lover", nil, {"default:cobble", "default:desertcobble", "default:mossycobble"}, 3, {mod..":cobble", mod..":desertcobble", mod..":mossycobble"}, "cobble_builder", type = "place", group = stone
+       'cobble_builder_lover', "Cobble Builder Lover", nil, {"default:cobble", "default:desert_cobble", "default:mossycobble"}, 3, {mod..":cobble", mod..":desertcobble", mod..":mossycobble"}, "cobble_builder", type = "place", group = stone
 	    })
 
 sys4_quests.registerQuests()

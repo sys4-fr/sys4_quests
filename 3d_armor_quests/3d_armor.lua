@@ -188,7 +188,7 @@ if minetest.get_modpath("ethereal_quests") then
 
    -- crystal_sword_crafter
    ins(quests, {
-	  'crystal_sword_crafter', "Crystal Sword Crafter", nil, {"ethereal:sword_crystal"}, 1, {mod..":bootd_crystal"}, "crystal_crafter_lover", type = t, custom_level = true, group = middle
+	  'crystal_sword_crafter', "Crystal Sword Crafter", nil, {"ethereal:sword_crystal"}, 1, {mod..":boots_crystal"}, "crystal_crafter_lover", type = t, custom_level = true, group = middle
 	       })
 
    -- crystal_protection

@@ -21,11 +21,20 @@ if minetest.get_modpath("minetest_quests") and
    local mod = "carts"
    local quests = sys4_quests.initQuests(mod, S)
 
+   -- initialisation for boost_cart if detected
+   if minetest.get_modpath("boost_cart") then
+      sys4_quests.initQuests("boost_cart", S)
+   end
+
    ----- Quests Groups -----
    local metal = "Metal Age"
 
    -- Update default quests
    up('mese_digger', nil, {mod..":powerrail"})
+   
+   if minetest.get_modpath("boost_cart") then
+      up('mese_digger', nil, {"boost_cart:startstoprail"})
+   end
 
    ----- Quests with type="place" -----
    local t = "place"

@@ -29,6 +29,36 @@ local lastQuestIndex = 0
 --local level = 33
 local level = 12
 
+-- Rewrite the following function of the quest mod for fix crash when playing with hidden hud.
+quests.accept_quest = function (playername, questname)
+   if (quests.active_quests[playername][questname] and not quests.active_quests[playername][questname].finished) then
+      if (quests.successfull_quests[playername] == nil) then
+	 quests.successfull_quests[playername] = {}
+      end
+      if (quests.successfull_quests[playername][questname] ~= nil) then
+	 quests.successfull_quests[playername][questname].count = quests.successfull_quests[playername][questname].count + 1
+      else
+	 quests.successfull_quests[playername][questname] = {count = 1}
+      end
+      quests.active_quests[playername][questname].finished = true
+      if quests.hud[playername].list ~= nil then
+	 for _,quest in ipairs(quests.hud[playername].list) do
+	    if (quest.name == questname) then
+	       local player = minetest.get_player_by_name(playername)
+	       player:hud_change(quest.id, "number", quests.colors.success)
+	    end
+	 end
+      end
+      quests.show_message("success", playername, S("Quest completed:") .. " " .. quests.registered_quests[questname].title)
+      minetest.after(3, function(playername, questname)
+			quests.active_quests[playername][questname] = nil
+			quests.update_hud(playername)
+			end, playername, questname)
+      return true -- the quest is finished, the mod can give a reward
+   end
+   return false -- the quest hasn't finished
+end
+
 function sys4_quests.addInitialStuff(stack)
    if not sys4_quests.stuff or sys4_quests.stuff == nil then
       sys4_quests.stuff = {}
@@ -246,15 +276,40 @@ function sys4_quests.registerQuests()
 	 end
 
 	 --print(dump(quest))
+
+	 -- If a target node or item is inexistant then remove it.
+	 local targets = {}
+	 for k, node in ipairs(quest[4]) do
+	    if minetest.registered_nodes[node] or minetest.registered_items[node] then
+	       table.insert(targets, node)
+	    else
+	       local nodeMod = string.split(node, ":")[1]
+	       minetest.log("warning", "sys4_quests: The target node or item '"..node.."' is inexistant, please upgrade '"..nodeMod.."' mod.")
+	    end
+	 end
+	 quest[4] = targets
 	 
+	 -- If an unlockable node or item is inexistant then remove it.
+	 local items = {}
+	 for k, item in ipairs(quest[6]) do
+	    if minetest.registered_nodes[item] or minetest.registered_items[item] then
+	       table.insert(items, item)
+	    else
+	       local itemMod = string.split(item, ":")[1]
+	       minetest.log("warning", "sys4_quests: The unlockable item '"..item.."' is inexistant, please upgrade '"..itemMod.."' mod.")
+	    end
+	 end
+	 quest[6] = items
+	 
+	 -- Register quest
 	 if quests.register_quest("sys4_quests:"..quest[1],
 				  { title = modIntllib(quest[2]),
-				 description = sys4_quests.formatDescription(quest, maxlevel, modIntllib),
-				 max = maxlevel,
-				 --autoaccept = sys4_quests.hasDependencies(quest[1]),
-				 autoaccept = true,
-				 callback = sys4_quests.nextQuest
-			       })
+				    description = sys4_quests.formatDescription(quest, maxlevel, modIntllib),
+				    max = maxlevel,
+				    --autoaccept = sys4_quests.hasDependencies(quest[1]),
+				    autoaccept = true,
+				    callback = sys4_quests.nextQuest
+				  })
 	 then
 	    lastQuestIndex = lastQuestIndex + 1
 	    quest.index = lastQuestIndex
@@ -341,13 +396,23 @@ function sys4_quests.updateQuest(questName, targetNodes, items)
 	 if questName == quest[1] then
 	    if targetNodes ~= nil and type(targetNodes) == "table" then
 	       for __,targetNode in ipairs(targetNodes) do
-		  table.insert(quest[4], targetNode)
+		  if minetest.registered_nodes[targetNode] or minetest.registered_items[targetNode] then
+		     table.insert(quest[4], targetNode)
+		  else
+		     local nodeMod = string.split(targetNode, ":")[1]
+		     minetest.log("warning", "sys4_quests: The target node or item '"..targetNode.."' is inexistant, please upgrade '"..nodeMod.."' mod.")
+		  end
 	       end
 	    end
 
 	    if items ~= nil and type(items) == "table" then
 	       for __,item in ipairs(items) do
-		  table.insert(quest[6], item)
+		  if minetest.registered_nodes[item] or minetest.registered_items[item] then
+		     table.insert(quest[6], item)
+		  else
+		     local itemMod = string.split(item, ":")[1]
+		     minetest.log("warning", "sys4_quests: The unlockable item '"..item.."' is inexistant, please upgrade '"..itemMod.."' mod.")
+		  end
 	       end
 	    
 	       local questDescription = quests.registered_quests['sys4_quests:'..questName].description

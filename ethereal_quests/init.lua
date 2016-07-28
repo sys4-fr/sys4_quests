@@ -49,7 +49,6 @@ and minetest.get_modpath("ethereal") then
       end
       
       -- Check if Ethereal Sapling is growing on correct substrate
-      
       if node.name == "ethereal:bamboo_sprout"
       and under == "ethereal:bamboo_dirt" or under == "ethereal:green_moss" then
 	 ethereal.grow_bamboo_tree(pos)
@@ -107,8 +106,8 @@ and minetest.get_modpath("ethereal") then
    up('wood_crafter', woodNodes, {mod..":bowl"})
    up('wood_crafter_lover', woodNodes, nil)
 
-   local fenceNodes = {mod..":fence_banana", mod..":fence_birch", mod..":fence_frostwood", mod..":fence_mushroom", mod..":fence_palm", mod..":fence_redwood", mod..":fence_scorched", mod..":fence_willow", mod..":fence_yelowwood"}
-   local fenceGates = {mod..":fencegate_banana_closed", mod..":fencegate_birch_closed", mod..":fencegate_frostwood_closed", mod..":fencegate_mushroom_closed", mod..":fencegate_palm_closed", mod..":fencegate_redwood_closed", mod..":fencegate_scorched_closed", mod..":fencegate_willow_closed", mod..":fencegate_yelowwood_closed"}
+   local fenceNodes = {mod..":fence_banana", mod..":fence_birch", mod..":fence_frostwood", mod..":fence_mushroom", mod..":fence_palm", mod..":fence_redwood", mod..":fence_scorched", mod..":fence_willow", mod..":fence_yellowwood"}
+   local fenceGates = {mod..":fencegate_banana_closed", mod..":fencegate_birch_closed", mod..":fencegate_frostwood_closed", mod..":fencegate_mushroom_closed", mod..":fencegate_palm_closed", mod..":fencegate_redwood_closed", mod..":fencegate_scorched_closed", mod..":fencegate_willow_closed", mod..":fencegate_yellowwood_closed"}
 
    local woodStairsNodes = {"stairs:slab_banana_wood", "stairs:slab_birch_wood", "stairs:slab_frost_wood", "stairs:slab_palm_wood", "stairs:slab_redwood_wood", "stairs:slab_willow_wood", "stairs:slab_yellow_wood", "stairs:stair_banana_wood", "stairs:stair_birch_wood", "stairs:stair_frost_wood", "stairs:stair_palm_wood", "stairs:stair_redwood_wood", "stairs:stair_willow_wood", "stairs:stair_yellow_wood"}
 

@@ -7,3 +7,4 @@ Rail Installer = Poseur de rails
 carts:brakerail = Rails ralentisseurs
 carts:cart = Chariots
 carts:powerrail = Rails accelérateurs
+boost_cart:startstoprail = Rails accelérateurs ou ralentisseurs

@@ -25,7 +25,7 @@ and minetest.get_modpath("unified_inventory") then
 
    -- textile_worker
    ins(quests, {
-	  'textile_worker', "Textile Worker", "wools", {"wool:white", "wool:black", "wool:blue", "wool:orange", "wool:red", "wool:violet", "wool:yellow", "wool:brown", "wool:cyan", "wool:dark_green", "wool:dar_grey", "wool:green", "wool:grey", "wool:magenta", "wool:pink"}, 6, {mod..":bag_small"}, "cotton_digger", type = t
+	  'textile_worker', "Textile Worker", "wools", {"wool:white", "wool:black", "wool:blue", "wool:orange", "wool:red", "wool:violet", "wool:yellow", "wool:brown", "wool:cyan", "wool:dark_green", "wool:dark_grey", "wool:green", "wool:grey", "wool:magenta", "wool:pink"}, 6, {mod..":bag_small"}, "cotton_digger", type = t
 	       })
 
    -- bag_crafter

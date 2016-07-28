@@ -154,7 +154,7 @@ ethereal:fence_palm = Barrières en Palmier
 ethereal:fence_redwood = Barrières en Séquoia
 ethereal:fence_scorched = Barrières calcinées
 ethereal:fence_willow = Barrières en Saule
-ethereal:fence_yelowwood = Barrières en bois jaune
+ethereal:fence_yellowwood = Barrières en bois jaune
 ethereal:fencegate_banana_closed = Portails en Bananier
 ethereal:fencegate_birch_closed = Portails en Bouleau
 ethereal:fencegate_frostwood_closed = Portails gelés
@@ -163,5 +163,5 @@ ethereal:fencegate_palm_closed = Portails en Palmier
 ethereal:fencegate_redwood_closed = Portails en Séquoia
 ethereal:fencegate_scorched_closed = Portails calcinés
 ethereal:fencegate_willow_closed = Portails en Saule
-ethereal:fencegate_yelowwood_closed = Portails en bois jaune
+ethereal:fencegate_yellowwood_closed = Portails en bois jaune
 

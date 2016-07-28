@@ -7,3 +7,4 @@ Rail Installer =
 carts:brakerail = 
 carts:cart =
 carts:powerrail = 
+boost_cart:startstoprail =
