@@ -80,66 +80,40 @@ function sys4_quests.addQuestGroup(groupName)
    end
 end
 
---[[function sys4_quests.addQuestGroupAfter(existingGroupName, groupName)
-   if groupName == nil or groupName == "" or groupName == "global" then
-      return
+local function isGroupExist(groupName)
+   for name, group in pairs(sys4_quests.questGroups) do
+      if name == groupName then
+	 return true
+      end
    end
-   
-   if not sys4_quests.questGroups or sys4_quests.questGroups == nil
-   or not existingGroupName or existingGroupName == nil or existingGroupName == "" then
-      sys4_quests.addQuestGroup(groupName)
-   else
-      local isExistingGroupPresent = false
-      for i = 1, #sys4_quests.questGroups do
-	 if sys4_quests.questGroups[i].name == existingGroupName then
-	    
-	    isExistingGroupPresent = true
+   return false
+end
 
-	    if i == #sys4_quests.questGroups then
-	       sys4_quests.addQuestsGroup(groupName)
-	    else
-	       for j = #sys4_quests.questGroups, i + 1, -1 do
-		  sys4_quests.questGroups[j+1] = sys4_quests.questsGroups[j]
-	       end
-	       sys4_quests.questGroups[i+1] = {name = groupName, questsIndex = {}}
-	       break
-	    end
-	 end
-      end
-      if not isExistingGroupPresent then
-	 return
-      end
+local function checkGroupName(groupName)
+   if groupName ~= nil and groupName ~= "" and groupName ~= "global" then
+      return true
+   else
+      return false
    end
 end
 
-function sys4_quests.addQuestGroupBefore(existingGroupName, groupName)
-   if groupName == nil or groupName == "" or groupName == "global" or
-   not existingGroupName or existingGroupName == "" or existingGroupName == "global" then
-      return
-   end
+function sys4_quests.insertQuestGroup(existingGroupName, newGroupName)
+   if checkGroupName(existingGroupName) and checkGroupName(newGroupName)
+   and isGroupExist(existingGroupName) and not isGroupExist(newGroupName) then
+      -- get order number of existing group
+      local existingGroupOrder = sys4_quests.questGroups[existingGroupName].order
 
-   if not sys4_quests.questGroups or sys4_quests.questGroups == nil then
-      sys4_quests.addQuestGroup(groupName)
-   else
-      local isExistingGroupPresent = false
-      for i = 1, #sys4_quests.questGroups do
-	 if sys4_quests.questGroups[i].name == existingGroupName then
-	    
-	    isExistingGroupPresent = true
-
-	    for j = #sys4_quests.questGroups, i, -1 do
-	       sys4_quests.questGroups[j+1] = sys4_quests.questsGroups[j]
-	    end
-	    sys4_quests.questGroups[i] = {name = groupName, questsIndex = {}}
-	    break
+      -- Increment by one the order number of this group and the following others
+      for name, group in pairs(sys4_quests.questGroups) do
+	 if group.order >= existingGroupOrder then
+	    group.order = group.order + 1
 	 end
       end
-      if not isExistingGroupPresent then
-	 return
-      end      
+
+      -- add new group with the order number of the existing group
+      sys4_quests.questGroups[newGroupName] = {order = existingGroupOrder, questsIndex = {}}
    end
 end
---]]
 
 local function isQuestActive(questName, playern)
    if quests.active_quests[playern] ~= nil
