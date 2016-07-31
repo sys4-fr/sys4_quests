@@ -767,18 +767,19 @@ minetest.register_on_joinplayer(
 
 minetest.register_on_dignode(
    function(pos, oldnode, digger)
-      local playern = digger:get_player_name()
+      if digger ~= nil then
+	 local playern = digger:get_player_name()
+	 for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+	    for _, registeredQuest in ipairs(registeredQuests.quests) do
+	       local questName = registeredQuest[1]
+	       local type = registeredQuest.type
 
-      for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
-	 for _, registeredQuest in ipairs(registeredQuests.quests) do
-	    local questName = registeredQuest[1]
-	    local type = registeredQuest.type
-
-	    if type == "dig" and isNodesEquivalent(registeredQuest[4], oldnode.name) then
-	       if quests.update_quest(playern, "sys4_quests:"..questName, 1) then
-		  minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
-		  if playerList[playern].bookMode then
-		     giveBook(playern, questName)
+	       if type == "dig" and isNodesEquivalent(registeredQuest[4], oldnode.name) then
+		  if quests.update_quest(playern, "sys4_quests:"..questName, 1) then
+		     minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
+		     if playerList[playern].bookMode then
+			giveBook(playern, questName)
+		     end
 		  end
 	       end
 	    end
