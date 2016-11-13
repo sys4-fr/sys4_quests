@@ -186,7 +186,7 @@ ins(quests, {
 
 -- obsidian_digger_lover
 ins(quests, {
-       'obsidian_digger_lover', "Obsidian Digger Lover", nil, {mod..":obsidian"}, 3, {mod..":obsidianbrick"}, "obsidian_digger", type = t, group = middle
+       'obsidian_digger_lover', "Obsidian Digger Lover", nil, {mod..":obsidian"}, 3, {mod..":obsidianbrick", mod..":obsidian_block"}, "obsidian_digger", type = t, group = middle
 	    })
 
 ----- Quests with type="place" -----
@@ -204,22 +204,22 @@ ins(quests, {
 
 -- sandstonebrick_builder
 ins(quests, {
-       'sandstonebrick_builder', "Sandstone Bricks Builder", nil, {mod..":sandstonebrick"}, 3, {"stairs:slab_sandstonebrick", "stairs:stair_sandstonebrick"}, "sandstone_crafter", type = t, group = stone
+       'sandstonebrick_builder', "Sandstone Bricks Builder", "sandstone bricks or sandstone blocks", {mod..":sandstonebrick", mod..":sandstone_block"}, 3, {"stairs:slab_sandstonebrick", "stairs:stair_sandstonebrick", "stairs:slab_sandstone_block", "stairs:stair_sandstone_block"}, "sandstone_crafter", type = t, group = stone
 	    })
 
 -- stone_builder
 ins(quests, {
-       'stone_builder', "Stone Builder", nil, {mod..":stone", mod..":desert_stone"}, 3, {"stairs:slab_stone", "stairs:stair_stone", "stairs:slab_desert_stone", "stairs:stair_desert_stone"}, "furnace_crafter", type = t
+       'stone_builder', "Stone Builder", nil, {mod..":stone", mod..":desert_stone"}, 3, {"stairs:slab_stone", "stairs:stair_stone", "stairs:slab_desert_stone", "stairs:stair_desert_stone", mod..":stone_block", mod..":desert_stone_block"}, "furnace_crafter", type = t, group = stone
 	    })
 
 -- brick_builder
 ins(quests, {
-       'brick_builder', "Brick Builder", nil, {mod..":brick"}, 3, {"stairs:slab_brick", "stairs:stair_brick"}, "furnace_crafter", type = t, group = stone
+       'brick_builder', "Brick Builder", nil, {mod..":brick"}, 3, {"stairs:slab_brick", "stairs:stair_brick", mod..":stonebrick", mod..":desert_stonebrick"}, "furnace_crafter", type = t, group = stone
 	    })
 
 --stonebrick_builder
 ins(quests, {
-       'stonebrick_builder', "Stone Brick Builder", nil, {mod..":stonebrick", mod..":desert_stonebrick"}, 3, {"stairs:slab_stonebrick", "stairs:stair_stonebrick", "stairs:slab_desert_stonebrick", "stairs:stair_desert_stonebrick"}, "furnace_crafter", type = t, group = stone
+       'stonebrick_builder', "Stone Brick Builder", "stone blocks or stone bricks", {mod..":stonebrick", mod..":desert_stonebrick", mod..":stone_block", mod..":desert_stone_block"}, 3, {"stairs:slab_stonebrick", "stairs:stair_stonebrick", "stairs:slab_desert_stonebrick", "stairs:stair_desert_stonebrick", "stairs:slab_stone_block", "stairs:stair_stone_block", "stairs:slab_desert_stone_block", "stairs:stair_desert_stone_block"}, {"brick_builder", "stone_builder"}, type = t, group = stone
 	    })
 
 -- cobble_builder
@@ -254,7 +254,7 @@ ins(quests, {
 
 -- obsidianbrick_builder
 ins(quests, {
-       'obsidianbrick_builder', "Obsidian Brick Builder", nil, {mod..":obsidianbrick"}, 3, {"stairs:slab_obsidianbrick", "stairs:stair_obsidianbrick"}, "obsidian_digger_lover", type = t
+       'obsidianbrick_builder', "Obsidian Brick Builder", "obsidian bricks or obsidian blocks", {mod..":obsidianbrick", mod..":obsidian_block"}, 3, {"stairs:slab_obsidianbrick", "stairs:stair_obsidianbrick", "stairs:slab_obsidian_block", "stairs:stair_obsidian_block"}, "obsidian_digger_lover", type = t
 	    })
 
 ----- Quests with type="craft" -----
@@ -297,12 +297,12 @@ ins(quests, {
 
 -- furnace_crafter
 ins(quests, {
-       'furnace_crafter', "Furnace Crafter", nil, {mod..":furnace"}, 1, {mod..":brick", mod..":clay_brick", mod..":stonebrick", mod..":desert_stonebrick"}, "stone_digger_expert", type = t, custom_level = true, group = stone
+       'furnace_crafter', "Furnace Crafter", nil, {mod..":furnace"}, 1, {mod..":brick", mod..":clay_brick"}, "stone_digger_expert", type = t, custom_level = true, group = stone
 	    })
 
 -- sandstone_crafter
 ins(quests, {
-       'sandstone_crafter', "Sandstone Crafter", nil, {mod..":sandstone"}, 4, {mod..":sandstonebrick"}, "stone_digger_pro", type = t, group = stone
+       'sandstone_crafter', "Sandstone Crafter", nil, {mod..":sandstone"}, 4, {mod..":sandstonebrick", mod..":sandstone_block"}, "stone_digger_pro", type = t, group = stone
 	    })
 
 -- bronze_crafter

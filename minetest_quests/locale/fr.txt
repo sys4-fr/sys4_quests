@@ -79,12 +79,14 @@ Wood Builder Lover = Pose des planches - Amateur
 
 ### Custom Descriptions ###
 
-colored wools = Blocs de laine teinté
+colored wools = blocs de laine teinté
 dyes = teintures
 flowers = fleurs
 vessels items = objets de vaisselle
 wooden tools = outils en bois
-
+stone blocks or stone bricks = roches taillées ou briques en roche
+sandstone bricks or sandstone blocks = briques en gré ou blocs de gré taillés
+obsidian bricks or obsidian blocks = briques en obsidienne ou obsidiennes taillées
 ### Nodes names ###
 
 # Trees
@@ -226,6 +228,8 @@ default:stone_with_gold = Roches d'or
 default:stone_with_iron = Roches de fer
 default:stone_with_mese = Roches de mese
 default:stonebrick = Briques en roche
+default:stone_block = Roches taillées
+default:desert_stone_block = Roches du desert taillées
 stairs:slab_cobble = Dalles en pavés de pierre
 stairs:stair_cobble = Escaliers en pavés de pierre
 stairs:slab_desert_cobble = Dalles en pavés du desert
@@ -238,26 +242,36 @@ stairs:slab_stone = Dalles en roche
 stairs:stair_stone = Escaliers en roche
 stairs:slab_stonebrick = Dalles en briques de roche
 stairs:stair_stonebrick = Escaliers en briques de roche
+stairs:slab_stone_block = Dalles en roche taillée
+stairs:stair_stone_block = Escaliers en roche taillée
+stairs:slab_desert_stone_block = Dalles en roche taillée du desert
+stairs:stair_desert_stone_block = Escaliers en roche taillée du desert
 
 # Obsidian
 default:obsidian = Blocs d'obsidienne
 default:obsidian_glass = Blocs en verre d'obsidienne
 default:obsidian_shard = Échardes d'obsidienne
 default:obsidianbrick = Briques en obsidienne
+default:obsidian_block = Obsidiennes taillées
 stairs:slab_obsidian = Dalles en obsidienne
 stairs:stair_obsidian = Escaliers en obsidienne
 stairs:slab_obsidianbrick = Dalles en briques d'obsidienne
 stairs:stair_obsidianbrick = Escaliers en briques d'obsidienne
+stairs:slab_obsidian_block = Dalles en obsidienne taillée
+stairs:stair_obsidian_block = Escaliers en obsidienne taillée
 
 # Sands
 default:desert_sand = Blocs de sable du desert
 default:sand = Blocs de sable
 default:sandstone = Blocs de gré
 default:sandstonebrick = Blocs en briques de gré
+default:sandstone_block = Blocs en gré taillé
 stairs:slab_sandstone = Dalles en gré
 stairs:stair_sandstone = Escaliers en gré
 stairs:slab_sandstonebrick = Dalles en briques de gré
 stairs:stair_sandstonebrick = Escaliers en briques de gré
+stairs:slab_sandstone_block = Dalles en gré taillé
+stairs:stair_sandstone_block = Escaliers en gré taillé
 
 # Gravel
 default:gravel = Blocs de gravier

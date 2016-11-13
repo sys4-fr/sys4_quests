@@ -84,6 +84,9 @@ dyes =
 flowers =
 vessels items =
 wooden tools =
+stone blocks or stone bricks =
+sandstone bricks or sandstone blocks =
+obsidian bricks or obsidian blocks =
 
 ### Nodes names ###
 
@@ -226,6 +229,8 @@ default:stone_with_gold =
 default:stone_with_iron =
 default:stone_with_mese =
 default:stonebrick =
+default:stone_block =
+default:desert_stone_block =
 stairs:slab_cobble =
 stairs:stair_cobble =
 stairs:slab_desert_cobble =
@@ -238,26 +243,36 @@ stairs:slab_stone =
 stairs:stair_stone =
 stairs:slab_stonebrick =
 stairs:stair_stonebrick =
+stairs:slab_stone_block = 
+stairs:stair_stone_block = 
+stairs:slab_desert_stone_block = 
+stairs:stair_desert_stone_block = 
 
 # Obsidian
 default:obsidian =
 default:obsidian_glass =
 default:obsidian_shard =
 default:obsidianbrick =
+default:obsidian_block =
 stairs:slab_obsidian =
 stairs:stair_obsidian =
 stairs:slab_obsidianbrick =
 stairs:stair_obsidianbrick =
+stairs:slab_obsidian_block =
+stairs:stair_obsidian_block =
 
 # Sands
 default:desert_sand =
 default:sand =
 default:sandstone =
 default:sandstonebrick =
+default:sandstone_block =
 stairs:slab_sandstone =
 stairs:stair_sandstone =
 stairs:slab_sandstonebrick =
 stairs:stair_sandstonebrick =
+stairs:slab_sandstone_block =
+stairs:stair_sandstone_block =
 
 # Gravel
 default:gravel =
