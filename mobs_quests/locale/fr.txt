@@ -17,4 +17,5 @@ mobs:magic_lasso = Lassos magiques
 mobs:nametag = Badges
 mobs:net = Filets
 mobs:pick_lava = Pioches de lave
+mobs:protector = Runes de protection de mobs
 mobs:shears = Cisailles

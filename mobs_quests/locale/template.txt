@@ -16,5 +16,6 @@ mobs:honey_block =
 mobs:magic_lasso =
 mobs:nametag =
 mobs:net =
-mobs:pick_lava = 
+mobs:pick_lava =
+mobs:protector = 
 mobs:shears = 

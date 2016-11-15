@@ -69,5 +69,6 @@ and minetest.get_modpath("mobs") then
    sys4_quests.registerQuests()
 
    up('iron_digger_lover', nil, {mod..":shears"})
+   up('gold_digger', nil, {mod..":protector"})
 
 end
