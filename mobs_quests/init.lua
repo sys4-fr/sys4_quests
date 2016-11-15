@@ -45,12 +45,12 @@ and minetest.get_modpath("mobs") then
 
       -- unlock_net
       ins(quests, {
-	     'unlock_net', "Unlock Net", nil, {"farming:cotton_1","farming:cotton_2","farming:cotton_3","farming:cotton_4","farming:cotton_5","farming:cotton_6","farming:cotton_7","farming:cotton_8"}, 2, {mod..":net", mod..":beehive"}, {"book_crafter"}, type = "dig", group = farming
+	     'unlock_net', "Unlock Net", nil, {"farming:cotton_1","farming:cotton_2","farming:cotton_3","farming:cotton_4","farming:cotton_5","farming:cotton_6","farming:cotton_7","farming:cotton_8"}, 2, {mod..":net", mod..":beehive"}, {"book_crafter"}, type = "dig", group = farm
 		  })
 
       -- beehive_crafter
       ins(quests, {
-	     'beehive_crafter', "Beehive Crafter", nil, {mod..":beehive"}, 1, {mod..":honey", mod..":honey_block"}, "unlock_net", type = t, custom_level = true, group = farming
+	     'beehive_crafter', "Beehive Crafter", nil, {mod..":beehive"}, 1, {mod..":honey", mod..":honey_block"}, "unlock_net", type = t, custom_level = true, group = farm
 		  })
    end
 

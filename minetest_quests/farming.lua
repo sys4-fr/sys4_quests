@@ -84,7 +84,7 @@ if redo then
 
    -- squash_digger
    ins(quests, {
-	  'squash_digger', "Squash Digger", "pumpkins or melons", {mod..":melon_8", mod..":pumpkin_8", mod..":pumpkin"}, 1, {mod..":melon_slice", mod..":melon_8", mod..":pumpkin_slice", mod..":pumpkin"}, "book_crafter", type = t, group = farming
+	  'squash_digger', "Squash Digger", "pumpkins or melons", {mod..":melon_8", mod..":pumpkin_8", mod..":pumpkin"}, 1, {mod..":melon_slice", mod..":melon_8", mod..":pumpkin_slice", mod..":pumpkin"}, "book_crafter", type = t, group = farm
 	       })
    
    -- unlock_gold_carrot
