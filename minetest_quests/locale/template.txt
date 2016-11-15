@@ -87,6 +87,7 @@ wooden tools =
 stone blocks or stone bricks =
 sandstone bricks or sandstone blocks =
 obsidian bricks or obsidian blocks =
+cocoa fruits =
 
 ### Nodes names ###
 
@@ -481,3 +482,4 @@ farming:pumpkin_slice =
 farming:rhubarb_pie =
 farming:smoothie_raspberry = 
 farming:trellis = 
+

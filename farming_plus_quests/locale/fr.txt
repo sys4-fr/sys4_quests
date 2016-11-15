@@ -1,0 +1,12 @@
+# Titles #
+Cocoa Digger = Récolte du cacao
+
+# Items #
+farming_plus:cocoa = Fruits du Cacaotier
+farming_plus:cocoa_bean = Fèves de cacao
+farming_plus:scarecrow = Épouvantails
+farming_plus:pumpkin_flour = Farine de citrouille
+farming_plus:pumpkin_face_light = Visages en citrouille lumineux
+farming_plus:scarecrow_light = Épouvantails lumineux
+farming_plus:big_pumpkin = Citrouilles géantes
+

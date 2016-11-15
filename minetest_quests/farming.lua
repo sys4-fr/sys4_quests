@@ -79,7 +79,7 @@ ins(quests, {
 if redo then
    -- cocoa_digger
    ins(quests, {
-	  'cocoa_digger', "Cocoa Digger", nil, {mod..":cocoa_1", mod..":cocoa_2", mod..":cocoa_3"}, 3, {mod..":chocolate_dark"}, nil, type = t, group = dark
+	  'cocoa_digger', "Cocoa Digger", "cocoa fruits", {mod..":cocoa_1", mod..":cocoa_2", mod..":cocoa_3"}, 3, {mod..":chocolate_dark"}, nil, type = t, group = dark
 	       })
 
    -- squash_digger

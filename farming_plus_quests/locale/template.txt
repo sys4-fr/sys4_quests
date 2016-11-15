@@ -1,0 +1,11 @@
+# Titles #
+Cocoa Digger =
+
+# Items #
+farming_plus:cocoa =
+farming_plus:cocoa_bean =
+farming_plus:scarecrow =
+farming_plus:pumpkin_flour =
+farming_plus:pumpkin_face_light =
+farming_plus:scarecrow_light =
+farming_plus:big_pumpkin = 

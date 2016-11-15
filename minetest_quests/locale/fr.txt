@@ -87,6 +87,8 @@ wooden tools = outils en bois
 stone blocks or stone bricks = roches taillées ou briques en roche
 sandstone bricks or sandstone blocks = briques en gré ou blocs de gré taillés
 obsidian bricks or obsidian blocks = briques en obsidienne ou obsidiennes taillées
+cocoa fruits = fruits du Cacaotier
+
 ### Nodes names ###
 
 # Trees
