@@ -342,6 +342,9 @@ beds:fancy_bed_bottom =
 # Boats
 boats:boat =
 
+# Buckets
+bucket:bucket_empty = 
+
 # Doors
 doors:door_glass =
 doors:door_obsidian_glass =

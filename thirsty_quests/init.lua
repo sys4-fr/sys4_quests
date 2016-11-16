@@ -6,9 +6,8 @@
 if minetest.get_modpath("minetest_quests")
 and minetest.get_modpath("thirsty") then
 
-   -- if ethereal is detected then define the ethereal:bowl as a drinkable container
-   -- and make it craftable over thus defined by thirsty mod.
-   -- TODO use the minetest.clear_craft if it is commited one day...
+   -- If ethereal is detected then define the ethereal:bowl as a drinkable container
+   -- and clear craft thus defined by thirsty mod.
    if minetest.get_modpath("ethereal") then
       thirsty.config.register_bowl = false
       thirsty.config.drink_from_container['ethereal:bowl'] =
@@ -18,20 +17,42 @@ and minetest.get_modpath("thirsty") then
 				liquids_pointable = true,
 				on_use = thirsty.on_use(nil)
 					      })
-      minetest.register_craft({
-				 output = "thirsty:wooden_bowl 0",
+      if minetest.clear_craft then
+	 minetest.clear_craft({
+				 output = "thirsty:wooden_bowl",
 				 recipe = {
 				    {"group:wood", "", "group:wood"},
 				    {"", "group:wood", ""}
 				 }
 			      })
-      minetest.register_craft({
-				 output = "ethereal:bowl",
-				 recipe = {
-				    {"group:wood", "", "group:wood"},
-				    {"", "group:wood", ""}
-				 }
-			      })
+      else
+	 minetest.register_craft({
+				    output = "thirsty:wooden_bowl 0",
+				    recipe = {
+				       {"group:wood", "", "group:wood"},
+				       {"", "group:wood", ""}
+				    }
+				 })
+	 minetest.register_craft({
+				    output = "ethereal:bowl",
+				    recipe = {
+				       {"group:wood", "", "group:wood"},
+				       {"", "group:wood", ""}
+				    }
+				 })
+      end
+   end
+
+   -- If food mod is detected then define food:bowl as a drinkable container
+   if minetest.get_modpath("food") then
+      thirsty.config.register_bowl = false
+      thirsty.config.drink_from_container['food:bowl'] =
+	 thirsty.config.drink_from_container['thirsty:wooden_bowl']
+      
+      minetest.override_item('food:bowl', {
+				liquids_pointable = true,
+				on_use = thirsty.on_use(nil)
+					  })
    end
    
    local S

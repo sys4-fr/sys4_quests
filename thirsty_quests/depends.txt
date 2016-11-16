@@ -1,5 +1,6 @@
 minetest_quests
 thirsty
 ethereal_quests?
+food_quests?
 intllib?
 

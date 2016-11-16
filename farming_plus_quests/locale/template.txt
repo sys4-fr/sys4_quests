@@ -9,3 +9,4 @@ farming_plus:pumpkin_flour =
 farming_plus:pumpkin_face_light =
 farming_plus:scarecrow_light =
 farming_plus:big_pumpkin = 
+farming_plus:orange_item =

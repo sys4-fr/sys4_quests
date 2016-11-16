@@ -1,0 +1,56 @@
+# Titles #
+Become a cooker = Devient cuisinier
+Cooker Lover = Cuisinier Amateur
+Cooker Pro = Cuisinier Chef
+
+# Custom Descriptions #
+basic food ingredients (apples, cactus, oranges, ...) = ingrédients basiques (pommes, cactus, oranges, ...)
+juices, ingredients or already known cooked meals = jus, ingredients ou plats cuisinés déjà connus
+elaborate ingredients or cooked meals = ingrédients ou plats cuisinés élaborés
+
+# Items #
+food:apple_juice = Jus de pommes
+food:cactus_juice = Jus de cactus
+food:orange_juice = Jus d'oranges
+food:rainbow_juice = Jus d'arc-en-ciel
+food:cakemix_plain = Préparations gâteaux standard
+food:cakemix_carrot = Préparations gâteaux à la carotte
+food:cakemix_choco = Préparations gâteaux au chocolat
+food:chocolate_powder = Tas de chocolat en poudre
+food:pasta = Pâtes
+food:butter = Plaquettes de beurre
+food:cheese = Morceaux de fromages
+food:milk_chocolate = Chocolat au lait
+food:pasta_bake_raw = Plats de Pâtes crues
+food:soup_chicken_raw = Soupe de poulet crues
+food:soup_tomato_raw = Soupe de tomate crue
+
+food:orange = Oranges
+food:potato = Pommes de Terres
+food:carrot = Carottes
+food:cocoa = Fèves de cacao
+food:egg = Oeufs
+food:meat_raw = Viande crue
+food:sugar = Sucre
+food:tomato = Tomates
+food:milk = Lait
+food:bowl = Bols en argile
+
+food_sweet:walnut = Noix
+food_sweet:lemon = Citrons
+food_sweet:blueberry = Myrtilles
+food_sweet:rhubarb = Rhubarbe
+food_sweet:strawberry = Fraises
+
+food_sweet:cakemix_walnut_coffee = Préparation gâteau aux noix
+food_sweet:crumble_rhubarb_raw = Préparation crumble à la rhubarbe
+food_sweet:cupcake_mix = Préparation cupcake
+food_sweet:muffin_blueberry_mix = Préparation muffin aux myrtilles
+food_sweet:cake_wedding = Pièce montée
+food_sweet:cakemix_cheese = Préparation cheesecake
+food_sweet:cakemix_cheese_blueberry = Préparation cheesecake aux myrtilles
+food_sweet:cakemix_triple_choco = Préparation gâteau triple chocolat
+food_sweet:cupcake_choco_mix = Préparation cupcake au chocolat
+food_sweet:cupcake_fairy = Cupcake des fées
+food_sweet:cupcake_lemon = Cupcake au citron
+food_sweet:muffin_choco_mix = Préparation muffin au chocolat

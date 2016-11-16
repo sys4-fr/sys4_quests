@@ -342,6 +342,9 @@ beds:fancy_bed_bottom = Lits chics
 # Boats
 boats:boat = Bateaux
 
+# Buckets
+bucket:bucket_empty = Seau vide
+
 # Doors
 doors:door_glass = Portes en verre
 doors:door_obsidian_glass = Portes en verre d'obsidienne

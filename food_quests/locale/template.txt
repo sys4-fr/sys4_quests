@@ -1,0 +1,56 @@
+# Titles #
+Become a cooker =
+Cooker Lover =
+Cooker Pro =
+
+# Custom Descriptions #
+basic food ingredients (apples, cactus, oranges, ...) =
+juices, ingredients or already known cooked meals =
+elaborate ingredients or cooked meals =
+
+# Items #
+food:apple_juice =
+food:cactus_juice =
+food:orange_juice =
+food:rainbow_juice = 
+food:cakemix_plain =
+food:cakemix_carrot =
+food:cakemix_choco =
+food:chocolate_powder =
+food:pasta =
+food:butter =
+food:cheese =
+food:milk_chocolate =
+food:pasta_bake_raw =
+food:soup_chicken_raw =
+food:soup_tomato_raw =
+
+food:orange =
+food:potato =
+food:carrot =
+food:cocoa =
+food:egg =
+food:meat_raw =
+food:sugar =
+food:tomato =
+food:milk =
+food:bowl =
+
+food_sweet:walnut =
+food_sweet:lemon =
+food_sweet:blueberry =
+food_sweet:rhubarb =
+food_sweet:strawberry =
+
+food_sweet:cakemix_walnut_coffee =
+food_sweet:crumble_rhubarb_raw =
+food_sweet:cupcake_mix =
+food_sweet:muffin_blueberry_mix =
+food_sweet:cake_wedding =
+food_sweet:cakemix_cheese =
+food_sweet:cakemix_cheese_blueberry =
+food_sweet:cakemix_triple_choco =
+food_sweet:cupcake_choco_mix =
+food_sweet:cupcake_fairy =
+food_sweet:cupcake_lemon =
+food_sweet:muffin_choco_mix =
