@@ -261,7 +261,7 @@ function sys4_quests.registerQuests()
 					table.insert(targets, node)
 				else
 					local nodeMod = string.split(node, ":")[1]
-					minetest.log("warning", "sys4_quests: '"..nodeMod.."' mod not fully supported --> target node '"..node.."' not found.")
+					minetest.log("warning", "sys4_quests.registerQuests (triggered by mod '"..mod.."'): '"..nodeMod.."' mod not fully supported --> target node '"..node.."' not found.")
 				end
 			end
 			quest[4] = targets
@@ -273,7 +273,7 @@ function sys4_quests.registerQuests()
 					table.insert(items, item)
 				else
 					local itemMod = string.split(item, ":")[1]
-					minetest.log("warning", "sys4_quests: '"..itemMod.."' mod not fully supported --> unlockable item '"..item.."' not found.")
+					minetest.log("warning", "sys4_quests.registerQuests (triggered by mod '"..mod.."'): '"..itemMod.."' mod not fully supported --> unlockable item '"..item.."' not found.")
 				end
 			end
 			quest[6] = items
@@ -378,7 +378,7 @@ function sys4_quests.updateQuest(questName, targetNodes, items)
 							table.insert(quest[4], targetNode)
 						else
 							local nodeMod = string.split(targetNode, ":")[1]
-							minetest.log("warning", "sys4_quests: '"..nodeMod.."' mod related quests not fully supported : Target node or item '"..targetNode.."' not found.")
+							minetest.log("warning", "sys4_quests.updateQuest (triggered by mod '"..mod.."'): '"..nodeMod.."' mod not fully supported : Target node '"..targetNode.."' not found.")
 						end
 					end
 				end
@@ -389,7 +389,7 @@ function sys4_quests.updateQuest(questName, targetNodes, items)
 							table.insert(quest[6], item)
 						else
 							local itemMod = string.split(item, ":")[1]
-							minetest.log("warning", "sys4_quests: '"..mod.."' mod related quests not fully supported : Unlockable item '"..item.."' not found.")
+							minetest.log("warning", "sys4_quests.updateQuest (triggered by mod '"..mod.."'): '"..mod.."' mod not fully supported : Unlockable item '"..item.."' not found.")
 						end
 					end
 					

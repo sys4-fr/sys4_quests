@@ -40,7 +40,7 @@ then
 	----- Quests with type="place" -----
 	local t = "place"
 
-	if minetest.get_modpath("moreores_quests") then
+	if minetest.get_modpath("moreores") then
 		ins(
 			quests,
 			{
