@@ -308,10 +308,24 @@ ins(
 		group = wood
 	})
 
-local woods = {"default:wood", "default:junglewood", "default:pine_wood", "default:acacia_wood", "default:aspen_wood"}
+local woods = {
+	"default:wood",
+	"default:junglewood",
+	"default:pine_wood",
+	"default:acacia_wood",
+	"default:aspen_wood"
+}
 
-if minetest.get_modpath("ethereal_quests") then
-	local etherealWoods = {"ethereal:banana_wood", "ethereal:birch_wood", "ethereal:frost_wood", "ethereal:palm_wood", "ethereal:redwood_wood", "ethereal:willow_wood", "ethereal:yellow_wood"}
+if minetest.get_modpath("ethereal") then
+	local etherealWoods = {
+		"ethereal:banana_wood",
+		"ethereal:birch_wood",
+		"ethereal:frost_wood",
+		"ethereal:palm_wood",
+		"ethereal:redwood_wood",
+		"ethereal:willow_wood",
+		"ethereal:yellow_wood"
+	}
 	for i = 1, #etherealWoods do
 		ins(woods, etherealWoods[i])
 	end
@@ -474,7 +488,7 @@ if minetest.get_modpath("moreores") then
 		})
 end
 
-if minetest.get_modpath("ethereal_quests") then
+if minetest.get_modpath("ethereal") then
 
 	-- crystal_sword_crafter
 	ins(

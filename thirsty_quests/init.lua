@@ -76,7 +76,7 @@ and minetest.get_modpath("thirsty") then
 	local middle = "Middle Age"
 
 	-- update quests from default
-	if not minetest.get_modpath("ethereal_quests") then
+	if not minetest.get_modpath("ethereal") then
 		up('wood_crafter', nil, {mod..":wooden_bowl"})
 	end
 
