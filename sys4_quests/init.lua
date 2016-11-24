@@ -389,7 +389,7 @@ function sys4_quests.updateQuest(questName, targetNodes, items)
 							table.insert(quest[6], item)
 						else
 							local itemMod = string.split(item, ":")[1]
-							minetest.log("warning", "sys4_quests.updateQuest (triggered by mod '"..mod.."'): '"..mod.."' mod not fully supported : Unlockable item '"..item.."' not found.")
+							minetest.log("warning", "sys4_quests.updateQuest (triggered by mod '"..mod.."'): '"..itemMod.."' mod not fully supported : Unlockable item '"..item.."' not found.")
 						end
 					end
 					
