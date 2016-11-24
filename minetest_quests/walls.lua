@@ -1,8 +1,8 @@
 local S
 if minetest.get_modpath("intllib") then
-   S = intllib.Getter()
+	S = intllib.Getter()
 else
-   S = function(s) return s end
+	S = function(s) return s end
 end
 
 -- Make local shortcuts of global functions --
@@ -18,9 +18,19 @@ local stone = "Stone Age"
 -- Get variable for register quests
 local quests = sys4_quests.initQuests(mod, S)
 
-ins(quests, {
-       'cobble_builder_lover', "Cobble Builder Lover", nil, {"default:cobble", "default:desert_cobble", "default:mossycobble"}, 3, {mod..":cobble", mod..":desertcobble", mod..":mossycobble"}, "cobble_builder", type = "place", group = stone
-	    })
+ins(
+	quests,
+	{
+		'cobble_builder_lover',
+		"Cobble Builder Lover",
+		nil,
+		{"default:cobble", "default:desert_cobble", "default:mossycobble"},
+		3,
+		{mod..":cobble", mod..":desertcobble", mod..":mossycobble"},
+		"cobble_builder",
+		type = "place",
+		group = stone
+	})
 
 sys4_quests.registerQuests()
 

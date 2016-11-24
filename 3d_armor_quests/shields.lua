@@ -5,9 +5,9 @@
 
 local S
 if minetest.get_modpath("intllib") then
-   S = intllib.Getter()
+	S = intllib.Getter()
 else
-   S = function(s) return s end
+	S = function(s) return s end
 end
 
 local ins = table.insert
@@ -30,12 +30,12 @@ up('gold_protection_pro', nil, {mod..":shield_gold"})
 up('diamond_protection_lover', nil, {mod..":shield_diamond"})
 
 if minetest.get_modpath("moreores_quests") then
-   up('mithril_protection_lover', nil, {mod..":shield_mithril"})
+	up('mithril_protection_lover', nil, {mod..":shield_mithril"})
 end
 
 if minetest.get_modpath("ethereal_quests") then
 
-   up('crystal_protection_lover', nil, {mod..":shield_crystal"})
+	up('crystal_protection_lover', nil, {mod..":shield_crystal"})
 end
 
 -- enhance cactus and wood protection

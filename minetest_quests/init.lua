@@ -20,73 +20,70 @@ local mod_xpanes = minetest.get_modpath("xpanes")
 local mod_bucket = minetest.get_modpath("bucket")
 
 if mod_sys4_quests then
-   local current_modpath = minetest.get_modpath(minetest.get_current_modname())
+	local current_modpath = minetest.get_modpath(minetest.get_current_modname())
 
-   -- add initial stuff
-   sys4_quests.addInitialStuff("default:torch 4")
-   sys4_quests.addInitialStuff("default:sapling")
-   sys4_quests.addInitialStuff("default:papyrus")
-   
-   if mod_default then
-      dofile(current_modpath.."/default.lua")
-      
-      if mod_farming then
-	 -- initial stuff
-	 sys4_quests.addInitialStuff("default:grass_1 2")
-	 
-	 dofile(current_modpath.."/farming.lua")
-	 
-	 if mod_dye then
-	    dofile(current_modpath.."/dye.lua")
-	 
-	    if mod_wool then
-	       -- initial stuff
-	       sys4_quests.addInitialStuff("default:junglegrass 2")
-	       
-	       dofile(current_modpath.."/wool.lua")
+	-- add initial stuff
+	sys4_quests.addInitialStuff("default:torch 4")
+	sys4_quests.addInitialStuff("default:sapling")
+	sys4_quests.addInitialStuff("default:papyrus")
 
-	       if mod_beds then
-		  dofile(current_modpath.."/beds.lua")
-	       end
-	    end
-	 end
-      end
-      
-      if mod_boats then
-	 dofile(current_modpath.."/boats.lua")
-      end
+	if mod_default then
+		dofile(current_modpath.."/default.lua")
 
-      if mod_fire then
-	 dofile(current_modpath.."/fire.lua")
-      end
+		if mod_farming then
+			dofile(current_modpath.."/farming.lua")
+			
+			if mod_dye then
+				dofile(current_modpath.."/dye.lua")
+				
+				if mod_wool then
+					-- initial stuff
+					sys4_quests.addInitialStuff("default:junglegrass 2")
+					
+					dofile(current_modpath.."/wool.lua")
 
-      if mod_screwdriver then
-	 dofile(current_modpath.."/screwdriver.lua")
-      end
+					if mod_beds then
+						dofile(current_modpath.."/beds.lua")
+					end
+				end
+			end
+		end
 
-      if mod_tnt then
-	 dofile(current_modpath.."/tnt.lua")
-      end
+		if mod_boats then
+			dofile(current_modpath.."/boats.lua")
+		end
 
-      if mod_walls then
-	 dofile(current_modpath.."/walls.lua")
-      end
+		if mod_fire then
+			dofile(current_modpath.."/fire.lua")
+		end
 
-      if mod_doors then
-	 dofile(current_modpath.."/doors.lua")
-      end
+		if mod_screwdriver then
+			dofile(current_modpath.."/screwdriver.lua")
+		end
 
-      if mod_vessels then
-	 dofile(current_modpath.."/vessels.lua")
-      end
+		if mod_tnt then
+			dofile(current_modpath.."/tnt.lua")
+		end
 
-      if mod_xpanes then
-	 dofile(current_modpath.."/xpanes.lua")
-      end
+		if mod_walls then
+			dofile(current_modpath.."/walls.lua")
+		end
 
-      if mod_bucket then
-	 dofile(current_modpath.."/bucket.lua")
-      end
-   end
+		if mod_doors then
+			dofile(current_modpath.."/doors.lua")
+		end
+
+		if mod_vessels then
+			dofile(current_modpath.."/vessels.lua")
+		end
+
+		if mod_xpanes then
+			dofile(current_modpath.."/xpanes.lua")
+		end
+
+		if mod_bucket then
+			dofile(current_modpath.."/bucket.lua")
+		end
+	end
 end
 

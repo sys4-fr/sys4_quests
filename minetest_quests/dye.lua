@@ -1,8 +1,8 @@
 local S
 if minetest.get_modpath("intllib") then
-   S = intllib.Getter()
+	S = intllib.Getter()
 else
-   S = function(s) return s end
+	S = function(s) return s end
 end
 
 -- Make local shortcuts of global functions --
@@ -24,15 +24,34 @@ up('coal_digger', nil, {mod..":black"})
 local t = "dig"
 
 -- flower_digger
-ins(quests, {
-       'flower_digger', "Flower Digger", "flowers", {"flowers:geranium", "flowers:rose", "flowers:tulip", "flowers:viola", "flowers:dandelion_white", "flowers:dandelion_yellow"}, 1, {mod..":blue", mod..":orange", mod..":red", mod..":violet", mod..":white", mod..":yellow"}, nil, type = t, group = farm
-	    })
+ins(
+	quests,
+	{
+		'flower_digger',
+		"Flower Digger",
+		"flowers",
+		{"flowers:geranium", "flowers:rose", "flowers:tulip", "flowers:viola", "flowers:dandelion_white", "flowers:dandelion_yellow"},
+		1,
+		{mod..":blue", mod..":orange", mod..":red", mod..":violet", mod..":white", mod..":yellow"},
+		nil,
+		type = t,
+		group = farm
+	})
 
 t = "craft"
 
 -- dye_crafter
-ins(quests, {
-       'dye_crafter', "Dye Crafter", "dyes", {mod..":black", mod..":blue", mod..":orange", mod..":red", mod..":violet", mod..":white", mod..":yellow"}, 1, {mod..":brown", mod..":cyan", mod..":dark_green", mod..":dark_grey", mod..":green", mod..":grey", mod..":magenta", mod..":pink"}, "coal_digger", type = t
-	    })
+ins(
+	quests,
+	{
+		'dye_crafter',
+		"Dye Crafter",
+		"dyes",
+		{mod..":black", mod..":blue", mod..":orange", mod..":red", mod..":violet", mod..":white", mod..":yellow"},
+		1,
+		{mod..":brown", mod..":cyan", mod..":dark_green", mod..":dark_grey", mod..":green", mod..":grey", mod..":magenta", mod..":pink"},
+		"coal_digger",
+		type = t
+	})
 
 sys4_quests.registerQuests()
