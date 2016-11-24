@@ -26,20 +26,20 @@ and minetest.get_modpath("food") then
 	end
 
 	-- is farming_plus loaded ?
-	local farming_plus = false
+	local farming_p = false
 	if minetest.get_modpath("farming_plus") then
-		farming_plus = true
+		farming_p = true
 	end
 
 	-- is ethereal loaded ?
-	local ethereal = false
+	local ethereal_mod = false
 	if minetest.get_modpath("ethereal") then
-		ethereal = true
+		ethereal_mod = true
 	end
 
 	-- is food mod only loaded without ethereal, farming and farming_redo ?
 	local food_only = true
-	if ethereal or farming_plus or farming_redo then
+	if ethereal_mod or farming_p or farming_redo then
 		food_only = false
 	end
 
@@ -52,13 +52,13 @@ and minetest.get_modpath("food") then
 	local ingredients = {"default:apple", "default:cactus", "nyancat:nyancat_rainbow"}
 	local cooked_food = {mod..":apple_juice", mod..":cactus_juice", mod..":orange_juice", mod..":rainbow_juice"}
 
-	if ethereal then
+	if ethereal_mod then
 		ins(ingredients, "ethereal:orange")
 	end
 	if farming_redo then
 		ins(ingredients, "farming:orange")
 	end
-	if farming_plus then
+	if farming_p then
 		ins(ingredients, "farming_plus:orange_item")
 	end
 
@@ -96,7 +96,7 @@ and minetest.get_modpath("food") then
 
 	ins(ingredients2, "farming:flour")
 
-	if ethereal then
+	if ethereal_mod then
 		ins(ingredients2, "ethereal:banana_dough")
 		ins(ingredients2, "ethereal:hearty_stew")
 		ins(ingredients2, "ethereal:mushroom_soup")
@@ -115,7 +115,7 @@ and minetest.get_modpath("food") then
 		ins(ingredients2, "farming:smoothie_raspberry")
 	end
 
-	if farming_plus then
+	if farming_p then
 		ins(ingredients2, "farming_plus:pumpkin_flour")
 	end
 
@@ -191,9 +191,9 @@ and minetest.get_modpath("food") then
 			up('iron_digger_pro', nil, {mod..":strawberry"})
 		elseif not farming_redo then
 			up('cooker', nil, {mod..":blueberry"})
-		elseif not ethereal and not farming_plus then
+		elseif not ethereal_mod and not farming_p then
 			up('iron_digger_pro', nil, {mod..":strawberry"})
-		elseif not farming_redo and not farming_plus then
+		elseif not farming_redo and not farming_p then
 			up('cooker', nil, {mod..":blueberry", mod..":rhubarb"})
 		end
 

@@ -261,7 +261,7 @@ function sys4_quests.registerQuests()
 					table.insert(targets, node)
 				else
 					local nodeMod = string.split(node, ":")[1]
-					minetest.log("warning", "sys4_quests: The target node or item '"..node.."' is inexistant, please upgrade '"..nodeMod.."' mod.")
+					minetest.log("warning", "sys4_quests: '"..nodeMod.."' mod not fully supported --> target node '"..node.."' not found.")
 				end
 			end
 			quest[4] = targets
@@ -273,7 +273,7 @@ function sys4_quests.registerQuests()
 					table.insert(items, item)
 				else
 					local itemMod = string.split(item, ":")[1]
-					minetest.log("warning", "sys4_quests: The unlockable item '"..item.."' is inexistant, please upgrade '"..itemMod.."' mod.")
+					minetest.log("warning", "sys4_quests: '"..itemMod.."' mod not fully supported --> unlockable item '"..item.."' not found.")
 				end
 			end
 			quest[6] = items
