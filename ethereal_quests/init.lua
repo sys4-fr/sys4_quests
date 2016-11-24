@@ -96,7 +96,7 @@ and minetest.get_modpath("ethereal") then
 		mod..":prairie_dirt"
 	}
 
-	if minetest.get_modpath("moreblocks_quets") then
+	if minetest.get_modpath("moreblocks_quests") then
 		up('dirt_digger', dirtNodes, {mod..":bonemeal", mod..":worm", "default:desert_sand"})
 
 		up('torch_placer', nil, {mod..":glostone"})
