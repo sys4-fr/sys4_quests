@@ -37,6 +37,12 @@ and minetest.get_modpath("food") then
 		ethereal_mod = true
 	end
 
+	-- is mobs_animal loaded ?
+	local mobs_a = false
+	if minetest.get_modpath("mobs_animal") then
+		mobs_a = true
+	end
+
 	-- is food mod only loaded without ethereal, farming and farming_redo ?
 	local food_only = true
 	if ethereal_mod or farming_p or farming_redo then
@@ -55,10 +61,23 @@ and minetest.get_modpath("food") then
 	if ethereal_mod then
 		ins(ingredients, "ethereal:orange")
 	end
+
+	if ethereal_mod and not farming_redo and not farming_p then
+		ins(cooked_food, mod..":potato")
+		ins(cooked_food, mod..":carrot")
+		ins(cooked_food, mod..":cocoa")
+		if not mobs_a then
+			ins(cooked_food, mod..":egg")
+			ins(cooked_food, mod..":meat_raw")
+		end
+		ins(cooked_food, mod..":sugar")
+		ins(cooked_food, mod..":tomato")
+	end
+	
 	if farming_redo and not ethereal_mod and not farming_p then
-		--ins(ingredients, "farming:orange")
 		ins(cooked_food, mod..":orange")
 	end
+	
 	if farming_p then
 		ins(ingredients, "farming_plus:orange_item")
 	end
@@ -68,8 +87,10 @@ and minetest.get_modpath("food") then
 		ins(cooked_food, mod..":potato")
 		ins(cooked_food, mod..":carrot")
 		ins(cooked_food, mod..":cocoa")
-		ins(cooked_food, mod..":egg")
-		ins(cooked_food, mod..":meat_raw")
+		if not mobs_a then
+			ins(cooked_food, mod..":egg")
+			ins(cooked_food, mod..":meat_raw")
+		end
 		ins(cooked_food, mod..":sugar")
 		ins(cooked_food, mod..":tomato")
 	end
@@ -117,6 +138,7 @@ and minetest.get_modpath("food") then
 	end
 
 	if farming_p then
+		minetest.register_alias("farming_plus:pumpkin_flour", "farming:pumpkin_flour")
 		ins(ingredients2, "farming_plus:pumpkin_flour")
 	end
 
@@ -171,7 +193,7 @@ and minetest.get_modpath("food") then
 
 	up('clay_digger', nil, {mod..":bowl"})
 
-	if food_only then
+	if not mobs_a then
 		up('iron_digger_pro', nil, {mod..":milk"})
 	end
 
