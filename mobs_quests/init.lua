@@ -4,8 +4,8 @@
 -- This mod add quests based on mobs mod
 
 if minetest.get_modpath("minetest_quests")
-and minetest.get_modpath("mobs") then
-
+	and minetest.get_modpath("mobs")
+then
 	local S
 	if minetest.get_modpath("intllib") then
 		S = intllib.Getter()
@@ -64,38 +64,54 @@ and minetest.get_modpath("mobs") then
 		end
 
 		-- unlock_net
-		ins(
-			quests,
-			{
-				'unlock_net',
-				"Unlock Net",
-				nil,
-				{"farming:cotton_1","farming:cotton_2","farming:cotton_3","farming:cotton_4","farming:cotton_5","farming:cotton_6","farming:cotton_7","farming:cotton_8"},
-				2,
-				{mod..":net", mod..":beehive"},
-				"book_crafter",
-				type = "dig",
-				group = farm
-			})
+		if minetest.get_modpath("mobs_animal") then
+			ins(
+				quests,
+				{
+					'unlock_net',
+					"Unlock Net",
+					nil,
+					{"farming:cotton_1","farming:cotton_2","farming:cotton_3","farming:cotton_4","farming:cotton_5","farming:cotton_6","farming:cotton_7","farming:cotton_8"},
+					2,
+					{mod..":net", mod..":beehive"},
+					"book_crafter",
+					type = "dig",
+					group = farm
+				})
 
-		-- beehive_crafter
-		ins(
-			quests,
-			{
-				'beehive_crafter',
-				"Beehive Crafter",
-				nil,
-				{mod..":beehive"},
-				1,
-				{mod..":honey", mod..":honey_block"},
-				"unlock_net",
-				type = t,
-				custom_level = true,
-				group = farm
-			})
+			-- beehive_crafter
+			ins(
+				quests,
+				{
+					'beehive_crafter',
+					"Beehive Crafter",
+					nil,
+					{mod..":beehive"},
+					1,
+					{mod..":honey", mod..":honey_block"},
+					"unlock_net",
+					type = t,
+					custom_level = true,
+					group = farm
+				})
+		else
+			ins(
+				quests,
+				{
+					'unlock_net',
+					"Unlock Net",
+					nil,
+					{"farming:cotton_1","farming:cotton_2","farming:cotton_3","farming:cotton_4","farming:cotton_5","farming:cotton_6","farming:cotton_7","farming:cotton_8"},
+					2,
+					{mod..":net"},
+					"book_crafter",
+					type = "dig",
+					group = farm
+				})
+		end
 	end
 
-	if minetest.get_modpath("bucket") then
+	if minetest.get_modpath("bucket") and minetest.get_modpath("mobs_animal") then
 		-- bucket_crafter
 		ins(
 			quests,
@@ -114,19 +130,21 @@ and minetest.get_modpath("mobs") then
 	end
 
 	-- unlock_lava_pickaxe
-	ins(
-		quests,
-		{
-			'unlock_lava_pickaxe',
-			"Unlock Lava Pickaxe",
-			nil,
-			{"default:obsidian_shard"},
-			2,
-			{mod..":pick_lava"},
-			"obsidian_digger",
-			type = t,
-			group = middle
-		})
+	if minetest.get_modpath("mobs_monster") then
+		ins(
+			quests,
+			{
+				'unlock_lava_pickaxe',
+				"Unlock Lava Pickaxe",
+				nil,
+				{"default:obsidian_shard"},
+				2,
+				{mod..":pick_lava"},
+				"obsidian_digger",
+				type = t,
+				group = middle
+			})
+	end
 
 	sys4_quests.registerQuests()
 

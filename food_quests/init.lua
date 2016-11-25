@@ -37,10 +37,16 @@ and minetest.get_modpath("food") then
 		ethereal_mod = true
 	end
 
+	-- is mobs loaded ?
+	local mobs_mod = false
+	if minetest.get_modpath("mobs") then
+		mobs_mod = true
+	end
+
 	-- is mobs_animal loaded ?
-	local mobs_a = false
+	local mobsa_mod = false
 	if minetest.get_modpath("mobs_animal") then
-		mobs_a = true
+		mobsa_mod = true
 	end
 
 	-- is food mod only loaded without ethereal, farming and farming_redo ?
@@ -54,43 +60,37 @@ and minetest.get_modpath("food") then
 
 	local t = "dig"
 
-	-- cooker
+	-- cooker quest
 	local ingredients = {"default:apple", "default:cactus", "nyancat:nyancat_rainbow"}
 	local cooked_food = {mod..":apple_juice", mod..":cactus_juice", mod..":orange_juice", mod..":rainbow_juice"}
 
+	-- orange ingredient
 	if ethereal_mod then
 		ins(ingredients, "ethereal:orange")
 	end
-
-	if ethereal_mod and not farming_redo and not farming_p then
-		ins(cooked_food, mod..":potato")
-		ins(cooked_food, mod..":carrot")
-		ins(cooked_food, mod..":cocoa")
-		if not mobs_a then
-			ins(cooked_food, mod..":egg")
-			ins(cooked_food, mod..":meat_raw")
-		end
-		ins(cooked_food, mod..":sugar")
-		ins(cooked_food, mod..":tomato")
-	end
-	
-	if farming_redo and not ethereal_mod and not farming_p then
-		ins(cooked_food, mod..":orange")
-	end
-	
 	if farming_p then
 		ins(ingredients, "farming_plus:orange_item")
 	end
 
-	if food_only then
+	if food_only or (farming_redo and not ethereal_mod and not farming_p) then
 		ins(cooked_food, mod..":orange")
+	end
+
+	-- egg ingredient
+	if not mobsa_mod then
+		ins(cooked_food, mod..":egg")
+	end
+
+	-- meat_raw ingredient
+	if not mobs_mod then
+		ins(cooked_food, mod..":meat_raw")
+	end
+
+	-- potato, carrot, sugar, tomato cocoa ingredients
+	if not farming_redo and not farming_p then
 		ins(cooked_food, mod..":potato")
 		ins(cooked_food, mod..":carrot")
 		ins(cooked_food, mod..":cocoa")
-		if not mobs_a then
-			ins(cooked_food, mod..":egg")
-			ins(cooked_food, mod..":meat_raw")
-		end
 		ins(cooked_food, mod..":sugar")
 		ins(cooked_food, mod..":tomato")
 	end
@@ -193,7 +193,7 @@ and minetest.get_modpath("food") then
 
 	up('clay_digger', nil, {mod..":bowl"})
 
-	if not mobs_a then
+	if not mobsa_mod then
 		up('iron_digger_pro', nil, {mod..":milk"})
 	end
 

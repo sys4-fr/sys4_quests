@@ -4,4 +4,5 @@ food
 food_sweet?
 ethereal?
 farming_plus?
+mobs?
 mobs_animal?

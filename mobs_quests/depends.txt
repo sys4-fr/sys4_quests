@@ -1,3 +1,7 @@
 minetest_quests
 mobs
+mobs_animal?
+farming?
+dye?
+bucket?
 intllib?
