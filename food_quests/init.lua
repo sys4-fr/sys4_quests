@@ -55,8 +55,9 @@ and minetest.get_modpath("food") then
 	if ethereal_mod then
 		ins(ingredients, "ethereal:orange")
 	end
-	if farming_redo then
-		ins(ingredients, "farming:orange")
+	if farming_redo and not ethereal_mod and not farming_p then
+		--ins(ingredients, "farming:orange")
+		ins(cooked_food, mod..":orange")
 	end
 	if farming_p then
 		ins(ingredients, "farming_plus:orange_item")
