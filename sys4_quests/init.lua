@@ -971,6 +971,91 @@ minetest.register_chatcommand(
 		end
 	})
 
+minetest.register_chatcommand(
+	"lqm",
+	{
+		params = "["..S("mod name").."]",
+		description = S("Display mods currently loaded and supported by quests system or display quests related to given mod as argument")..".",
+		func = function(name, param)
+			if param ~= "" then
+				local isModValid = false
+				for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+					if mod == param then
+						isModValid = true
+						minetest.chat_send_player(name, S("Legend")..":")
+						minetest.chat_send_player(name, " [*] <-- "..S("Successfull quest"))
+						minetest.chat_send_player(name, " [>] <-- "..S("Active quest"))
+						minetest.chat_send_player(name, " [ ] <-- "..S("Not reached quest"))
+						minetest.chat_send_player(name, " <U>{mod} <-- "..S("Quest from {mod} used by mod").." "..mod)
+						minetest.chat_send_player(name, " ")
+						minetest.chat_send_player(name, S("Quests of mod").." \""..mod.."\" : ")
+						local modIntllib = registeredQuests.intllib
+						for _, quest in ipairs(registeredQuests.quests) do
+							local questState = "[ ]"
+							if isQuestActive(quest[1], name) then
+								questState = "[>]"
+							end
+							if isQuestSuccessfull(quest[1], name) then
+								questState = "[*]"
+							end
+
+							minetest.chat_send_player(name, questState.." "..modIntllib(quest[2]).." ["..quest[1].."]")
+						end
+					end
+				end
+
+				if not isModValid then
+					minetest.chat_send_player(name, S("Sorry, but this mod isn't supported")..".")
+				else
+					-- Display quests from other mods wich use this given mod
+					for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+						if mod ~= param then
+							local modIntllib = registeredQuests.intllib
+							for _, quest in ipairs(registeredQuests.quests) do
+								local tNodes = quest[4] -- target Nodes
+								local uItems = quest[6] -- Unlockable items
+
+								local isQuestUpdated = false
+								
+								for i = 1, #tNodes do
+									if string.split(tNodes[i], ":")[1] == param then
+										isQuestUpdated = true
+										break;
+									end
+								end
+
+								if not isQuestUpdated then
+									for i = 1, #uItems do
+										if string.split(uItems[i], ":")[1] == param then
+											isQuestUpdated = true
+											break;
+										end
+									end
+								end
+
+								if isQuestUpdated then
+									local questState = "[ ]"
+									if isQuestActive(quest[1], name) then
+										questState = "[>]"
+									end
+									if isQuestSuccessfull(quest[1], name) then
+										questState = "[*]"
+									end
+
+									minetest.chat_send_player(name, "<U>{"..mod.."}"..questState.." "..modIntllib(quest[2]).." ["..quest[1].."]")
+								end
+							end
+						end
+					end
+				end
+				
+			else
+				for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+					minetest.chat_send_player(name, mod)
+				end
+			end
+		end
+})
 
 minetest.register_chatcommand(
 	"itemqq",
