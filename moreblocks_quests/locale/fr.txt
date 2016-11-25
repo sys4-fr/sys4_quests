@@ -1,6 +1,6 @@
 ### Quests Title ###
 
-Dirt Digger = Ramasse de le terre
+Dirt Digger = Ramasse de la terre
 Jungle Grass Digger = Cueille de l'herbe de jungle
 Stone Digger Master = Mine de la roche - Maître
 Tree Digger Lover = Coupe du bois - Amateur
