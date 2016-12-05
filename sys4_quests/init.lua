@@ -752,6 +752,7 @@ minetest.register_on_joinplayer(
 					end
 				end
 			end
+			playerList[playern].isNew = false
 		end
 	end)
 
