@@ -1,0 +1,15 @@
+sys4_quests
+default?
+stairs?
+flowers?
+dye?
+wool?
+doors?
+walls?
+xpanes?
+tnt?
+fire?
+beds?
+boats?
+bucket?
+farming?

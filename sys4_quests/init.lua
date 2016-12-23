@@ -2,6 +2,8 @@
 -- By Sys4
 
 -- This mod provide an api that could be used by others mods for easy creation of quests.
+local modpath = minetest.get_modpath(minetest.get_current_modname())
+dofile(modpath.."/mod_patch.lua")
 
 local S
 if minetest.get_modpath("intllib") then
@@ -26,40 +28,377 @@ sys4_quests.questGroups = {}
 sys4_quests.questGroups['global'] = {order = 1, questsIndex = {}}
 
 local lastQuestIndex = 0
-local level = 12
+local level = 1
 local playerList = {}
 
--- Rewrite the following function of the quest mod for fix crash when playing with hidden hud.
-quests.accept_quest = function (playername, questname)
-	if (quests.active_quests[playername][questname]
-			 and not quests.active_quests[playername][questname].finished)
-	then
-		if (quests.successfull_quests[playername] == nil) then
-			quests.successfull_quests[playername] = {}
-		end
-		if (quests.successfull_quests[playername][questname] ~= nil) then
-			quests.successfull_quests[playername][questname].count = quests.successfull_quests[playername][questname].count + 1
-		else
-			quests.successfull_quests[playername][questname] = {count = 1}
-		end
-		quests.active_quests[playername][questname].finished = true
-		if quests.hud[playername].list ~= nil then
-			for _,quest in ipairs(quests.hud[playername].list) do
-				if (quest.name == questname) then
-					local player = minetest.get_player_by_name(playername)
-					player:hud_change(quest.id, "number", quests.colors.success)
+local groupsToVerify = {"tree", "wood", "flower", "dye", "wool", "sand", "stone", "soil", "stick", "leaves"}
+
+-- Classes Definitions
+local QuestTree = {}
+local Quest = {}
+QuestTree.__index = QuestTree
+Quest.__index = Quest
+
+local MinetestItem = {}  -- My custom item data
+local MinetestItems = {} -- Collection of my custom items
+
+MinetestItem.__index = MinetestItem
+MinetestItems.__index = MinetestItems
+
+setmetatable(MinetestItem, {
+					 __call = function (cls, ...)
+						 return cls.new(...)
+					 end,
+})
+
+setmetatable(MinetestItems, {
+					 __call = function(cls, ...)
+						 return cls.new(...)
+					 end,
+})
+
+setmetatable(QuestTree, {
+					 __call = function (cls, ...)
+						 return cls.new(...)
+					 end,
+})
+
+setmetatable(Quest, {
+					 __call = function (cls, ...)
+						 return cls.new(...)
+					 end,
+})
+
+-- Constructors
+
+function QuestTree.new(quest)
+	local self = setmetatable({}, QuestTree)
+	self.quest = quest
+	return self
+end
+
+function Quest.new(item)
+	local self = setmetatable({}, Quest)
+	self.item = item
+	local splittedName = string.split(item:get_name(), ":")
+	self.name = splittedName[1].."_"..splittedName[2].."_quest"
+	self.questTrees = nil
+	return self
+end
+
+local function get_item_recipes(itemName)
+	local groupSplit = string.split(itemName, ":")
+	local recipes = nil
+	
+	if groupSplit[1] == "group" then
+		local group = groupSplit[2]
+		for name, item in pairs(minetest.registered_items) do
+			if minetest.get_item_group(name, group) > 0 then
+				local itemRecipes = minetest.get_all_craft_recipes(name)
+				if itemRecipes then
+					for i, recipe in ipairs(itemRecipes) do
+						if not recipes then recipes = {} end
+						table.insert(recipes, recipe)
+					end
 				end
 			end
 		end
-		quests.show_message("success", playername, S("Quest completed:") .. " " .. quests.registered_quests[questname].title)
-		minetest.after(3, function(playername, questname)
-								quests.active_quests[playername][questname] = nil
-								quests.update_hud(playername)
-								end, playername, questname)
-		return true -- the quest is finished, the mod can give a reward
+	else
+		recipes = minetest.get_all_craft_recipes(itemName)
 	end
-	return false -- the quest hasn't finished
+	return recipes
 end
+
+function MinetestItem.new(item, childs)
+	local self = setmetatable({}, MinetestItem)
+	self.stack = ItemStack(item.name)
+	self.name = item.name
+	self.def = item
+	self.recipes = get_item_recipes(item.name)
+	self.childs = childs
+	return self
+end
+
+function MinetestItems.new()
+	local self = setmetatable({}, MinetestItems)
+	self.items = nil
+	return self
+end
+
+-- Quest methods
+
+function Quest:get_name()
+	return self.name
+end
+function Quest:set_name(name)
+	self.name = name
+end
+
+function Quest:get_item()
+	return self.item
+end
+
+function Quest:get_questTrees()
+	return self.questTrees
+end
+
+function Quest:add(questTree)
+	if self.questTrees == nil then self.questTrees = {} end
+	table.insert(self.questTrees, questTree)
+end
+
+function Quest:get_targetCount()
+	local itemTarget = self:get_item()
+	local count = 9
+	if itemTarget:has_childs() then
+		local itemChilds = {}
+		for i, itemChild in ipairs(itemTarget:get_childs()) do
+			local itemSplit = string.split(itemChild, ":")
+			if itemSplit[1] == "group" then
+				local group = itemSplit[2]
+				for itemName, _ in pairs(minetest.registered_items) do
+					if minetest.get_item_group(itemName, group) >= 1 then
+						table.insert(itemChilds, itemName)
+					end
+				end
+			else
+				table.insert(itemChilds, itemChild)
+			end
+		end
+		for i, itemChild in ipairs(itemChilds) do
+			local recipes = minetest.get_all_craft_recipes(itemChild)
+			if recipes then
+				for j, recipe in ipairs(recipes) do
+					local sCount = 0
+					for k, ingredient in ipairs(recipe.items) do
+						if ingredient == itemTarget:get_name() then
+							sCount = sCount + 1
+						end
+					end
+					
+					if sCount > 0 and count > sCount then
+						count = sCount
+					end
+				end
+			end
+		end
+	end
+
+	return count
+end
+
+function Quest:get_action()
+	local action = nil
+	local item = self:get_item()
+
+	if not item:get_recipes() then
+		action = "dig"
+	else
+		action = "craft"
+		for i, recipe in ipairs(item:get_recipes()) do
+			if recipe.type == "cooking" then
+				action = "cook"
+			end
+		end
+	end
+	return action
+end
+
+-- QuestTree methods
+
+function QuestTree:add(questTree)
+	self:get_quest():add(questTree)
+end
+
+local count = 0
+function QuestTree:get_tree_with_item_child(name)
+	count = count + 1
+	print (count..": "..name)
+	local treeFound = nil
+	local itemChilds = self:get_quest():get_item():get_childs()
+	for i=1, #itemChilds do
+		if itemChilds[i] == name then
+			treeFound = self
+			break
+		end
+	end
+	if not treeFound then
+		local childQuestTrees = self:get_quest():get_questTrees()
+		if childQuestTrees then
+			for i=1, #childQuestTrees do
+				treeFound = childQuestTrees[i]:get_tree_with_item_child(name)
+				if treeFound then break end
+			end
+		end
+	end
+
+	return treeFound
+end
+
+function QuestTree:get_quest()
+	return self.quest
+end
+
+-- MinetestItem methods
+
+function MinetestItem:get_stack()
+	return self.stack
+end
+
+function MinetestItem:get_name()
+	return self.name
+end
+
+function MinetestItem:get_field(fieldName)
+	if fieldName then return self.def[fieldName] end
+	return nil
+end
+
+function MinetestItem:get_def()
+	return self.def
+end
+
+function MinetestItem:get_recipes(tRecipe)
+	if self.recipes then
+		local recipes = nil
+		for _, recipe in ipairs(self.recipes) do
+			if not tRecipe or recipe.type == tRecipe then
+				if not recipes then recipes = {} end
+				table.insert(recipes, recipe)
+			end
+		end
+		
+		return recipes
+	else
+		return nil
+	end
+end
+
+function MinetestItem:get_childs()
+	return self.childs
+end
+
+function MinetestItem:has_childs()
+	return self:get_childs()
+end
+
+function MinetestItem:has_child(name)
+	if self:has_childs() then
+		for _, child in ipairs(self:get_childs()) do
+			if child == name then
+				return true
+			end
+		end
+	end
+	return false
+end
+
+function MinetestItem:add_child(child)
+	for _, group in ipairs(groupsToVerify) do
+		if minetest.get_item_group(child, group) > 0 then
+			child = "group:"..group
+		end
+	end
+
+	if not self:has_childs() then
+		self.childs = {}
+	end
+
+	local isPresent = false
+	for _, currentChild in ipairs(self:get_childs()) do
+		if currentChild == child then
+			isPresent = true
+		end
+	end
+	if not isPresent then
+		table.insert(self.childs, child)
+	end
+end
+
+function MinetestItem:is_tool()
+	if self:get_field("tool_capabilities") then return true end
+	return false
+end
+
+function MinetestItem:is_hand_diggable()
+	local groups = self:get_field("groups")
+	if groups.crumbly and not groups.cracky
+		or groups.snappy and not groups.choppy
+		or groups.choppy and groups.oddly_breakable_by_hand
+	then
+		return true
+	end
+	return false
+end
+
+function MinetestItem:is_diggable_by(itemTool)
+	if itemTool then
+		if itemTool:is_tool() then
+			local toolGroup = itemTool:get_field("tool_capabilities").groupcaps
+			local group = nil
+			if toolGroup.cracky then
+				group = "cracky"
+			elseif toolGroup.choppy then
+				group = "choppy"
+			elseif toolGroup.crumbly then
+				group = "crumbly"
+			elseif toolGroup.snappy then
+				group = "snappy"
+			end
+
+			if toolGroup[group].times[minetest.get_item_group(self:get_name(), group)]
+			then return true
+			else return false	end
+		else return false	end
+	else return self:is_hand_diggable()	end
+end
+
+-- MinetestItems methods
+
+function MinetestItems:add(item, childs)
+	if not self.items then self.items = {} end
+	for _, group in ipairs(groupsToVerify) do
+		if minetest.get_item_group(item.name, group) > 0 then
+			item.name = "group:"..group
+		end
+	end
+
+	local isAdded = false
+	for _, currentItem in ipairs(self.items) do
+		if currentItem:get_name() == item.name then
+			isAdded = true
+			if childs then
+				for __, child in ipairs(childs) do
+					currentItem:add_child(child)
+				end
+			end
+		end
+	end
+	if not isAdded then
+		table.insert(self.items, MinetestItem(item, childs))
+	end
+end
+
+function MinetestItems:get_items()
+	return self.items
+end
+
+function MinetestItems:get_item(itemName)
+	for _, item in ipairs(self:get_items()) do
+		if item:get_name() == itemName then
+			return item
+		end
+	end
+	return nil
+end
+
+function MinetestItems:get_itemField(itemName, fieldName)
+	local item = self:get_item(itemName)
+	if item then return item:get_field(fieldName) end
+	return nil
+end
+
+-- Sys4_Quests
 
 function sys4_quests.addInitialStuff(stack)
 	if not sys4_quests.stuff or sys4_quests.stuff == nil then
@@ -78,7 +417,8 @@ function sys4_quests.addQuestGroup(groupName)
 		for _, group in pairs(sys4_quests.questGroups) do
 			groupLen = groupLen + 1
 		end
-		sys4_quests.questGroups[groupName] = {order = groupLen + 1, questsIndex = {}}
+		sys4_quests.questGroups[groupName] = {order = groupLen + 1,
+														  questsIndex = {}}
 	end
 end
 
@@ -129,10 +469,9 @@ end
 
 local function isQuestSuccessfull(questName, playern)
 	if quests.successfull_quests[playern] ~= nil
-	and quests.successfull_quests[playern]["sys4_quests:"..questName] ~= nil then
-		return true
-	else
-		return false
+		and quests.successfull_quests[playern]["sys4_quests:"..questName] ~= nil
+	then
+		return true else return false
 	end
 end
 
@@ -158,11 +497,8 @@ local function getActiveQuestGroup(playern)
 	local isFound = false
 	for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 		for _, quest in ipairs(registeredQuests.quests) do
-			--	 print("Quest : "..quest[1])
 			if isQuestActive(quest[1], playern) then
-				--	    print("is ACTIVE")
 				groupName = getGroupByQuestIndex(quest.index)
-				--	    print("GroupName is : "..dump(groupName))
 				if groupName ~= nil then
 					isFound = true
 					break
@@ -171,18 +507,16 @@ local function getActiveQuestGroup(playern)
 		end
 		if isFound then break end
 	end
-
-	--   print("Return groupName : "..dump(groupName))
 	return groupName
 end
 
 local function getFirstQuestGroup()
 	for name, group in pairs(sys4_quests.questGroups) do
-		--      print("NAME : "..name..", ORDER : "..group.order)
 		if group.order == 2 then
 			return name
 		end
 	end
+	return nil
 end
 
 local function getQuestGroupOrder(questGroup)
@@ -211,53 +545,282 @@ local function getNextQuestGroup(currentQuestGroup)
 
 	local groupOrder = getQuestGroupOrder(currentQuestGroup)
 
-	if groupOrder == groupTotal then
+	if groupOrder == nil or groupOrder == groupTotal then
 		return nil
 	else
 		return getQuestGroupByGroupOrder(groupOrder + 1)
 	end
 end
 
-function sys4_quests.initQuests(mod, intllib)
-	if not intllib or intllib == nil then
+-- Experimental functions for registering quests automatically
+
+local function containsItem(liste, item)
+	for _, liste_iter in ipairs(liste) do
+		if liste_iter == item then return true end
+	end
+	return false
+end
+
+local function get_groups(itemName)
+	local split = string.split(itemName, ":")
+	if split[1] == "group" then
+		return string.split(split[2], ",")
+	else
+		return nil
+	end
+end
+
+local function get_item_childs(itemName, mod)
+	local childs = nil
+	for name, _ in pairs(minetest.registered_items) do
+		local recipes = nil
+		if name ~= "" and string.split(name, ":")[1] ~= name
+		and string.split(name, ":")[1] == mod then
+			recipes = minetest.get_all_craft_recipes(name)
+			if recipes then
+				for __, recipe in ipairs(recipes) do
+					local ingredients = recipe.items
+					for i=1, #ingredients do
+						if ingredients[i] then
+							local sameGroup = false
+							if ingredients[i] == itemName then
+								sameGroup = true
+							elseif get_groups(ingredients[i]) then
+								for ___, group in ipairs(get_groups(ingredients[i])) do
+									sameGroup = minetest.get_item_group(itemName, group) > 0
+								end
+							end
+							
+							if sameGroup then
+								if not childs then childs = {} end
+								if not containsItem(childs, name) then
+									table.insert(childs, name)
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+	return childs
+end
+
+local function check_item(itemName)
+	local itemNameSplit = string.split(itemName, ":")
+	local item = minetest.registered_items[itemName]
+	if itemNameSplit[1] ~= "" and itemNameSplit[1] ~= itemName
+	and item["groups"].not_in_creative_inventory ~= 1 then
+		return true
+	end
+	return false
+end
+
+local function rebuildQuestTrees(questTrees)
+	local newQuestTrees = {}
+	
+	for i=1, #questTrees do
+		local treeToMove = questTrees[i]
+		local isAdded = false
+		for j=i, #questTrees do
+			if j ~= i then
+				local currentTree = questTrees[j]:get_tree_with_item_child(treeToMove:get_quest():get_item():get_name())
+				if currentTree	then
+					currentTree:add(treeToMove)
+					isAdded = true
+					break
+				end
+			end
+		end
+		if not isAdded then
+			for k=1, #newQuestTrees do
+				local currentTree = newQuestTrees[k]:get_tree_with_item_child(treeToMove:get_quest():get_item():get_name())
+				if currentTree then
+					currentTree:add(treeToMove)
+					isAdded = true
+					break
+				end
+			end
+			if not isAdded then
+				table.insert(newQuestTrees, treeToMove)
+			end
+		end
+	end
+	return newQuestTrees
+end
+
+local function get_mod_items(mod)
+	local modItems = MinetestItems()
+	
+	if mod and minetest.get_modpath(mod) then
+		for name, item in pairs(minetest.registered_items) do
+			if string.split(name, ":")[1] == mod
+			and check_item(name) then
+				modItems:add(item, get_item_childs(name, mod))
+			end
+		end
+	else
+		minetest.log("error", "sys4_quests: Mod "..mod.." not found !")
+	end
+	
+	return modItems
+end
+
+local function makeQuests(mod, questTrees, parentQuest)
+	local registerQuests = {}
+
+	for i=1, #questTrees do
+		local quest = questTrees[i]:get_quest()
+
+		if quest:get_item():get_field("mod_origin") == mod then
+			local questName = quest:get_name()
+			local questTitle = questName -- Titre par défaut, devrait être changé
+			local questDescription = nil -- Peut être changé
+			local itemTarget = quest:get_item():get_name()
+			local targetCount = quest:get_targetCount()
+			local items_to_unlock = quest:get_item():get_childs()
+			local action = quest:get_action()
+			
+			table.insert(registerQuests,
+							 { questName,
+								questTitle,
+								questDescription,
+								{itemTarget},
+								targetCount,
+								items_to_unlock,
+								{parentQuest},
+								type = action
+			})
+		end
+		local childs = quest:get_questTrees()
+		if childs then
+			for j, child in ipairs(childs) do
+				for k, questT in ipairs(makeQuests(mod, childs, quest:get_name())) do
+					table.insert(registerQuests, questT)
+				end
+			end
+		end
+	end
+	return registerQuests
+end
+
+local function makeAutoQuests(mod, intllib)
+	local modItems = get_mod_items(mod)
+	if modItems then
+		-- Construction de l'arbre des quêtes
+		local questTrees = sys4_quests.questTrees
+		local rootQuests = {}
+
+		for _, item in ipairs(modItems:get_items()) do
+			if item:has_childs()
+				and item:is_hand_diggable()
+				and not item:get_recipes()
+			then
+				local questTree = QuestTree(Quest(item))
+				table.insert(questTrees, questTree)
+				table.insert(rootQuests, questTree)
+			end
+		end
+
+		for _, item in ipairs(modItems:get_items()) do
+			if item:has_childs() then
+				local isPresent = false
+				for i=1, #rootQuests do
+					if rootQuests[i]:get_quest():get_item():get_name() ==
+					item:get_name() then
+						isPresent = true
+					end
+				end
+				if not isPresent then
+					local questTree = QuestTree(Quest(item))
+					table.insert(questTrees, questTree)
+				end
+			end
+		end
+
+		local treeLen = 0
+		local loop = 0
+		while treeLen ~= #questTrees do
+			treeLen = #questTrees
+			questTrees = rebuildQuestTrees(questTrees)
+			loop = loop + 1
+		end
+		print("rebuildQuestTrees loop:"..loop)
+		print("questTrees length: "..#questTrees)
+		print("RootQuest length: "..#rootQuests)
+
+		-- remplissage des quêtes à enregistrer
+		sys4_quests.registeredQuests[mod].quests = makeQuests(mod, questTrees, nil)
+		sys4_quests.questTrees = questTrees
+	end
+end
+
+local function isQuestExist(questName)
+	for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+		for _, quest in ipairs(registeredQuests.quests) do
+			if quest[1] == questName then
+				return true
+			end
+		end
+	end
+	return false
+end
+
+function sys4_quests.set_parent_quest(quest, parentQuest)
+	for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+		for _, rquest in ipairs(registeredQuests.quests) do
+			if rquest[1] == quest then
+				rquest[7] = {parentQuest}
+			end
+		end
+	end
+end
+
+function sys4_quests.initQuests(mod, intllib, auto)
+	if not intllib then
 		intllib = S
 	end
 
-	if not sys4_quests.registeredQuests or sys4_quests.registeredQuests == nil then
+	if not sys4_quests.registeredQuests then
 		sys4_quests.registeredQuests = {}
 	end
 
 	sys4_quests.registeredQuests[mod] = {}
 	sys4_quests.registeredQuests[mod].intllib = intllib
 	sys4_quests.registeredQuests[mod].quests = {}
+	sys4_quests.questTrees = {}
+	if auto then
+		makeAutoQuests(mod, intllib)
+	end
 	return sys4_quests.registeredQuests[mod].quests
 end
 
+local function is_known_group(group)
+	for i, knownGroup in ipairs(groupsToVerify) do
+		if knownGroup == group then return true end
+	end
+	return false
+end
+
 function sys4_quests.registerQuests()
-
 	for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
-
 		local modIntllib = registeredQuests.intllib
 
 		-- init quests index
 		for _, quest in pairs(registeredQuests.quests) do
-
-			-- Register quest
-			--print("Register quest : "..mod.." - "..quest[1])
-			--local auto = sys4_quests.hasDependencies(quest[1])
-			--print("Autoaccept next quest : "..dump(auto))
-
 			local maxlevel = quest[5] * level
 			if quest.custom_level then
 				maxlevel = quest[5]
 			end
 
-			--print(dump(quest))
-
 			-- If a target node or item is inexistant then remove it.
 			local targets = {}
 			for k, node in ipairs(quest[4]) do
-				if minetest.registered_nodes[node] or minetest.registered_items[node] then
+				if minetest.registered_nodes[node]
+					or minetest.registered_items[node]
+					or (string.split(node, ":")[1] == "group"
+							 and is_known_group(string.split(node, ":")[2]))
+				then
 					table.insert(targets, node)
 				else
 					local nodeMod = string.split(node, ":")[1]
@@ -269,7 +832,11 @@ function sys4_quests.registerQuests()
 			-- If an unlockable node or item is inexistant then remove it.
 			local items = {}
 			for k, item in ipairs(quest[6]) do
-				if minetest.registered_nodes[item] or minetest.registered_items[item] then
+				if minetest.registered_nodes[item]
+					or minetest.registered_items[item]
+					or (string.split(item, ":")[1] == "group"
+							 and is_known_group(string.split(item, ":")[2]))
+				then
 					table.insert(items, item)
 				else
 					local itemMod = string.split(item, ":")[1]
@@ -292,6 +859,8 @@ function sys4_quests.registerQuests()
 				lastQuestIndex = lastQuestIndex + 1
 				quest.index = lastQuestIndex
 
+				print("Quest Registered : "..quest[1])
+				
 				-- insert quest index in specified group
 				if not quest.group then
 					table.insert(sys4_quests.questGroups['global'].questsIndex, quest.index)
@@ -311,9 +880,14 @@ end
 
 function sys4_quests.intllib_by_item(item)
 	local mod = string.split(item, ":")[1]
-	if mod == "stairs" then
+	if mod == "stairs" or mod == "group" then
 		for questsMod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 			for _, quest in ipairs(registeredQuests.quests) do
+				for __, titem in ipairs(quest[4]) do
+					if item == titem then
+						return registeredQuests.intllib
+					end
+				end
 				for __, titem in ipairs(quest[6]) do
 					if item == titem then
 						return registeredQuests.intllib
@@ -349,9 +923,14 @@ function sys4_quests.printUnlockedItems(items)
 	for _, item in ipairs(items) do
 		local itemMod = string.split(item, ":")[1]
 		local intllibMod
-		if itemMod == "stairs" then
+		if itemMod == "stairs" or itemMod == "group" then
 			for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 				for _, quest in ipairs(registeredQuests.quests) do
+					for __, titem in ipairs(quest[4]) do
+						if item == titem then
+							intllibMod = registeredQuests.intllib
+						end
+					end
 					for __, titem in ipairs(quest[6]) do
 						if item == titem then
 							intllibMod = registeredQuests.intllib
@@ -507,7 +1086,6 @@ local function getNextQuests(questname, playern)
 			end
 		end
 	end
-
 	return nextQuests
 end
 
@@ -523,20 +1101,13 @@ local function isAllQuestsGroupSuccessfull(currentQuestGroup, questname, playern
 			end
 		end
 	end
-
-	--   print("Successfull ALL group quest : "..dump(successfull))
 	return successfull
 end
 
 function sys4_quests.nextQuest(playername, questname)
-	--   print("Next quest after : "..questname)
 	local nextQuests = getNextQuests(questname, playername)
-
 	local currentQuestGroup = playerList[playername].activeQuestGroup
 	local nextQuestGroup = getNextQuestGroup(currentQuestGroup)
-
-	--   print("currentQuestGroup : "..currentQuestGroup)
-	--   print("NEXt QUEST GROUP : "..dump(nextQuestGroup))
 
 	if nextQuestGroup ~= nil
 	and isAllQuestsGroupSuccessfull(currentQuestGroup, questname, playername) then
@@ -560,9 +1131,6 @@ function sys4_quests.nextQuest(playername, questname)
 	else
 
 		for _, nextQuest in pairs(nextQuests) do
-			--      print("Next quest selected : "..nextQuest[1])
-			--nextquest = nextQuest.index
-			--sys4_quests.setCurrentQuest(playername, nextQuest)
 			minetest.after(1, function() quests.start_quest(playername, "sys4_quests:"..nextQuest[1]) end)
 		end
 	end
@@ -571,11 +1139,11 @@ end
 
 local function isNodesEquivalent(nodeTargets, nodeDug)
 	for _, nodeTarget in pairs(nodeTargets) do
-		if nodeTarget == nodeDug then
-			return true
-		end
+		local groupSplit = string.split(nodeTarget, ":")
+		if groupSplit[1] == "group"
+			and minetest.get_item_group(nodeDug, groupSplit[2]) >= 1
+		or nodeTarget == nodeDug then	return true	end
 	end
-
 	return false
 end
 
@@ -590,9 +1158,9 @@ local function getCraftRecipes(item)
 				if craftRecipes[i].type == "normal" then
 					if not first then
 						str = str.."\n--- "..S("OR").." ---\n\n"
-					end
-					
+					end		
 					first = false
+					
 					local width = craftRecipes[i].width
 					local items = craftRecipes[i].items
 					local maxn = table.maxn(items)
@@ -650,8 +1218,7 @@ local function writeBook(content, items, playern)
 			
 			tt = tt..">>>> "..intllib(item).." <<<<\n\n"
 			tt = tt..S("Craft recipes").." :\n"
-			tt = tt..getCraftRecipes(item)
-			tt = tt.."\n----------OOOOOO----------\n\n"
+			tt = tt..getCraftRecipes(item).."\n\n"
 		end
 		txt = txt..tt.."\n"
 	end
@@ -692,37 +1259,41 @@ local function giveBook(playerName, quest)
 end
 
 -- Replace quests.show_message function for customize central_message sounds if the mod is present
-local function show_message(t, playername, text)
-	if (quests.hud[playername].central_message_enabled) then
-		local player = minetest.get_player_by_name(playername)
-		cmsg.push_message_player(player, text, quests.colors[t])
-		minetest.sound_play("sys4_quests_" .. t, {to_player = playername})
-	end
-end
-
 if (cmsg) then
-	quests.show_message = show_message
+	quests.show_message = function (t, playername, text)
+		if (quests.hud[playername].central_message_enabled) then
+			local player = minetest.get_player_by_name(playername)
+			cmsg.push_message_player(player, text, quests.colors[t])
+			minetest.sound_play("sys4_quests_" .. t, {to_player = playername})
+		end
+	end
 end
 
 minetest.register_on_newplayer(
 	function(player)
 		local playern = player:get_player_name()
+		local firstQuestGroup = getFirstQuestGroup()
+		if firstQuestGroup == nil then
+			firstQuestGroup = 'global'
+		end
 		playerList[playern] = {
 			name = playern,
 			isNew = true,
 			craftMode = true,
 			bookMode = false,
-			activeQuestGroup = getFirstQuestGroup()
+			activeQuestGroup = firstQuestGroup
 		}
-		--      print("ActiveQuestGroup for New Player : "..playerList[playern].activeQuestGroup)
+
 		-- give initial stuff
-		if minetest.get_modpath("give_initial_stuff") and give_initial_stuff and sys4_quests.stuff then
+		if minetest.get_modpath("give_initial_stuff")
+			and give_initial_stuff
+			and sys4_quests.stuff
+		then
 			give_initial_stuff.clear()
 			local stuff = sys4_quests.stuff
 			for i = 1, #stuff do
 				give_initial_stuff.add(stuff[i])
 			end
-
 			give_initial_stuff.give(player)
 		end
 	end)
@@ -731,29 +1302,41 @@ minetest.register_on_joinplayer(
 	function(player)
 		local playern = player:get_player_name()
 		if not playerList[playern] or playerList[playern] == nil then
+			local activeGroup = getActiveQuestGroup(playern)
+			if activeGroup == nil then
+				activeGroup = 'global'
+			end
 			playerList[playern] = {
 				name = playern,
 				isNew = false,
 				craftMode = true,
 				bookMode = false,
-				activeQuestGroup = getActiveQuestGroup(playern)
+				activeQuestGroup = activeGroup
 			}
-			--print("ActiveQuestGroup for Player : "..playerList[playern].activeQuestGroup)
 		end
 
 		if (playerList[playern].isNew) then
 			for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 				for _, registeredQuest in ipairs(registeredQuests.quests) do
-					if registeredQuest[7] == nil
+					if (registeredQuest[7] == nil or #registeredQuest[7] == 0)
 						and (getGroupByQuestIndex(registeredQuest.index) == nil
-								  or getGroupByQuestIndex(registeredQuest.index) == playerList[playern].activeQuestGroup)
-					then
-						quests.start_quest(playern, "sys4_quests:"..registeredQuest[1])
+							  or getGroupByQuestIndex(registeredQuest.index) == playerList[playern].activeQuestGroup)	then
+							quests.start_quest(playern, "sys4_quests:"..registeredQuest[1])
 					end
 				end
 			end
+			
 			playerList[playern].isNew = false
 		end
+	end)
+
+
+--Called when a button is pressed in player's inventory form
+--Newest functions are called first
+--#If function returns true, remaining functions are not called
+minetest.register_on_player_receive_fields(
+	function(player, formname, fields)
+		minetest.chat_send_player(player:get_player_name(), "Event register_on_player_receive_fields triggered")
 	end)
 
 minetest.register_on_dignode(
@@ -782,6 +1365,8 @@ minetest.register_on_craft(
 	function(itemstack, player, old_craft_grid, craft_inv)
 		local playern = player:get_player_name()
 
+		-- DEBUG
+		minetest.chat_send_player(playern, "Event register_on_craft triggered")
 		local wasteItem = "sys4_quests:waste"
 		local itemstackName = itemstack:get_name()
 		local itemstackCount = itemstack:get_count()
@@ -792,18 +1377,16 @@ minetest.register_on_craft(
 				local questName = registeredQuest[1]
 				local items = registeredQuest[6]
 
-				for __, item in ipairs(items) do	
-					if item == itemstackName
+--				for __, item in ipairs(items) do	
+				if (item == itemstackName or isNodesEquivalent(items, itemstackName))
 						and quests.successfull_quests[playern] ~= nil
 						and quests.successfull_quests[playern]["sys4_quests:"..questName ] ~= nil
 					then
 						wasteItem = nil
 					end
-				end
+--				end
 			end
 		end
-
-		--      print("WasteItem state = "..dump(wasteItem))
 
 		for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 			for _, registeredQuest in ipairs(registeredQuests.quests) do
@@ -819,7 +1402,6 @@ minetest.register_on_craft(
 							giveBook(playern, questName)
 						end
 					end
-					--return nil
 				end
 			end
 		end
@@ -881,6 +1463,33 @@ local nodes = {
 for i=1, #nodes do
 	nodes[i].on_place = register_on_place
 end
+
+-- Furnace inventory take event
+local furnace = minetest.registered_nodes["default:furnace"]
+local old_allow_metadata_inventory_take = furnace.allow_metadata_inventory_take
+local function allow_metadata_inventory_take(pos, listname, index, stack, player)
+	local stackCount = old_allow_metadata_inventory_take(pos, listname, index, stack, player)
+	minetest.chat_send_player(player:get_player_name(), "Furnace Event")
+	if player ~= nil and listname == "dst" then
+		local playern = player:get_player_name()
+		for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+			for _, registeredQuest in ipairs(registeredQuests.quests) do
+				local questName = registeredQuest[1]
+				
+				if registeredQuest.type == "cook" and isNodesEquivalent(registeredQuest[4], stack:get_name()) then
+					if quests.update_quest(playern, "sys4_quests:"..questName, stackCount) then
+						minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
+						if playerList[playern].bookMode then
+							giveBook(playern, questName)
+						end
+					end
+				end
+			end
+		end
+	end
+	return stackCount
+end	
+furnace.allow_metadata_inventory_take = allow_metadata_inventory_take 
 
 minetest.register_chatcommand(
 	"lcraft",
@@ -1218,3 +1827,87 @@ minetest.register_chatcommand(
 		end
 
 	})
+
+-- QuestTrees DEBUG
+local function print_questTrees(str, questTrees)
+	local str = str.."==> "
+	local output = ""
+
+	if questTrees then
+		for i=1, #questTrees do
+			output = output..str..questTrees[i]:get_quest():get_item():get_name().."\n"
+			output = output..print_questTrees(str, questTrees[i]:get_quest():get_questTrees())
+		end
+	end
+
+	return output
+end
+
+local function get_registeredQuestsTrees(parent)
+	local questTrees = nil
+
+	if not parent then
+		for mod, registeredQuest in pairs(sys4_quests.registeredQuests) do
+			for _, quest in ipairs(registeredQuest.quests) do
+				if not quest[7] or #quest[7] == 0 then
+					if not questTrees then questTrees = {} end
+					local questTree = { name = quest[1],
+											  childs = get_registeredQuestsTrees(quest[1])
+					}
+					table.insert(questTrees, questTree)
+				end
+			end
+		end
+	else
+		for mod, registeredQuest in pairs(sys4_quests.registeredQuests) do
+			for _, quest in ipairs(registeredQuest.quests) do
+				if quest[7] and quest[7][1] == parent then
+					if not questTrees then questTrees = {} end
+					local questTree = { name = quest[1],
+											  childs = get_registeredQuestsTrees(quest[1])
+					}
+					table.insert(questTrees, questTree)
+				end
+			end
+		end
+	end
+
+	return questTrees
+end
+	
+local function print_questTrees2(str, questTrees)
+	local str = str.."==> "
+	local output = ""
+
+	if questTrees then
+		for i, quest in ipairs(questTrees) do
+			
+			output = output..str..quest.name.."\n"
+			output = output..print_questTrees2(str, quest.childs)
+		end
+	end
+
+	return output
+end
+
+minetest.register_chatcommand(
+	"questree",
+	{
+		params = nil,
+		description = "display quests tree.",
+		func = function(name, param)
+			minetest.chat_send_player(name, print_questTrees("", sys4_quests.questTrees))
+		end
+})
+
+minetest.register_chatcommand(
+	"quest",
+	{
+		params = nil,
+		description = "display quests tree.",
+		func = function(name, param)
+			local questTrees = get_registeredQuestsTrees(nil)
+			minetest.chat_send_player(name, print_questTrees2("", questTrees))
+		end
+})
+
