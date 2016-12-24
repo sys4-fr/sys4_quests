@@ -315,6 +315,12 @@ function MinetestItem:add_child(child)
 	end
 end
 
+function MinetestItem:add_childs(childs)
+	for i, child in ipairs(childs) do
+		self:add_child(child)
+	end
+end
+
 function MinetestItem:is_tool()
 	if self:get_field("tool_capabilities") then return true end
 	return false
@@ -583,7 +589,13 @@ local function get_item_childs(itemName, mod)
 					for i=1, #ingredients do
 						if ingredients[i] then
 							local sameGroup = false
-							if ingredients[i] == itemName then
+							local groupItemSplit = string.split(itemName, ":")
+
+							if groupItemSplit[1] == "group"
+							and minetest.get_item_group(ingredients[i], groupItemSplit[2]) >= 1 then
+								sameGroup = true
+								
+							elseif ingredients[i] == itemName then
 								sameGroup = true
 							elseif get_groups(ingredients[i]) then
 								for ___, group in ipairs(get_groups(ingredients[i])) do
@@ -616,9 +628,23 @@ local function check_item(itemName)
 	return false
 end
 
+local function add_item_childs(questTrees, mod)
+	for i=1, #questTrees do
+		local itemChilds = get_item_childs(questTrees[i]:get_quest():get_item():get_name(), mod)
+		if itemChilds then
+			questTrees[i]:get_quest():get_item():add_childs(itemChilds)
+		end
+
+		local childQuests = questTrees[i]:get_quest():get_questTrees()
+		if childQuests then
+			add_item_childs(childQuests, mod)
+		end
+	end
+end
+
 local function rebuildQuestTrees(questTrees)
 	local newQuestTrees = {}
-	
+
 	for i=1, #questTrees do
 		local treeToMove = questTrees[i]
 		local isAdded = false
@@ -661,6 +687,7 @@ local function get_mod_items(mod)
 		end
 	else
 		minetest.log("error", "sys4_quests: Mod "..mod.." not found !")
+		return nil
 	end
 	
 	return modItems
@@ -694,21 +721,26 @@ local function makeQuests(mod, questTrees, parentQuest)
 		end
 		local childs = quest:get_questTrees()
 		if childs then
-			for j, child in ipairs(childs) do
+--			for j, child in ipairs(childs) do
 				for k, questT in ipairs(makeQuests(mod, childs, quest:get_name())) do
 					table.insert(registerQuests, questT)
 				end
-			end
+--			end
 		end
 	end
 	return registerQuests
 end
 
 local function makeAutoQuests(mod, intllib)
+	print("MOD : "..mod)
 	local modItems = get_mod_items(mod)
 	if modItems then
 		-- Construction de l'arbre des quêtes
+		if not sys4_quests.questTrees then sys4_quests.questTrees = {} end
 		local questTrees = sys4_quests.questTrees
+
+		add_item_childs(questTrees, mod)
+
 		local rootQuests = {}
 
 		for _, item in ipairs(modItems:get_items()) do
@@ -776,6 +808,16 @@ function sys4_quests.set_parent_quest(quest, parentQuest)
 	end
 end
 
+function sys4_quests.set_action_quest(quest, action)
+	for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+		for _, rquest in ipairs(registeredQuests.quests) do
+			if rquest[1] == quest then
+				rquest.type = action
+			end
+		end
+	end
+end
+
 function sys4_quests.initQuests(mod, intllib, auto)
 	if not intllib then
 		intllib = S
@@ -788,7 +830,6 @@ function sys4_quests.initQuests(mod, intllib, auto)
 	sys4_quests.registeredQuests[mod] = {}
 	sys4_quests.registeredQuests[mod].intllib = intllib
 	sys4_quests.registeredQuests[mod].quests = {}
-	sys4_quests.questTrees = {}
 	if auto then
 		makeAutoQuests(mod, intllib)
 	end
