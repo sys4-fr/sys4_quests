@@ -35,8 +35,6 @@ local mod = "default"
 local auto = true -- Quests of mod default will be generated automatically
 
 -- Make quests based on the following groups of items if possible
---local itemGroups = {"tree", "wood", "flower", "dye", "wool",
---						  "sand", "stone", "soil", "stick", "leaves"}
 local itemGroups = {"tree", "wood", "sand", "stone", "stick"}
 for i=1, #itemGroups do
 	add_itemGroup(itemGroups[i])
@@ -75,6 +73,7 @@ setaction("default_diamond_quest", "dig")
 setaction("default_obsidian_quest", "dig")
 setaction("default_mese_crystal_quest", "dig")
 
+-- farming
 quests = init("farming", S, auto)
 setparent("farming_wheat_quest", "group_stick_quest")
 setaction("farming_wheat_quest", "dig")
@@ -91,8 +90,10 @@ ins(quests, {
 		 type = "dig"
 })
 
+-- boats
 init("boats", S, auto)
 
+-- flowers
 add_itemGroup("flower")
 quests = init("flowers", S, auto)
 ins(quests, {
@@ -106,22 +107,17 @@ ins(quests, {
 		 type = "dig"
 })
 
+-- dye
 add_itemGroup("dye")
 init("dye", S, auto)
 setparent("group_dye_quest", "group_flower_quest")
 
+-- wool
 add_itemGroup("wool")
 init("wool", S, auto)
 setparent("group_wool_quest", "farming_cotton_quest")
 
-init("walls", S, auto)
-init("xpanes", S, auto)
-init("tnt", S, auto)
-init("fire", S, auto)
-init("beds", S, auto)
-init("bucket", S, auto)
-init("carts", S, auto)
-
+-- doors
 quests = init("doors", S, auto)
 ins(quests, {
 		 "default_obsidian_glass_quest",
@@ -134,15 +130,23 @@ ins(quests, {
 		 type = "cook"
 })
 
+-- others
+init("walls", S, auto)
+init("xpanes", S, auto)
+init("tnt", S, auto)
+init("fire", S, auto)
+init("beds", S, auto)
+init("bucket", S, auto)
+init("carts", S, auto)
 init("stairs", S, auto)
 
+-- register quests
 register()
 
 -- correction of items to unlock
 mod = "default"
 update("default_clay_quest", nil, {mod..":clay"})
 update("default_clay_lump_quest", nil, {mod..":clay_lump"})
-update("default_mese_quest", {mod..":stone_with_mese"}, {mod..":mese_crystal"})
 
 mod = "farming"
 update("farming_wheat_quest", {mod..":wheat_1", mod..":wheat_2", mod..":wheat_3", mod..":wheat_4", mod..":wheat_5", mod..":wheat_6", mod..":wheat_7", mod..":wheat_8"}, nil)

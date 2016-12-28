@@ -15,22 +15,22 @@ function sys4_quests.get_quest(questName)
 	return nil
 end
 
-local function isQuestActive(questName, playern)
+local function is_questActive(questName, playern)
 	return quests.active_quests[playern] and quests.active_quests[playern]["sys4_quests:"..questName]
 end
 
-local function isQuestSuccessfull(questName, playern)
+local function is_questSuccessfull(questName, playern)
 	return quests.successfull_quests[playern]	and quests.successfull_quests[playern]["sys4_quests:"..questName]
 end
 
-local function get_item_group(groupName)
+local function get_itemGroup(groupName)
 	for _, group in ipairs(sys4_quests.itemGroups) do
 		if group == groupName then return group end
 	end
 	return nil
 end
 
-local function get_quest_group_by_questIndex(questIndex)
+local function get_questGroup_by_questIndex(questIndex)
 	for name, group in pairs(sys4_quests.questGroups) do
 		for _, index in ipairs(group.questsIndex) do
 			if index == questIndex and name ~= "global" then
@@ -42,7 +42,7 @@ local function get_quest_group_by_questIndex(questIndex)
 	return nil
 end
 
-local function get_quest_group(name)
+local function get_questGroup(name)
 	for groupname, group in pairs(sys4_quests.questGroups) do
 		if groupname == name then
 			return group
@@ -51,13 +51,13 @@ local function get_quest_group(name)
 	return nil
 end
 
-local function getQuestGroupOrder(questGroup)
-	local group = get_quest_group(questGroup)
+local function get_questGroup_order(questGroup)
+	local group = get_questGroup(questGroup)
 	if group then return group.order end
 	return nil
 end
 
-local function getQuestGroupByGroupOrder(order)
+local function get_questGroup_by_order(order)
 	for name, group in pairs(sys4_quests.questGroups) do
 		if group.order == order then
 			return name
@@ -66,24 +66,24 @@ local function getQuestGroupByGroupOrder(order)
 	return nil
 end
 
-local function getNextQuestGroup(currentQuestGroup)
+local function get_next_questGroup(currentQuestGroup)
 	local groupTotal = 0
 	for _, group in pairs(sys4_quests.questGroups) do
 		groupTotal = groupTotal + 1
 	end
 
-	local groupOrder = getQuestGroupOrder(currentQuestGroup)
+	local groupOrder = get_questGroup_order(currentQuestGroup)
 
 	if not groupOrder or groupOrder == groupTotal then
 		return nil
 	else
-		return getQuestGroupByGroupOrder(groupOrder + 1)
+		return get_questGroup_by_order(groupOrder + 1)
 	end
 end
 
 -- functions for registering quests automatically
 
-local function containsItem(liste, item)
+local function contain_item(liste, item)
 	for _, liste_iter in ipairs(liste) do
 		if liste_iter == item then return true end
 	end
@@ -99,7 +99,7 @@ local function get_groups(itemName)
 	end
 end
 
-local function get_item_childs(itemName, mod)
+local function get_itemChilds(itemName, mod)
 	local childs = nil
 	for name, _ in pairs(minetest.registered_items) do
 		local recipes = nil
@@ -127,7 +127,7 @@ local function get_item_childs(itemName, mod)
 							end
 							if sameGroup then
 								if not childs then childs = {} end
-								if not containsItem(childs, name) then
+								if not contain_item(childs, name) then
 									table.insert(childs, name)
 								end
 							end
@@ -150,21 +150,21 @@ local function check_item(itemName)
 	return false
 end
 
-local function add_item_childs(questTrees, mod)
+local function add_itemChilds(questTrees, mod)
 	for i=1, #questTrees do
-		local itemChilds = get_item_childs(questTrees[i]:get_quest():get_item():get_name(), mod)
+		local itemChilds = get_itemChilds(questTrees[i]:get_quest():get_item():get_name(), mod)
 		if itemChilds then
 			questTrees[i]:get_quest():get_item():add_childs(itemChilds)
 		end
 
 		local childQuests = questTrees[i]:get_quest():get_questTrees()
 		if childQuests then
-			add_item_childs(childQuests, mod)
+			add_itemChilds(childQuests, mod)
 		end
 	end
 end
 
-local function rebuildQuestTrees(questTrees)
+local function rebuild_questTrees(questTrees)
 	local newQuestTrees = {}
 
 	for i=1, #questTrees do
@@ -197,14 +197,14 @@ local function rebuildQuestTrees(questTrees)
 	return newQuestTrees
 end
 
-local function get_mod_items(mod)
+local function get_modItems(mod)
 	local modItems = sys4_quests.MinetestItems()
 	
 	if mod and minetest.get_modpath(mod) then
 		for name, item in pairs(minetest.registered_items) do
 			if string.split(name, ":")[1] == mod
 			and check_item(name) then
-				modItems:add(item, get_item_childs(name, mod))
+				modItems:add(item, get_itemChilds(name, mod))
 			end
 		end
 	else
@@ -234,7 +234,7 @@ local function get_itemTarget(itemName)
 	return itemName
 end
 
-local function makeQuests(mod, questTrees, parentQuest)
+local function make_quests(mod, questTrees, parentQuest)
 	local registerQuests = {}
 
 	for i=1, #questTrees do
@@ -263,7 +263,7 @@ local function makeQuests(mod, questTrees, parentQuest)
 		local childs = quest:get_questTrees()
 		if childs then
 --			for j, child in ipairs(childs) do
-				for k, questT in ipairs(makeQuests(mod, childs, quest:get_name())) do
+				for k, questT in ipairs(make_quests(mod, childs, quest:get_name())) do
 					table.insert(registerQuests, questT)
 				end
 --			end
@@ -272,31 +272,18 @@ local function makeQuests(mod, questTrees, parentQuest)
 	return registerQuests
 end
 
-local function makeAutoQuests(mod, intllib)
+local function make_auto_quests(mod, intllib)
 	print("MOD : "..mod)
-	local modItems = get_mod_items(mod)
+	local modItems = get_modItems(mod)
 	if modItems then
 		
 		-- Construction de l'arbre des quêtes
 		if not sys4_quests.questTrees then sys4_quests.questTrees = {} end
 		local questTrees = sys4_quests.questTrees
 
-		-- Ajout manuel de quetes racines pour chaque mod identifié.
-		--[[if mod == "dye" then
-			local flowersItems = get_mod_items("flowers")
-			--print("FLOWERS ::::::::::::: "..dump(flowersItems))
-			for _, item in ipairs(flowersItems:get_items()) do
-				if item:get_name() == "group:flower" then
-					table.insert(questTrees, sys4_quests.QuestTree(sys4_quests.Quest(item)))
-					break
-				end
-			end
-		end
-		--]]
-
 		-- ajout d'items provenant du mod pouvant être rajoutés
 		-- dans l'arbre de quetes déjà existant.
-		add_item_childs(questTrees, mod)
+		add_itemChilds(questTrees, mod)
 
 		local rootQuests = {}
 
@@ -331,15 +318,15 @@ local function makeAutoQuests(mod, intllib)
 		local loop = 0
 		while treeLen ~= #questTrees do
 			treeLen = #questTrees
-			questTrees = rebuildQuestTrees(questTrees)
+			questTrees = rebuild_questTrees(questTrees)
 			loop = loop + 1
 		end
-		print("rebuildQuestTrees loop:"..loop)
+		print("rebuild_questTrees loop:"..loop)
 		print("questTrees length: "..#questTrees)
 		print("RootQuest length: "..#rootQuests)
 
 		-- remplissage des quêtes à enregistrer
-		sys4_quests.registeredQuests[mod].quests = makeQuests(mod, questTrees, nil)
+		sys4_quests.registeredQuests[mod].quests = make_quests(mod, questTrees, nil)
 		sys4_quests.questTrees = questTrees
 	end
 end
@@ -373,7 +360,7 @@ local function intllib_by_item(item)
 	return sys4_quests.registeredQuests[mod].intllib
 end
 
-local function printUnlockedItems(items)
+local function print_itemsUnlocked(items)
 	local str = ""
 	for _, item in ipairs(items) do
 		local itemMod = string.split(item, ":")[1]
@@ -402,7 +389,7 @@ local function printUnlockedItems(items)
 	return str
 end
 
-local function formatDescription(quest, level, intllib)
+local function format_description(quest, level, intllib)
 	local questType = quest.type
 	local targetCount = level
 	local customDesc = quest[3]
@@ -418,10 +405,10 @@ local function formatDescription(quest, level, intllib)
 
 	-- Print Unlocked Items
 	str = str.."\n \n"..S("The end of the quest unlock this items").." :\n"
-	return str..printUnlockedItems(quest[6])
+	return str..print_itemsUnlocked(quest[6])
 end
 
-local function hasDependencies(questName)
+local function has_dependences(questName)
 	for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 		for _, quest in ipairs(registeredQuests.quests) do
 			if quest[7] and quest[7] ~= nil and type(quest[7]) == "string" then
@@ -468,7 +455,7 @@ local function contains(quests, quest)
 	return false
 end
 
-local function isParentQuestsAreSuccessfull(parentQuests, currentQuest, playern)
+local function is_questParents_successfull(parentQuests, currentQuest, playern)
 	local parentQuestsList = {}
 
 	if type(parentQuests) == "string" then
@@ -488,7 +475,7 @@ local function isParentQuestsAreSuccessfull(parentQuests, currentQuest, playern)
 				isFinished = true
 				break
 			else
-				isFinished = isFinished or isQuestSuccessfull(splittedParentQuest, playern)
+				isFinished = isFinished or is_questSuccessfull(splittedParentQuest, playern)
 			end
 		end
 
@@ -498,7 +485,7 @@ local function isParentQuestsAreSuccessfull(parentQuests, currentQuest, playern)
 	return isAllFinished
 end
 
-local function getNextQuests(questname, playern)
+local function get_next_quests(questname, playern)
 	local insert = table.insert
 	local nextQuests = {}
 
@@ -510,14 +497,14 @@ local function getNextQuests(questname, playern)
 			for _, registeredQuest in ipairs(registeredQuests.quests) do
 
 				if registeredQuest[1] ~= currentQuest
-					and not isQuestActive(registeredQuest[1], playern)
-					and not isQuestSuccessfull(registeredQuest[1], playern)
+					and not is_questActive(registeredQuest[1], playern)
+					and not is_questSuccessfull(registeredQuest[1], playern)
 				then
 					local parentQuests = registeredQuest[7]
 
 					if parentQuests ~= nil
 						and contains(parentQuests, currentQuest)
-					and isParentQuestsAreSuccessfull(parentQuests, currentQuest, playern) then
+					and is_questParents_successfull(parentQuests, currentQuest, playern) then
 						insert(nextQuests, registeredQuest)
 					end
 				end
@@ -527,15 +514,15 @@ local function getNextQuests(questname, playern)
 	return nextQuests
 end
 
-local function isAllQuestsGroupSuccessfull(currentQuestGroup, questname, playern)
+local function is_all_groupQuests_successfull(currentQuestGroup, questname, playern)
 	local successfull = true
 	local currentQuest = string.split(questname, ":")[2]
 
 	for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 		for _, registeredQuest in ipairs(registeredQuests.quests) do
 			if registeredQuest[1] ~= currentQuest
-			and get_quest_group_by_questIndex(registeredQuest.index) == currentQuestGroup then
-				successfull = successfull and isQuestSuccessfull(registeredQuest[1], playern)
+			and get_questGroup_by_questIndex(registeredQuest.index) == currentQuestGroup then
+				successfull = successfull and is_questSuccessfull(registeredQuest[1], playern)
 			end
 		end
 	end
@@ -543,18 +530,18 @@ local function isAllQuestsGroupSuccessfull(currentQuestGroup, questname, playern
 end
 
 function sys4_quests.nextQuest(playername, questname)
-	local nextQuests = getNextQuests(questname, playername)
+	local nextQuests = get_next_quests(questname, playername)
 	local currentQuestGroup = sys4_quests.playerList[playername].activeQuestGroup
-	local nextQuestGroup = getNextQuestGroup(currentQuestGroup)
+	local nextQuestGroup = get_next_questGroup(currentQuestGroup)
 
 	if nextQuestGroup ~= nil
-	and isAllQuestsGroupSuccessfull(currentQuestGroup, questname, playername) then
+	and is_all_groupQuests_successfull(currentQuestGroup, questname, playername) then
 		sys4_quests.playerList[playername].activeQuestGroup = nextQuestGroup
 
 		-- start quests of the next group
 		for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 			for _, registeredQuest in ipairs(registeredQuests.quests) do
-				if registeredQuest[7] == nil and get_quest_group_by_questIndex(registeredQuest.index) == nextQuestGroup then
+				if registeredQuest[7] == nil and get_questGroup_by_questIndex(registeredQuest.index) == nextQuestGroup then
 					minetest.after(1, function() quests.start_quest(playername, "sys4_quests:"..registeredQuest[1]) end)
 				end
 			end
@@ -588,7 +575,7 @@ function sys4_quests.initQuests(mod, intllib, auto)
 	sys4_quests.registeredQuests[mod].intllib = intllib
 	sys4_quests.registeredQuests[mod].quests = {}
 	if auto then
-		makeAutoQuests(mod, intllib)
+		make_auto_quests(mod, intllib)
 	end
 	return sys4_quests.registeredQuests[mod].quests
 end
@@ -687,7 +674,7 @@ function sys4_quests.updateQuest(questName, targetNodes, items)
 					end
 					
 					local questDescription = quests.registered_quests['sys4_quests:'..questName].description
-					questDescription = questDescription..printUnlockedItems(items)
+					questDescription = questDescription..print_itemsUnlocked(items)
 					quests.registered_quests['sys4_quests:'..questName].description = questDescription
 				end
 			end
@@ -795,7 +782,7 @@ function sys4_quests.registerQuests()
 				if minetest.registered_nodes[node]
 					or minetest.registered_items[node]
 					or (string.split(node, ":")[1] == "group"
-							 and get_item_group(string.split(node, ":")[2]))
+							 and get_itemGroup(string.split(node, ":")[2]))
 				then
 					table.insert(targets, node)
 				else
@@ -811,7 +798,7 @@ function sys4_quests.registerQuests()
 				if minetest.registered_nodes[item]
 					or minetest.registered_items[item]
 					or (string.split(item, ":")[1] == "group"
-							 and get_item_group(string.split(item, ":")[2]))
+							 and get_itemGroup(string.split(item, ":")[2]))
 				then
 					table.insert(items, item)
 				else
@@ -825,9 +812,9 @@ function sys4_quests.registerQuests()
 			if quests.register_quest(
 				"sys4_quests:"..quest[1],
 				{ title = modIntllib(quest[2]),
-				  description = formatDescription(quest, maxlevel, modIntllib),
+				  description = format_description(quest, maxlevel, modIntllib),
 				  max = maxlevel,
-				  --autoaccept = sys4_quests.hasDependencies(quest[1]),
+				  --autoaccept = sys4_quests.has_dependences(quest[1]),
 				  autoaccept = true,
 				  callback = sys4_quests.nextQuest
 				})
@@ -846,7 +833,7 @@ function sys4_quests.registerQuests()
 				end
 
 			elseif not quests.registered_quests["sys4_quests:"..quest[1] ].autoaccept
-			and hasDependencies(quest[1]) then
+			and has_dependences(quest[1]) then
 				quests.registered_quests["sys4_quests:"..quest[1] ].autoaccept = true
 			end
 			

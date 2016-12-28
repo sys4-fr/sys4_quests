@@ -1,5 +1,4 @@
 quests
 default
-flowers?
-dye?
+give_initial_stuff?
 intllib?
