@@ -5,13 +5,15 @@ else
 	S = function(s) return s end
 end
 
--- Make local shortcuts of global functions --
+-- Make local shortcuts of tool functions --
 local ins = table.insert
-local up = sys4_quests.updateQuest
-local setp = sys4_quests.set_parent_quest
-local seta = sys4_quests.set_action_quest
----------- Quests for default mod ----------
-local mod = "default"
+local update = sys4_quests.updateQuest
+local setparent = sys4_quests.set_parent_quest
+local setaction = sys4_quests.set_action_quest
+local add_itemGroup = sys4_quests.add_itemGroup
+local add_questGroup = sys4_quests.addQuestGroup
+local register = sys4_quests.registerQuests
+local init = sys4_quests.initQuests
 
 ----- Quests Groups -----
 local dark = "Dark Age"
@@ -20,55 +22,127 @@ local farm = "Farming Age"
 local stone = "Stone Age"
 local metal = "Metal Age"
 local middle = "Middle Age"
-
---[[sys4_quests.addQuestGroup(dark)
-sys4_quests.addQuestGroup(wood)
-sys4_quests.addQuestGroup(farm)
-sys4_quests.addQuestGroup(stone)
-sys4_quests.addQuestGroup(metal)
-sys4_quests.addQuestGroup(middle)
---]]
-
--- Get variable for register quests
-local auto = true
-local quests = sys4_quests.initQuests("default", S, auto)
-setp("group_stone_quest", "group_stick_quest")
-setp("default_coal_lump_quest", "group_stick_quest")
-setp("default_coalblock_quest", "default_coal_lump_quest")
-setp("default_gold_lump_quest", "group_stone_quest")
-setp("default_iron_lump_quest", "group_stone_quest")
-setp("default_copper_lump_quest", "group_stone_quest")
-setp("default_steel_ingot_quest", "default_iron_lump_quest")
-setp("default_steelblock_quest", "default_steel_ingot_quest")
-setp("default_diamond_quest", "default_steel_ingot_quest")
-setp("default_obsidian_quest", "default_steel_ingot_quest")
-setp("default_mese_quest", "default_steel_ingot_quest")
-
-seta("group_stone_quest", "dig")
-seta("default_coal_lump_quest", "dig")
-seta("group_sand_quest", "dig")
-
-up("default_coal_lump_quest", {"default:stone_with_coal"}, nil)
-up("default_iron_lump_quest", {"default:stone_with_iron"}, nil)
-up("default_copper_lump_quest", {"default:stone_with_copper"}, nil)
-up("default_gold_lump_quest", {"default:stone_with_gold"}, nil)
-up("default_diamond_quest", {"default:stone_with_diamond"}, nil)
-up("default_mese_crystal_quest", {"default:stone_with_mese"}, nil)
+local questGroups = {dark, wood, farm, stone, metal, middle}
 
 --[[
-sys4_quests.initQuests("flowers", S, auto)
-sys4_quests.initQuests("wool", S, auto)
-sys4_quests.initQuests("farming", S, auto)
-sys4_quests.initQuests("dye", S, auto)
-sys4_quests.initQuests("walls", S, auto)
-sys4_quests.initQuests("xpanes", S, auto)
-sys4_quests.initQuests("tnt", S, auto)
-sys4_quests.initQuests("fire", S, auto)
-sys4_quests.initQuests("beds", S, auto)
-sys4_quests.initQuests("boats", S, auto)
-sys4_quests.initQuests("bucket", S, auto)
-sys4_quests.initQuests("carts", S, auto)
-sys4_quests.initQuests("doors", S, auto)
-sys4_quests.initQuests("stairs", S, auto)
+for i=1, #questGroups do
+	add_questGroup(questGroups[i])
+end
 --]]
-sys4_quests.registerQuests()
+
+---------- Quests for mod default ----------
+local mod = "default"
+local auto = true -- Quests of mod default will be generated automatically
+
+-- Make quests based on the following groups of items if possible
+--local itemGroups = {"tree", "wood", "flower", "dye", "wool",
+--						  "sand", "stone", "soil", "stick", "leaves"}
+local itemGroups = {"tree", "wood", "sand", "stone", "stick"}
+for i=1, #itemGroups do
+	add_itemGroup(itemGroups[i])
+end
+
+-- generate our quests and get their structure in a variable
+local quests = init(mod, S, auto)
+
+-- Reorganisation of quests dependencies
+
+setparent("group_stone_quest", "group_stick_quest")
+setparent("default_coal_lump_quest", "group_stick_quest")
+setparent("default_gold_lump_quest", "group_stone_quest")
+setparent("default_gold_ingot_quest", "default_gold_lump_quest")
+setparent("default_skeleton_key_quest", "default_gold_ingot_quest")
+setparent("default_iron_lump_quest", "group_stone_quest")
+setparent("default_copper_lump_quest", "group_stone_quest")
+setparent("default_diamond_quest", "default_steel_ingot_quest")
+setparent("default_obsidian_quest", "default_steel_ingot_quest")
+setparent("default_mese_crystal_quest", "default_steel_ingot_quest")
+setparent("default_mese_quest", "default_mese_crystal_quest")
+setparent("default_bronze_ingot_quest", "default_copper_ingot_quest")
+setparent("default_bronzeblock_quest", "default_bronze_ingot_quest")
+setparent("default_chest_quest", "default_steel_ingot_quest")
+setparent("default_snow_quest", nil)
+setparent("default_snowblock_quest", "default_snow_quest")
+
+-- correction of type action
+
+setaction("group_sand_quest", "dig")
+setaction("default_clay_quest", "dig")
+setaction("default_snow_quest", "dig")
+setaction("group_stone_quest", "dig")
+setaction("default_coal_lump_quest", "dig")
+setaction("default_diamond_quest", "dig")
+setaction("default_obsidian_quest", "dig")
+setaction("default_mese_crystal_quest", "dig")
+
+quests = init("farming", S, auto)
+setparent("farming_wheat_quest", "group_stick_quest")
+setaction("farming_wheat_quest", "dig")
+ins(quests, {
+		 "farming_cotton_quest",
+		 "farming_cotton_quest",
+		 nil,
+		 {"farming:cotton_1","farming:cotton_2","farming:cotton_3",
+		  "farming:cotton_4","farming:cotton_5","farming:cotton_6",
+		  "farming:cotton_7","farming:cotton_8"},
+		 1,
+		 {"group:wool"},
+		 {"group_stick_quest"},
+		 type = "dig"
+})
+
+init("boats", S, auto)
+
+add_itemGroup("flower")
+quests = init("flowers", S, auto)
+ins(quests, {
+		 "group_flower_quest",
+		 "group_flower_quest",
+		 nil,
+		 {"group:flower"},
+		 1,
+		 {"group:dye"},
+		 nil,
+		 type = "dig"
+})
+
+add_itemGroup("dye")
+init("dye", S, auto)
+setparent("group_dye_quest", "group_flower_quest")
+
+add_itemGroup("wool")
+init("wool", S, auto)
+setparent("group_wool_quest", "farming_cotton_quest")
+
+init("walls", S, auto)
+init("xpanes", S, auto)
+init("tnt", S, auto)
+init("fire", S, auto)
+init("beds", S, auto)
+init("bucket", S, auto)
+init("carts", S, auto)
+
+quests = init("doors", S, auto)
+ins(quests, {
+		 "default_obsidian_glass_quest",
+		 "default_obsidian_glass_quest",
+		 nil,
+		 {"default:obsidian_glass"},
+		 6,
+		 {"doors:door_obsidian_glass"},
+		 {"default_obsidian_shard_quest"},
+		 type = "cook"
+})
+
+init("stairs", S, auto)
+
+register()
+
+-- correction of items to unlock
+mod = "default"
+update("default_clay_quest", nil, {mod..":clay"})
+update("default_clay_lump_quest", nil, {mod..":clay_lump"})
+update("default_mese_quest", {mod..":stone_with_mese"}, {mod..":mese_crystal"})
+
+mod = "farming"
+update("farming_wheat_quest", {mod..":wheat_1", mod..":wheat_2", mod..":wheat_3", mod..":wheat_4", mod..":wheat_5", mod..":wheat_6", mod..":wheat_7", mod..":wheat_8"}, nil)

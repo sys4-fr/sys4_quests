@@ -18,12 +18,13 @@ dofile(modpath.."/quests_patch.lua")
 
 -- init sys4_quests data structure
 sys4_quests = {}
+sys4_quests.playerList = {}
 sys4_quests.intllib = S
 sys4_quests.questGroups = {}
 sys4_quests.questGroups['global'] = {order = 1, questsIndex = {}}
-sys4_quests.itemGroups = {-- Todo: remove
-	"tree", "wood", "flower", "dye", "wool",
-	"sand", "stone", "soil", "stick", "leaves"}
+sys4_quests.itemGroups = {}
+	--"tree", "wood", "flower", "dye", "wool",
+	--"sand", "stone", "soil", "stick", "leaves"
 sys4_quests.level = 1
 
 -- init classes
@@ -69,6 +70,35 @@ local function isNodesEquivalent(nodeTargets, nodeDug)
 		or nodeTarget == nodeDug then	return true	end
 	end
 	return false
+end
+
+local function intllib_by_item(item)
+	local mod = string.split(item, ":")[1]
+	if mod == "stairs" or mod == "group" then
+		for questsMod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+			for _, quest in ipairs(registeredQuests.quests) do
+				for __, titem in ipairs(quest[4]) do
+					if item == titem then
+						return registeredQuests.intllib
+					end
+				end
+				for __, titem in ipairs(quest[6]) do
+					if item == titem then
+						return registeredQuests.intllib
+					end
+				end
+			end
+		end
+	end
+
+	local quests = sys4_quests.registeredQuests[mod]
+	if not quests then
+		sys4_quests.registeredQuests[mod] = {}
+		quests = sys4_quests.registeredQuests[mod]
+		quests.intllib = S
+		quests.quests = {}
+	end
+	return sys4_quests.registeredQuests[mod].intllib
 end
 
 local function getCraftRecipes(item)
@@ -138,7 +168,7 @@ local function writeBook(content, items, playern)
 
 		for _, item in ipairs(items) do
 			
-			local intllib = sys4_quests.intllib_by_item(item)
+			local intllib = intllib_by_item(item)
 			
 			tt = tt..">>>> "..intllib(item).." <<<<\n\n"
 			tt = tt..S("Craft recipes").." :\n"
@@ -222,8 +252,6 @@ local function isQuestSuccessfull(questName, playern)
 	return quests.successfull_quests[playern]	and quests.successfull_quests[playern]["sys4_quests:"..questName]
 end
 
-local playerList = {}
-
 minetest.register_on_newplayer(
 	function(player)
 		local playern = player:get_player_name()
@@ -231,7 +259,7 @@ minetest.register_on_newplayer(
 		if firstQuestGroup == nil then
 			firstQuestGroup = 'global'
 		end
-		playerList[playern] = {
+		sys4_quests.playerList[playern] = {
 			name = playern,
 			isNew = true,
 			craftMode = true,
@@ -256,7 +284,9 @@ minetest.register_on_newplayer(
 minetest.register_on_joinplayer(
 	function(player)
 		local playern = player:get_player_name()
-		if not playerList[playern] or playerList[playern] == nil then
+		local playerList = sys4_quests.playerList
+		if not playerList[playern]
+		or playerList[playern] == nil then
 			local activeGroup = getActiveQuestGroup(playern)
 			if activeGroup == nil then
 				activeGroup = 'global'
@@ -298,6 +328,7 @@ minetest.register_on_dignode(
 	function(pos, oldnode, digger)
 		if digger ~= nil then
 			local playern = digger:get_player_name()
+			local playerList = sys4_quests.playerList
 			for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 				for _, registeredQuest in ipairs(registeredQuests.quests) do
 					local questName = registeredQuest[1]
@@ -319,6 +350,7 @@ minetest.register_on_dignode(
 minetest.register_on_craft(
 	function(itemstack, player, old_craft_grid, craft_inv)
 		local playern = player:get_player_name()
+		local playerList = sys4_quests.playerList
 
 		-- DEBUG
 		minetest.chat_send_player(playern, "Event register_on_craft triggered")
@@ -372,6 +404,7 @@ minetest.register_on_craft(
 
 local function register_on_placenode(pos, node, placer)
 	local playern = placer:get_player_name()
+	local playerList = sys4_quests.playerList
 
 	for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 		for _, registeredQuest in ipairs(registeredQuests.quests) do
@@ -427,6 +460,7 @@ local function allow_metadata_inventory_take(pos, listname, index, stack, player
 	minetest.chat_send_player(player:get_player_name(), "Furnace Event")
 	if player ~= nil and listname == "dst" then
 		local playern = player:get_player_name()
+		local playerList = sys4_quests.playerList
 		for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 			for _, registeredQuest in ipairs(registeredQuests.quests) do
 				local questName = registeredQuest[1]
@@ -452,6 +486,7 @@ minetest.register_chatcommand(
 		params = "[on|off]",
 		description = S("Enable or not locked crafts")..".",
 		func = function(name, param)
+			local playerList = sys4_quests.playerList
 			if param == "on" then
 				playerList[name].craftMode = true
 				minetest.chat_send_player(name, S("Locked crafts Enabled")..".")
@@ -468,6 +503,7 @@ minetest.register_chatcommand(
 		params = "[on|off]",
 		description = S("Enable or not books that describe unlocked craft recipes")..".",
 		func = function(name, param)
+			local playerList = sys4_quests.playerList
 			if param == "on" then
 				playerList[name].bookMode = true
 				minetest.chat_send_player(name, S("Book Mode Enabled")..".")
@@ -484,6 +520,7 @@ minetest.register_chatcommand(
 		params = "["..S("group index").."]",
 		description = S("Display groups of quests or display quests of a group if group index is given as argument")..".",
 		func = function(name, param)
+			local playerList = sys4_quests.playerList
 			if param ~= "" then
 				local isGroupValid = false
 				for groupName, group in pairs(sys4_quests.questGroups) do
@@ -806,7 +843,7 @@ local function get_registeredQuestsTrees(parent)
 			for _, quest in ipairs(registeredQuest.quests) do
 				if not quest[7] or #quest[7] == 0 then
 					if not questTrees then questTrees = {} end
-					local questTree = { name = quest[1],
+					local questTree = { quest = quest,
 											  childs = get_registeredQuestsTrees(quest[1])
 					}
 					table.insert(questTrees, questTree)
@@ -818,7 +855,7 @@ local function get_registeredQuestsTrees(parent)
 			for _, quest in ipairs(registeredQuest.quests) do
 				if quest[7] and quest[7][1] == parent then
 					if not questTrees then questTrees = {} end
-					local questTree = { name = quest[1],
+					local questTree = { quest = quest,
 											  childs = get_registeredQuestsTrees(quest[1])
 					}
 					table.insert(questTrees, questTree)
@@ -837,7 +874,7 @@ local function print_questTrees2(str, questTrees)
 	if questTrees then
 		for i, quest in ipairs(questTrees) do
 			
-			output = output..str..quest.name.."\n"
+			output = output..str..quest.quest[1].." ["..quest.quest.type.."]\n"
 			output = output..print_questTrees2(str, quest.childs)
 		end
 	end
@@ -863,6 +900,149 @@ minetest.register_chatcommand(
 		func = function(name, param)
 			local questTrees = get_registeredQuestsTrees(nil)
 			minetest.chat_send_player(name, print_questTrees2("", questTrees))
+		end
+})
+
+local function get_itemdef_field(itemName, fieldName, value)
+	if minetestItems:get_item(itemName) then
+		if not value then
+			return minetestItems:get_itemField(itemName, fieldName)
+		elseif value == minetestItems:get_itemField(itemName, fieldName) then
+			return itemName
+		end
+	end
+	return nil
+end
+
+local function check_item(itemName)
+	local itemNameSplit = string.split(itemName, ":")
+	local item = minetest.registered_items[itemName]
+	if itemNameSplit[1] ~= "" and itemNameSplit[1] ~= itemName
+	and item["groups"].not_in_creative_inventory ~= 1 then
+		return true
+	end
+	return false
+end
+
+local function get_groups(itemName)
+	local split = string.split(itemName, ":")
+	if split[1] == "group" then
+		return string.split(split[2], ",")
+	else
+		return nil
+	end
+end
+
+local function contains(liste, item)
+	for _, liste_iter in ipairs(liste) do
+		if liste_iter == item then return true end
+	end
+	return false
+end
+
+local function get_item_childs(itemName)
+	local childs = nil
+	for name, _ in pairs(minetest.registered_items) do
+		local recipes = nil
+		if name ~= "" and string.split(name, ":")[1] ~= name then
+			recipes = minetest.get_all_craft_recipes(name)
+			if recipes then
+				for __, recipe in ipairs(recipes) do
+					local ingredients = recipe.items
+					for i=1, #ingredients do
+						if ingredients[i] then
+							local sameGroup = false
+							if ingredients[i] == itemName then
+								sameGroup = true
+							elseif get_groups(ingredients[i]) then
+								for ___, group in ipairs(get_groups(ingredients[i])) do
+									sameGroup = minetest.get_item_group(itemName, group) > 0
+								end
+							end
+							
+							if sameGroup then
+								if not childs then childs = {} end
+								if not contains(childs, name) then
+									table.insert(childs, name)
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+	return childs
+end
+
+minetest.register_chatcommand(
+	"qitem",
+	{
+		params = "item name",
+		description = "Get item properties.",
+		func = function(name, param)
+			if not param then param = "all" end
+			local params = string.split(param, " ")
+			if params[1] == "quests" then
+				minetest.chat_send_player(name, print_questTrees("", sys4_quests.questTrees))
+			end
+
+			local minetestItems = sys4_quests.MinetestItems()
+
+			for name, item in pairs(minetest.registered_items) do
+				if check_item(name) then
+					minetestItems:add(item, get_item_childs(name))
+				end
+			end
+			
+			for i, item in pairs(minetestItems:get_items()) do
+				if params[1] == "all" then
+					if params[2] then
+						if params[2] == "recipes" then
+							local recipes = item:get_recipes(params[3])
+							if recipes then
+								minetest.chat_send_player(name, "Recipes of "..item:get_name().." : "..dump(recipes))
+							end
+						elseif params[2] == "diggable" then
+							local itemTool = minetestItems:get_item(params[3])
+							if item:is_diggable_by(itemTool) then
+								minetest.chat_send_player(name, item:get_name())
+							end
+						else
+							local field = get_itemdef_field(item:get_name(), params[2], params[3])
+							if field then
+								minetest.chat_send_player(name, item:get_name()..": "..params[2].." = "..dump(field))
+							end
+						end
+					else
+						minetest.chat_send_player(name, dump(item:get_def()))
+					end
+				elseif params[1] == item:get_name() then
+					if params[2] then
+						if params[2] == "recipes" then
+							local recipes = item:get_recipes(params[3])
+							if recipes then
+								minetest.chat_send_player(name, "Recipes of "..item:get_name().." : "..dump(recipes))
+							end
+						elseif params[2] == "childs" then
+							local childs = item:get_childs()
+							if childs then
+								minetest.chat_send_player(name, "Childs of ingredient "..item:get_name()..": "..dump(childs))
+							end
+						else
+							local field = get_itemdef_field(item:get_name(), params[2])
+							if field then
+								minetest.chat_send_player(name, dump(field))
+							else
+								minetest.chat_send_player(name, "Field unknown !")
+							end
+						end
+					else
+						minetest.chat_send_player(name, dump(item:get_def()))
+					end
+					break
+				end
+			end
 		end
 })
 
