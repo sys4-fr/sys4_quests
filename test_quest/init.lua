@@ -61,6 +61,11 @@ setparent("default_bronzeblock_quest", "default_bronze_ingot_quest")
 setparent("default_chest_quest", "default_steel_ingot_quest")
 setparent("default_snow_quest", nil)
 setparent("default_snowblock_quest", "default_snow_quest")
+setparent("default_steel_ingot_quest", "default_iron_lump_quest")
+setparent("default_steelblock_quest", "default_steel_ingot_quest")
+setparent("default_copper_ingot_quest", "default_copper_lump_quest")
+setparent("default_copperblock_quest", "default_copper_ingot_quest")
+setparent("default_mese_crystal_fragment_quest", "default_mese_crystal_quest")
 
 -- correction of type action
 
@@ -74,6 +79,7 @@ setaction("default_obsidian_quest", "dig")
 setaction("default_mese_crystal_quest", "dig")
 
 -- farming
+local redo = farming.mod and farming.mod == "redo"
 quests = init("farming", S, auto)
 setparent("farming_wheat_quest", "group_stick_quest")
 setaction("farming_wheat_quest", "dig")
@@ -89,6 +95,30 @@ ins(quests, {
 		 {"group_stick_quest"},
 		 type = "dig"
 })
+
+if redo then
+	setaction("farming_pumpkin_quest", "dig")
+	setaction("farming_melon_slice_quest", "dig")
+	
+	setparent("farming_carrot_quest", "default_gold_lump_quest")
+	setparent("farming_rhubarb_quest", "farming_wheat_quest")
+	setparent("farming_potato_quest", "group_stone_quest")
+	setparent("farming_pumpkin_quest", "group_stick_quest")
+	setparent("farming_barley_quest", "group_stick_quest")
+	setparent("farming_blueberries_quest", "farming_bread_quest")
+	setparent("farming_melon_slice_quest", "group_stick_quest")
+end
+
+-- vessels
+add_itemGroup("vessel")
+init("vessels", S, auto)
+setaction("group_vessel_quest", "craft")
+if redo then
+	setparent("farming_corn_quest", "group_vessel_quest")
+	setparent("farming_raspberries_quest", "group_vessel_quest")
+	setparent("farming_coffee_beans_quest", "group_vessel_quest")
+	setparent("farming_drinking_cup_quest", "farming_coffee_beans_quest")
+end
 
 -- boats
 init("boats", S, auto)
