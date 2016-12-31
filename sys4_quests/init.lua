@@ -846,8 +846,15 @@ local function print_questTrees2(str, questTrees)
 
 	if questTrees then
 		for i, quest in ipairs(questTrees) do
-			
-			output = output..str..quest.quest[1].." ["..quest.quest.type.."]\n"
+			local items = quest.quest[6]
+			output = output..str..quest.quest[1].." ["..quest.quest.type.."] - unlock {"
+			if items then
+				for i, item in ipairs(items) do
+					output = output..item
+					if i < #items then output = output.."," end
+				end
+			end
+			output = output.."}\n"
 			output = output..print_questTrees2(str, quest.childs)
 		end
 	end
@@ -858,7 +865,7 @@ end
 minetest.register_chatcommand(
 	"questree",
 	{
-		params = "[all|raw|quest_name]",
+		params = "[ all | raw | quest_name ]",
 		description = "display quests tree.",
 		func = function(name, param)
 			local params = string.split(param, " ")
@@ -875,6 +882,23 @@ minetest.register_chatcommand(
 				minetest.chat_send_player(name, print_questTrees("", sys4_quests.questTrees))
 			else
 				minetest.chat_send_player(name, print_questTrees2("", questTrees))
+			end
+		end
+})
+
+minetest.register_chatcommand(
+	"qitem",
+	{
+		params = "item_name",
+		description = "display item properties.",
+		func = function(name, param)
+			local params = string.split(param, " ")
+			local item_name = params[1]
+			if item_name then
+				local item = minetest.registered_items[item_name]
+				if item then
+					minetest.chat_send_player(name, dump(item))
+				end
 			end
 		end
 })
