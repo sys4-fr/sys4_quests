@@ -840,32 +840,50 @@ local function get_registered_questTrees(parent)
 	return questTrees
 end
 	
-local function print_questTrees2(str, questTrees)
-	local str = str.."==> "
+local function print_questTrees2(str, questTrees, verbose)
+	local str = str.."=> "
 	local output = ""
 
 	if questTrees then
 		for i, quest in ipairs(questTrees) do
-			local items = quest.quest[6]
-			output = output..str..quest.quest[1].." ["..quest.quest.type.."] - unlock {"
-			if items then
-				for i, item in ipairs(items) do
-					output = output..item
-					if i < #items then output = output.."," end
+			output = output..str..quest.quest[1].." ["..quest.quest.type
+
+			if verbose then
+				local itemTargets = quest.quest[4]
+				if itemTargets then
+					output = output..": "
+					for i, item in ipairs(itemTargets) do
+						output = output..item
+						if i < #itemTargets then output = output.."," end
+					end
 				end
 			end
-			output = output.."}\n"
-			output = output..print_questTrees2(str, quest.childs)
+			output = output.."]"
+
+			if verbose then
+				local items = quest.quest[6]
+				
+				if items then
+					output = output.." - unlock {"
+					for i, item in ipairs(items) do
+						output = output..item
+						if i < #items then output = output.."," end
+					end
+					output = output.."}"
+				end
+			end
+			output = output.."\n"
+			output = output..print_questTrees2(str, quest.childs, verbose)
 		end
 	end
-
+	
 	return output
 end
 
 minetest.register_chatcommand(
 	"questree",
 	{
-		params = "[ all | raw | quest_name ]",
+		params = "[ all | raw | quest_name ] [ verbose ]",
 		description = "display quests tree.",
 		func = function(name, param)
 			local params = string.split(param, " ")
@@ -881,7 +899,7 @@ minetest.register_chatcommand(
 			if quest_name == "raw" then
 				minetest.chat_send_player(name, print_questTrees("", sys4_quests.questTrees))
 			else
-				minetest.chat_send_player(name, print_questTrees2("", questTrees))
+				minetest.chat_send_player(name, print_questTrees2("", questTrees, params[2] == "verbose"))
 			end
 		end
 })
