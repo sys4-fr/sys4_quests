@@ -562,6 +562,7 @@ function sys4_quests.nextQuest(playername, questname)
 end
 
 -- functions to use for make quests
+
 function sys4_quests.initQuests(mod, intllib, auto)
 	if not intllib then
 		intllib = S

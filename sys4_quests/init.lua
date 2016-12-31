@@ -236,9 +236,11 @@ minetest.register_on_newplayer(
 	function(player)
 		local playern = player:get_player_name()
 		local firstQuestGroup = get_first_questGroup()
-		if firstQuestGroup == nil then
+		if not firstQuestGroup then
 			firstQuestGroup = 'global'
 		end
+
+		-- add new player properties
 		sys4_quests.playerList[playern] = {
 			name = playern,
 			isNew = true,
@@ -297,29 +299,30 @@ minetest.register_on_joinplayer(
 
 minetest.register_on_dignode(
 	function(pos, oldnode, digger)
-		if digger ~= nil then
-			local playern = digger:get_player_name()
-			local playerList = sys4_quests.playerList
-			for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
-				for _, registeredQuest in ipairs(registeredQuests.quests) do
-					local questName = registeredQuest[1]
-					local type = registeredQuest.type
-
-					if type == "dig" and is_items_equivalent(registeredQuest[4], oldnode.name) then
-						if quests.update_quest(playern, "sys4_quests:"..questName, 1) then
-							minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
-							if playerList[playern].bookMode then
-								give_book(playern, questName)
-							end
-						end
+		if not digger then return end
+		local playern = digger:get_player_name()
+		local playerList = sys4_quests.playerList
+		for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
+			for _, registeredQuest in ipairs(registeredQuests.quests) do
+				local questName = registeredQuest[1]
+				local questType = registeredQuest.type
+				
+				if questType == "dig"
+					and is_items_equivalent(registeredQuest[4], oldnode.name)
+					and quests.update_quest(playern, "sys4_quests:"..questName, 1)
+				then
+					minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
+					if playerList[playern].bookMode then
+						give_book(playern, questName)
 					end
 				end
 			end
 		end
-	end)
+end)
 
 minetest.register_on_craft(
 	function(itemstack, player, old_craft_grid, craft_inv)
+		if not player then return end
 		local playern = player:get_player_name()
 		local playerList = sys4_quests.playerList
 
@@ -333,13 +336,15 @@ minetest.register_on_craft(
 				local questName = registeredQuest[1]
 				local items = registeredQuest[6]
 
-				if (item == itemstackName or is_items_equivalent(items, itemstackName))
-					and quests.successfull_quests[playern] ~= nil
-					and quests.successfull_quests[playern]["sys4_quests:"..questName ] ~= nil
+				if is_items_equivalent(items, itemstackName)
+					and quests.successfull_quests[playern]
+					and quests.successfull_quests[playern]["sys4_quests:"..questName]
 				then
 					wasteItem = nil
+					break
 				end
 			end
+			if not wasteItem then break end
 		end
 		
 		for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
@@ -347,7 +352,7 @@ minetest.register_on_craft(
 				local questType = registeredQuest.type
 				local questName = registeredQuest[1]
 
-				if questType == "craft" and wasteItem == nil
+				if questType == "craft" and not wasteItem
 				and is_items_equivalent(registeredQuest[4], itemstackName) then 
 					
 					if quests.update_quest(playern, "sys4_quests:"..questName, itemstackCount) then
@@ -360,9 +365,7 @@ minetest.register_on_craft(
 			end
 		end
 
-		if wasteItem == nil then
-			return wasteItem
-		elseif not playerList[playern].craftMode then
+		if not wasteItem or not playerList[playern].craftmode then
 			return nil
 		else
 			return ItemStack(wasteItem)
@@ -370,6 +373,8 @@ minetest.register_on_craft(
 	end)
 
 local function register_on_placenode(pos, node, placer)
+	if not placer then return end
+	
 	local playern = placer:get_player_name()
 	local playerList = sys4_quests.playerList
 
@@ -859,6 +864,7 @@ minetest.register_chatcommand(
 			local params = string.split(param, " ")
 			local quest_name = params[1]
 			local questTrees
+
 			if quest_name == "all" then
 				questTrees = get_registered_questTrees(nil)
 			elseif quest_name ~= "raw" then
