@@ -57,7 +57,7 @@ end
 
 function sys4_quests.Quest:get_targetCount()
 	local itemTarget = self:get_item()
-	local count = 9
+	local count = 6
 	if itemTarget:has_childs() then
 		local itemChilds = {}
 		for i, itemChild in ipairs(itemTarget:get_childs()) do

@@ -215,23 +215,29 @@ local function get_modItems(mod)
 	return modItems
 end
 
-local function get_itemTarget(itemName)
+local function get_itemTargets(itemName)
 	if string.split(itemName, ":")[1] ~= "group" then
+		local itemTargets = {}
 		for name, item in pairs(minetest.registered_items) do
 			local itemTarget = item.drop
 			if itemTarget then
-				if type(itemTarget) == "table"  then
-					for i=1, #itemTarget do
-						local itemTarget_str = string.split(itemTarget[i], " ")[1]
-						if itemTarget_str == itemName then return item.name end
+				if itemTarget.items then
+					for i=1, #itemTarget.items do
+						if #itemTarget.items[i].items then
+							for j=1, #itemTarget.items[i].items do
+								local itemTarget_str = string.split(itemTarget.items[i].items[j], " ")[1]
+								if itemTarget_str == itemName then table.insert(itemTargets, item.name) end
+							end
+						end
 					end
 				elseif string.split(itemTarget, " ")[1] == itemName then
-					return item.name
+					table.insert(itemTargets, item.name)
 				end
 			end
 		end
-	end
-	return itemName
+		if #itemTargets == 0 then table.insert(itemTargets, itemName) end
+		return itemTargets
+	else return {itemName} end
 end
 
 local function make_quests(mod, questTrees, parentQuest)
@@ -244,7 +250,7 @@ local function make_quests(mod, questTrees, parentQuest)
 			local questName = quest:get_name()
 			local questTitle = questName -- Titre par défaut, devrait être changé
 			local questDescription = nil -- Peut être changé
-			local itemTarget = get_itemTarget(quest:get_item():get_name())
+			local itemTarget = get_itemTargets(quest:get_item():get_name())
 			local targetCount = quest:get_targetCount()
 			local items_to_unlock = quest:get_item():get_childs()
 			local action = quest:get_action()
@@ -253,7 +259,7 @@ local function make_quests(mod, questTrees, parentQuest)
 							 { questName,
 								questTitle,
 								questDescription,
-								{itemTarget},
+								itemTarget,
 								targetCount,
 								items_to_unlock,
 								{parentQuest},
@@ -332,6 +338,7 @@ local function make_auto_quests(mod, intllib)
 end
 
 local function intllib_by_item(item)
+	print("DEBUGGGG ::::::: "..item)
 	local mod = string.split(item, ":")[1]
 	if mod == "stairs" or mod == "group" then
 		for questsMod, registeredQuests in pairs(sys4_quests.registeredQuests) do

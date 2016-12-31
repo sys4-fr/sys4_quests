@@ -91,7 +91,7 @@ ins(quests, {
 		  "farming:cotton_4","farming:cotton_5","farming:cotton_6",
 		  "farming:cotton_7","farming:cotton_8"},
 		 1,
-		 {"group:wool"},
+		 {"wool:white"},
 		 {"group_stick_quest"},
 		 type = "dig"
 })
