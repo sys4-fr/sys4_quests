@@ -232,6 +232,49 @@ local function is_questSuccessfull(questName, playern)
 	return quests.successfull_quests[playern]	and quests.successfull_quests[playern]["sys4_quests:"..questName]
 end
 
+local function get_registered_questTrees(parent)
+	local questTrees = nil
+
+	if not parent then
+		for mod, registeredQuest in pairs(sys4_quests.registeredQuests) do
+			for _, quest in ipairs(registeredQuest.quests) do
+				if not quest[7] or #quest[7] == 0 then
+					if not questTrees then questTrees = {} end
+					local questTree = { quest = quest,
+											  childs = get_registered_questTrees(quest[1])
+					}
+					table.insert(questTrees, questTree)
+				end
+			end
+		end
+	else
+		for mod, registeredQuest in pairs(sys4_quests.registeredQuests) do
+			for _, quest in ipairs(registeredQuest.quests) do
+				if quest[7] and (quest[7] == parent or quest[7][1] == parent) then
+					if not questTrees then questTrees = {} end
+					local questTree = { quest = quest,
+											  childs = get_registered_questTrees(quest[1])
+					}
+					table.insert(questTrees, questTree)
+				end
+			end
+		end
+	end
+
+	return questTrees
+end
+
+local function build_questList(list, quests)
+	for i, quest in ipairs(quests) do
+		table.insert(list, quest.quest)
+		if quest.childs then
+			list = build_questList(list, quest.childs)
+		end
+	end
+
+	return list
+end
+
 minetest.register_on_newplayer(
 	function(player)
 		local playern = player:get_player_name()
@@ -294,6 +337,18 @@ minetest.register_on_joinplayer(
 			
 			playerList[playern].isNew = false
 		end
+
+		if minetest.get_modpath("progress_tree") then
+			local quests = build_questList({}, get_registered_questTrees(nil))
+			for _,quest in ipairs(quests) do
+				local parents = {}
+				if quest[7] and type(quest[7]) == "table" then parents = quest[7] end
+				if quest[7] and type(quest[7]) == "string" then parents = {quest[7]} end
+				sys4_quests.progressTree:add(quest[1], parents)
+			end
+
+			playerList[playern].progress_data = progress_tree.new_player_data(sys4_quests.progressTree, {"group_tree_quest"})
+		end
 	end)
 
 
@@ -323,6 +378,11 @@ end)
 minetest.register_on_craft(
 	function(itemstack, player, old_craft_grid, craft_inv)
 		if not player then return end
+
+		if itemstack:get_name() == "sys4_quests:test_book" then
+			return nil
+		end
+		
 		local playern = player:get_player_name()
 		local playerList = sys4_quests.playerList
 
@@ -336,15 +396,18 @@ minetest.register_on_craft(
 				local questName = registeredQuest[1]
 				local items = registeredQuest[6]
 
-				if is_items_equivalent(items, itemstackName)
-					and quests.successfull_quests[playern]
-					and quests.successfull_quests[playern]["sys4_quests:"..questName]
-				then
-					wasteItem = nil
-					break
+				for _, item in ipairs(items) do
+					
+					if item == itemstackName 
+						and quests.successfull_quests[playern]
+						and quests.successfull_quests[playern]["sys4_quests:"..questName]
+					then
+						wasteItem = nil
+						break
+					end
 				end
+				if not wasteItem then break end
 			end
-			if not wasteItem then break end
 		end
 		
 		for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
@@ -365,7 +428,7 @@ minetest.register_on_craft(
 			end
 		end
 
-		if not wasteItem or not playerList[playern].craftmode then
+		if not wasteItem or not playerList[playern].craftMode then
 			return nil
 		else
 			return ItemStack(wasteItem)
@@ -808,38 +871,6 @@ local function print_questTrees(str, questTrees)
 	return output
 end
 
-local function get_registered_questTrees(parent)
-	local questTrees = nil
-
-	if not parent then
-		for mod, registeredQuest in pairs(sys4_quests.registeredQuests) do
-			for _, quest in ipairs(registeredQuest.quests) do
-				if not quest[7] or #quest[7] == 0 then
-					if not questTrees then questTrees = {} end
-					local questTree = { quest = quest,
-											  childs = get_registered_questTrees(quest[1])
-					}
-					table.insert(questTrees, questTree)
-				end
-			end
-		end
-	else
-		for mod, registeredQuest in pairs(sys4_quests.registeredQuests) do
-			for _, quest in ipairs(registeredQuest.quests) do
-				if quest[7] and quest[7][1] == parent then
-					if not questTrees then questTrees = {} end
-					local questTree = { quest = quest,
-											  childs = get_registered_questTrees(quest[1])
-					}
-					table.insert(questTrees, questTree)
-				end
-			end
-		end
-	end
-
-	return questTrees
-end
-	
 local function print_questTrees2(str, questTrees, verbose)
 	local str = str.."=> "
 	local output = ""
@@ -904,6 +935,24 @@ minetest.register_chatcommand(
 		end
 })
 
+local function get_itemDef(itemName, questTree)
+	local def = nil
+	for i, quest in ipairs(questTree) do
+		if quest:get_quest():get_item():get_name() == itemName then
+			def = quest:get_quest():get_item():get_def()
+		else
+			local childs = quest:get_quest():get_questTrees()
+			if childs then
+				def = get_itemDef(itemName, childs)
+			end
+		end
+		
+		if def then break end
+	end
+	
+	return def
+end
+
 minetest.register_chatcommand(
 	"qitem",
 	{
@@ -916,7 +965,123 @@ minetest.register_chatcommand(
 				local item = minetest.registered_items[item_name]
 				if item then
 					minetest.chat_send_player(name, dump(item))
+				else
+					minetest.chat_send_player(name, dump(get_itemDef(item_name, sys4_quests.questTrees)))
 				end
 			end
 		end
 })
+
+-- progress_tree mod support test
+if minetest.get_modpath("progress_tree") then
+	sys4_quests.progressTree = progress_tree.new_tree()
+
+	local function get_itemTexture(itemName, questTree)
+		local texture_field = nil
+		if not questTree then return nil end
+		
+		for i, quest in ipairs(questTree) do
+			if quest:get_quest():get_item():get_name() == itemName then
+				local item = quest:get_quest():get_item()
+				texture_field = item:get_def().inventory_image
+				if not texture_field or texture_field == ""  then
+					texture_field = item:get_def()["tiles"][1]
+				end
+			else
+				local childs = quest:get_quest():get_questTrees()
+				if childs then
+					texture_field = get_itemTexture(itemName, childs)
+				end
+			end
+
+			if texture_field then break end
+		end
+		
+		return texture_field
+	end
+
+	local function build_infos(infos, x, y, quests)
+		for i=1, #quests do
+			local texture = get_itemTexture(quests[i].quest[4][1], sys4_quests.questTrees)
+			if not texture then texture = "waste.png" end
+			infos[quests[i].quest[1]] = {x=x, y=y, texture=texture, desc=quests[i].quest[2]}
+			if quests[i].childs then
+				infos = build_infos(infos, x, y+1, quests[i].childs)
+			end
+			x = x + 1
+		end
+
+		return infos
+	end
+	
+	local function build_formspec(playern)
+		local infos = build_infos({}, 0, 0, get_registered_questTrees(nil))
+		local formspec = "size[20,10]"
+		local nodes = {}
+		local playerList = sys4_quests.playerList
+		local data = playerList[playern].progress_data
+		
+		for k in pairs(data.learned) do
+			local info = infos[k]
+			local texture = info.texture .. "^progress_tree_check.png^[colorize:#00FF00:50"
+			local fs = "image_button[" .. info.x .. "," .. info.y .. ";1,1;"
+				.. minetest.formspec_escape(texture) .. ";" .. k .. ";]"
+			local tooltip = "tooltip[" .. k .. ";" .. info.desc .. "]"
+			table.insert(nodes, fs)
+			table.insert(nodes, tooltip)
+		end
+		
+		for k in pairs(data.available) do
+			local info = infos[k]
+			local fs = "image_button[" .. info.x .. "," .. info.y .. ";1,1;" .. info.texture
+				.. ";" .. k .. ";]"
+			local tooltip = "tooltip[" .. k .. ";" .. info.desc .. "]"
+			table.insert(nodes, fs)
+			table.insert(nodes, tooltip)
+		end
+		
+		formspec = formspec .. table.concat(nodes)
+		
+		return formspec
+	end
+	
+	
+	local function show(player)
+		minetest.show_formspec(player:get_player_name(), "sys4_quests:test", build_formspec(player:get_player_name()))
+	end
+	
+	
+	minetest.register_on_player_receive_fields(function(player, formname, fields)
+			if formname ~= "sys4_quests:test" then return end
+
+			local data = sys4_quests.playerList[player:get_player_name()].progress_data
+			for node in pairs(data.available) do
+				if fields[node] then
+					data:learn(node)
+				end
+			end
+			
+			if not fields["quit"] then
+				show(player)
+			end
+	end)
+		
+	minetest.register_craftitem("sys4_quests:test_book", {
+											 description = "Ultimate Techs",
+											 groups = { not_in_creative_inventory = 1 },
+											 inventory_image = "default_book.png",
+											 
+											 on_use = function(itemstack, player)
+												 show(player)
+											 end,
+	})
+
+	minetest.register_craft({
+			output = "sys4_quests:test_book",
+			recipe = {
+				{"sys4_quests:waste"}
+			}
+	})
+				
+	
+end

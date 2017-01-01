@@ -112,7 +112,7 @@ and minetest.get_modpath("thirsty") then
 			{"default:bronze_ingot"},
 			1,
 			{mod..":bronze_canteen"},
-			{"water_drinker", "bronze_crafter_pro"},
+			{"bronze_crafter_pro", "water_drinker"},
 			type = t
 		})
 
@@ -157,7 +157,7 @@ and minetest.get_modpath("thirsty") then
 			{"bucket:bucket_empty"},
 			1,
 			{mod..":extractor"},
-			{"water_tools_crafter_lover", "mese_digger_pro", "diamond_digger_pro"},
+			{"diamond_digger_pro", "mese_digger_pro", "water_tools_crafter_lover"},
 			type = t,
 			custom_level = true
 		})

@@ -8,6 +8,7 @@ end
 -- Make local shortcuts of tool functions --
 local ins = table.insert
 local update = sys4_quests.updateQuest
+local replace = sys4_quests.replace_quest
 local setparent = sys4_quests.set_parent_quest
 local setaction = sys4_quests.set_action_quest
 local add_itemGroup = sys4_quests.add_itemGroup
@@ -82,6 +83,7 @@ setaction("default_mese_crystal_quest", "dig")
 local redo = farming.mod and farming.mod == "redo"
 quests = init("farming", S, auto)
 setparent("farming_wheat_quest", "group_stick_quest")
+setparent("farming_straw_quest", "farming_wheat_quest")
 setaction("farming_wheat_quest", "dig")
 ins(quests, {
 		 "farming_cotton_quest",

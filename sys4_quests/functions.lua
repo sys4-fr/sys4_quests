@@ -15,6 +15,18 @@ function sys4_quests.get_quest(questName)
 	return nil
 end
 
+function sys4_quests.replace_quest(quest)
+	if quest[1] then
+		for _, quests in pairs(sys4_quests.registeredQuests) do
+			for _, currentQuest in ipairs(quests.quests) do
+				if currentQuest[1] == quest[1] then
+					currentQuest = quest
+				end
+			end
+		end
+	end
+end
+
 local function is_questActive(questName, playern)
 	return quests.active_quests[playern] and quests.active_quests[playern]["sys4_quests:"..questName]
 end
@@ -279,7 +291,6 @@ local function make_quests(mod, questTrees, parentQuest)
 end
 
 local function make_auto_quests(mod, intllib)
-	print("MOD : "..mod)
 	local modItems = get_modItems(mod)
 	if modItems then
 		
@@ -327,9 +338,6 @@ local function make_auto_quests(mod, intllib)
 			questTrees = rebuild_questTrees(questTrees)
 			loop = loop + 1
 		end
-		print("rebuild_questTrees loop:"..loop)
-		print("questTrees length: "..#questTrees)
-		print("RootQuest length: "..#rootQuests)
 
 		-- remplissage des quêtes à enregistrer
 		sys4_quests.registeredQuests[mod].quests = make_quests(mod, questTrees, nil)
@@ -338,7 +346,6 @@ local function make_auto_quests(mod, intllib)
 end
 
 local function intllib_by_item(item)
-	print("DEBUGGGG ::::::: "..item)
 	local mod = string.split(item, ":")[1]
 	if mod == "stairs" or mod == "group" then
 		for questsMod, registeredQuests in pairs(sys4_quests.registeredQuests) do
@@ -708,7 +715,7 @@ local function get_questGraph(parent)
 	else
 		for mod, registeredQuest in pairs(sys4_quests.registeredQuests) do
 			for _, quest in ipairs(registeredQuest.quests) do
-				if quest[7] and quest[7][1] == parent then
+				if quest[7] and (quest[7] == parent or quest[7][1] == parent) then
 					if not questTrees then questTrees = {} end
 					local questTree = { quest = quest,
 											  childs = get_questGraph(quest[1])

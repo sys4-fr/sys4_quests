@@ -116,7 +116,7 @@ and minetest.get_modpath("moreblocks") then
 			{"default:copperblock"},
 			1,
 			{mod..":copperpatina"},
-			{"copper_digger", "iron_digger_pro"},
+			{"iron_digger_pro", "copper_digger"},
 			type = t,
 			group = metal
 		})
@@ -131,7 +131,7 @@ and minetest.get_modpath("moreblocks") then
 			{mod..":glow_glass"},
 			1,
 			{mod..":trap_glow_glass"},
-			{"torch_placer", "mese_digger"},
+			{"mese_digger", "torch_placer"},
 			type = t
 		})
 
@@ -145,7 +145,7 @@ and minetest.get_modpath("moreblocks") then
 			{mod..":super_glow_glass"},
 			1,
 			{mod..":trap_super_glow_glass"},
-			{"glow_glass_builder", "mese_digger"},
+			{"mese_digger", "glow_glass_builder"},
 			type = t
 		})
 
@@ -189,7 +189,7 @@ and minetest.get_modpath("moreblocks") then
 			{"default:torch"},
 			1,
 			{mod..":glow_glass"},
-			{"coal_digger", "furnace_crafter"},
+			{"furnace_crafter", "coal_digger"},
 			type = t
 		})
 

@@ -8,6 +8,7 @@ end
 -- Make local shortcuts of global functions --
 local ins = table.insert
 local up = sys4_quests.updateQuest
+local add_questGroup = sys4_quests.add_questGroup
 
 ---------- Quests for default mod ----------
 local mod = "default"
@@ -19,13 +20,11 @@ local farm = "Farming Age"
 local stone = "Stone Age"
 local metal = "Metal Age"
 local middle = "Middle Age"
+local questGroups = {dark, wood, farm, stone, metal, middle}
 
-sys4_quests.addQuestGroup(dark)
-sys4_quests.addQuestGroup(wood)
-sys4_quests.addQuestGroup(farm)
-sys4_quests.addQuestGroup(stone)
-sys4_quests.addQuestGroup(metal)
-sys4_quests.addQuestGroup(middle)
+for i=1, #questGroups do
+	add_questGroup(questGroups[i])
+end
 
 -- Get variable for register quests
 local quests = sys4_quests.initQuests(mod, S)
@@ -793,7 +792,7 @@ ins(
 		{mod..":sword_wood", mod..":axe_wood", mod..":shovel_wood"},
 		3,
 		{mod..":pick_wood"},
-		{"wood_crafter_lover", "sticks_crafter_lover"},
+		{"sticks_crafter_lover", "wood_crafter_lover"},
 		type = t,
 		group = wood,
 		custom_level = true
