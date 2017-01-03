@@ -23,7 +23,7 @@ sys4_quests.intllib = S
 sys4_quests.questGroups = {}
 sys4_quests.questGroups['global'] = {order = 1, questsIndex = {}}
 sys4_quests.itemGroups = {}
-sys4_quests.level = 6
+sys4_quests.level = 2
 
 -- init classes
 dofile(modpath.."/item_class.lua")
@@ -1004,7 +1004,7 @@ if minetest.get_modpath("progress_tree") then
 		for i=1, #quests do
 			local texture = get_itemTexture(quests[i].quest[4][1], sys4_quests.questTrees)
 			if not texture then texture = "waste.png" end
-			infos[quests[i].quest[1]] = {x=x, y=y, texture=texture, desc=quests[i].quest[2]}
+			infos[quests[i].quest[1]] = {x=x, y=y, texture=texture, desc=quests[i].quest[2].."\n"..quests[i].quest.type.." "..dump(quests[i].quest[4]).."\nUnlock: "..dump(quests[i].quest[6])}
 			if quests[i].childs then
 				infos = build_infos(infos, x, y+1, quests[i].childs)
 			end

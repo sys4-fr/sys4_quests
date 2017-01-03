@@ -111,6 +111,29 @@ local function get_groups(itemName)
 	end
 end
 
+local function is_diggable_by(itemName, itemTool)
+	if itemTool then
+		local item = minetest.registered_items[itemTool]
+		if item.tool_capabilities then
+			local toolGroup = item.tool_capabilities.groupcaps
+			local group = nil
+			if toolGroup.cracky then
+				group = "cracky"
+			elseif toolGroup.choppy then
+				group = "choppy"
+			elseif toolGroup.crumbly then
+				group = "crumbly"
+			elseif toolGroup.snappy then
+				group = "snappy"
+			end
+
+			if toolGroup[group].times[minetest.get_item_group(itemName, group)]
+			then return true
+			else return false	end
+		else return false	end
+	else return false end
+end
+
 local function get_itemChilds(itemName, mod)
 	local childs = nil
 	for name, _ in pairs(minetest.registered_items) do
@@ -164,7 +187,15 @@ end
 
 local function add_itemChilds(questTrees, mod)
 	for i=1, #questTrees do
+		local dbg = (questTrees[i]:get_quest():get_name() == "default_glass_quest" and mod == "vessels")
+		or (questTrees[i]:get_quest():get_name() == "group_stick_quest" and mod == "farming")
+		if dbg then
+			print("Add itemChilds Mod : "..mod)
+		end
 		local itemChilds = get_itemChilds(questTrees[i]:get_quest():get_item():get_name(), mod)
+		if dbg then
+			print("dump :"..dump(itemChilds))
+		end
 		if itemChilds then
 			questTrees[i]:get_quest():get_item():add_childs(itemChilds)
 		end
@@ -176,15 +207,102 @@ local function add_itemChilds(questTrees, mod)
 	end
 end
 
+local function get_minimum_tool_item(item)
+	local deb = item:get_name() == "default:iron_lump"
+	
+	if item:is_hand_diggable() then return nil end
+
+	if deb then print("Is Not hand_diggable !!!") end
+	
+	local tool_shovel = item:get_def().groups.crumbly
+	local tool_axe = item:get_def().groups.choppy
+	local tool_pick = item:get_def().groups.cracky
+	local tool_sword = item:get_def().groups.snappy
+
+	local tool_level = 0
+	local tool_type
+	if tool_axe then tool_level = tool_axe; tool_type = "choppy"
+	elseif tool_shovel then tool_level = tool_shovel; tool_type = "crumbly"
+	elseif tool_pick then tool_level = tool_pick; tool_type = "cracky"
+	elseif tool_sword then tool_level = tool_sword; tool_type = "snappy"
+	else return nil end
+
+	if deb then print("Tool Type : "..tool_type) end
+
+	local tools_found = {}
+	for name, rItem in pairs(minetest.registered_items) do
+		local tool_item  = sys4_quests.MinetestItem(rItem, nil)
+		if tool_item:is_tool() then
+			if deb then print("get tool : "..tool_item:get_name()) end
+			if item:is_diggable_by(tool_item) then
+				if deb then print(item:get_name().." is diggable by "..tool_item:get_name()) end
+				table.insert(tools_found, tool_item)
+			end
+		end
+	end
+
+	if deb then print("Tools found : "..#tools_found) end
+
+	local minimal_tool = nil
+	for i, tool in ipairs(tools_found) do
+		if not minimal_tool then
+			minimal_tool = tool
+		elseif tool:get_field("tool_capabilities").groupcaps[tool_type] and minimal_tool:get_field("tool_capabilities").groupcaps[tool_type]
+			and minimal_tool:get_field("tool_capabilities").groupcaps[tool_type].times[tool_level] <= tool:get_field("tool_capabilities").groupcaps[tool_type].times[tool_level]
+		then
+			minimal_tool = tool
+		end
+	end
+
+	return minimal_tool
+end
+
 local function rebuild_questTrees(questTrees)
 	local newQuestTrees = {}
 
 	for i=1, #questTrees do
 		local treeToMove = questTrees[i]
 		local isAdded = false
+
+		local treeMove_item = treeToMove:get_quest():get_item()
+		local item_targets = treeToMove:get_quest():get_target_items()
+		local tool_item = nil
+		if item_targets then
+			for _, target in ipairs(item_targets) do
+				if target ~= treeMove_item:get_name() and not tool_item and string.split(target, ":")[1] ~= "group" then
+					print("TARGET :"..target.." of "..treeMove_item:get_name())
+					tool_item = get_minimum_tool_item(sys4_quests.MinetestItem(minetest.registered_items[target], nil))
+					break
+				end
+			end
+		end
+		
+		--if not tool_item then
+		--	tool_item = get_minimum_tool_item(treeMove_item)
+		--end
+		
 		for j=i, #questTrees do
-			if j ~= i then
-				local currentTree = questTrees[j]:get_tree_with_item_child(treeToMove:get_quest():get_item():get_name())
+			if j ~= i then		
+				local currentTree = nil
+				if tool_item then
+					currentTree = questTrees[j]:get_last_tree_with_item_child(tool_item:get_name())
+				else
+					currentTree = questTrees[j]:get_tree_with_item_child(treeMove_item:get_name())
+					--currentTree = questTrees[j]:get_last_tree_with_item_child(treeMove_item:get_name())
+				end
+				
+				--DEBUG
+				if treeMove_item:get_name() == "default:iron_lump" then
+					print("TreeToMove Item : "..treeMove_item:get_name())
+					local tool_str = "nil"
+					local tree_str = "nil"
+					if tool_item then tool_str = tool_item:get_name() end
+					if currentTree then tree_str = currentTree:get_quest():get_name() end
+					print("Tool Item : "..tool_str)
+					print("CurrentTree : "..tree_str)
+				end
+				--
+				
 				if currentTree	then
 					currentTree:add(treeToMove)
 					isAdded = true
@@ -194,7 +312,14 @@ local function rebuild_questTrees(questTrees)
 		end
 		if not isAdded then
 			for k=1, #newQuestTrees do
-				local currentTree = newQuestTrees[k]:get_tree_with_item_child(treeToMove:get_quest():get_item():get_name())
+				local currentTree = nil
+				if tool_item then
+					currentTree = newQuestTrees[k]:get_last_tree_with_item_child(tool_item:get_name())
+				else
+					currentTree = newQuestTrees[k]:get_tree_with_item_child(treeMove_item:get_name())
+					--currentTree = newQuestTrees[k]:get_last_tree_with_item_child(treeMove_item:get_name())
+				end
+
 				if currentTree then
 					currentTree:add(treeToMove)
 					isAdded = true
@@ -227,31 +352,6 @@ local function get_modItems(mod)
 	return modItems
 end
 
-local function get_itemTargets(itemName)
-	if string.split(itemName, ":")[1] ~= "group" then
-		local itemTargets = {}
-		for name, item in pairs(minetest.registered_items) do
-			local itemTarget = item.drop
-			if itemTarget then
-				if itemTarget.items then
-					for i=1, #itemTarget.items do
-						if #itemTarget.items[i].items then
-							for j=1, #itemTarget.items[i].items do
-								local itemTarget_str = string.split(itemTarget.items[i].items[j], " ")[1]
-								if itemTarget_str == itemName then table.insert(itemTargets, item.name) end
-							end
-						end
-					end
-				elseif string.split(itemTarget, " ")[1] == itemName then
-					table.insert(itemTargets, item.name)
-				end
-			end
-		end
-		if #itemTargets == 0 then table.insert(itemTargets, itemName) end
-		return itemTargets
-	else return {itemName} end
-end
-
 local function make_quests(mod, questTrees, parentQuest)
 	local registerQuests = {}
 
@@ -262,7 +362,7 @@ local function make_quests(mod, questTrees, parentQuest)
 			local questName = quest:get_name()
 			local questTitle = questName -- Titre par défaut, devrait être changé
 			local questDescription = nil -- Peut être changé
-			local itemTarget = get_itemTargets(quest:get_item():get_name())
+			local itemTarget = quest:get_target_items()
 			local targetCount = quest:get_targetCount()
 			local items_to_unlock = quest:get_item():get_childs()
 			local action = quest:get_action()
@@ -280,11 +380,9 @@ local function make_quests(mod, questTrees, parentQuest)
 		end
 		local childs = quest:get_questTrees()
 		if childs then
---			for j, child in ipairs(childs) do
-				for k, questT in ipairs(make_quests(mod, childs, quest:get_name())) do
-					table.insert(registerQuests, questT)
-				end
---			end
+			for k, questT in ipairs(make_quests(mod, childs, quest:get_name())) do
+				table.insert(registerQuests, questT)
+			end
 		end
 	end
 	return registerQuests
@@ -301,34 +399,50 @@ local function make_auto_quests(mod, intllib)
 		-- ajout d'items provenant du mod pouvant être rajoutés
 		-- dans l'arbre de quetes déjà existant.
 		add_itemChilds(questTrees, mod)
-
-		local rootQuests = {}
-
-		for _, item in ipairs(modItems:get_items()) do
-			if item:has_childs()
-				and item:is_hand_diggable()
-					 and not item:get_recipes()
-			then
-				local questTree = sys4_quests.QuestTree(sys4_quests.Quest(item))
-				table.insert(questTrees, questTree)
-				table.insert(rootQuests, questTree)
+		
+		-- debug
+		local dbg = mod == "vessels"
+		if dbg then
+			for i, tree in ipairs(questTrees) do
+				local tree_tmp = tree:get_tree("default_glass_quest")
+				if tree_tmp then
+					print(dump(tree_tmp:get_quest():get_item():get_childs()))
+				end
 			end
 		end
+		
+		local rootQuests = {}
 
-		for _, item in ipairs(modItems:get_items()) do
-			if item:has_childs() then
-				local isPresent = false
-				for i=1, #rootQuests do
-					if rootQuests[i]:get_quest():get_item():get_name() ==
-					item:get_name() then
-						isPresent = true
-					end
-				end
-				if not isPresent then
+		if modItems:get_items() then
+			for _, item in ipairs(modItems:get_items()) do
+				if item:has_childs()
+					and item:is_hand_diggable()
+					and not item:get_recipes()
+				then
 					local questTree = sys4_quests.QuestTree(sys4_quests.Quest(item))
 					table.insert(questTrees, questTree)
+					table.insert(rootQuests, questTree)
 				end
 			end
+			
+			for _, item in ipairs(modItems:get_items()) do
+				if item:has_childs() then
+					local isPresent = false
+					for i=1, #rootQuests do
+						if rootQuests[i]:get_quest():get_item():get_name() ==
+						item:get_name() then
+							isPresent = true
+						end
+					end
+					if not isPresent then
+						local questTree = sys4_quests.QuestTree(sys4_quests.Quest(item))
+						table.insert(questTrees, questTree)
+					end
+				end
+			end
+
+		else
+			print("No items for mod : "..mod)
 		end
 
 		local treeLen = 0
@@ -339,9 +453,16 @@ local function make_auto_quests(mod, intllib)
 			loop = loop + 1
 		end
 
-		-- remplissage des quêtes à enregistrer
-		sys4_quests.registeredQuests[mod].quests = make_quests(mod, questTrees, nil)
 		sys4_quests.questTrees = questTrees
+
+		if dbg then
+			for i, tree in ipairs(questTrees) do
+				local tree_tmp = tree:get_tree("default_glass_quest")
+				if tree_tmp then
+					print(dump(tree_tmp:get_quest():get_item():get_childs()))
+				end
+			end
+		end
 	end
 end
 
@@ -653,11 +774,101 @@ function sys4_quests.set_parent_quest(quest, parentQuest)
 	end
 end
 
+function sys4_quests.set_parent_questTree(quest, parentQuest)
+	local treeToMove = nil
+	for i, tree in ipairs(sys4_quests.questTrees) do
+		treeToMove = tree:get_tree(quest)
+		if treeToMove then break end
+	end
+
+	if not treeToMove then error("Tree '"..quest.."' not found !") end
+
+	local parentTree = nil
+	if parentQuest then
+		for i, tree in ipairs(sys4_quests.questTrees) do
+			parentTree = tree:get_tree(parentQuest)
+			if parentTree then break end
+		end
+
+		if not parentTree then error("Parent tree '"..parentQuest.."' not found !") end
+	end
+	
+	-- rebuild child trees of the parent treeToMove
+	local parent_treeToMove = treeToMove:get_parent()
+	
+	if parent_treeToMove then
+		for i, tree in ipairs(sys4_quests.questTrees) do
+			local currentTree = tree:get_tree(parent_treeToMove:get_quest():get_name())
+			if currentTree and currentTree:get_quest():get_questTrees() then
+				
+				local new_childTrees = nil
+				for j, tree2 in ipairs(currentTree:get_quest():get_questTrees()) do
+					if tree2:get_quest():get_name() ~= quest then
+						if not new_childTrees then new_childTrees = {} end
+						table.insert(new_childTrees, tree2)
+					end
+				end
+
+				currentTree:get_quest().questTrees = new_childTrees
+			end
+		end
+	end
+
+	local new_trees = {}
+	
+	-- add treeToMove to parentTree
+	if parentTree then
+		parentTree:add(treeToMove)
+	else
+		table.insert(new_trees, treeToMove)
+	end
+
+	-- rebuild questTrees
+	for i, tree in ipairs(sys4_quests.questTrees) do
+		if tree:get_quest():get_name() ~= quest then
+			table.insert(new_trees, tree)
+		end
+	end
+
+	sys4_quests.questTrees = new_trees
+end
+
 function sys4_quests.set_action_quest(quest, action)
 	for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
 		for _, rquest in ipairs(registeredQuests.quests) do
 			if rquest[1] == quest then
 				rquest.type = action
+			end
+		end
+	end
+end
+
+function sys4_quests.get_tree(treeName)
+	local treeFound = nil
+	for i, tree in ipairs(sys4_quests.questTrees) do
+		treeFound = tree:get_tree(treeName)
+		if treeFound then return treeFound end
+	end
+	return nil
+end
+
+function sys4_quests.del_tree(treeName)
+	for i, tree in ipairs(sys4_quests.questTrees) do
+		if tree:get_tree(treeName) then
+			local parentTree = tree:get_tree(treeName):get_parent()
+			
+			if parentTree then
+				local new_childs = nil
+				for j, childTree in ipairs(parentTree:get_quest():get_questTrees()) do
+					if childTree:get_quest():get_name() ~= treeName then
+						if not new_childs then new_childs = {} end
+						table.insert(new_childs, childTree)
+					end
+				end
+				parentTree:get_quest().questTrees = new_childs
+			else
+				table.remove(sys4_quests.questTrees, i)
+				break
 			end
 		end
 	end
@@ -778,6 +989,11 @@ end
 local lastQuestIndex = 0
 
 function sys4_quests.registerQuests()
+	-- remplissage des quêtes à enregistrer
+	for mod, _ in pairs(sys4_quests.registeredQuests) do
+		sys4_quests.registeredQuests[mod].quests = make_quests(mod, sys4_quests.questTrees, nil)
+	end
+		
 	-- Clean items to unlock
 	clean_itemsToUnlock(get_questGraph(nil))
 	

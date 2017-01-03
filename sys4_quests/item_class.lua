@@ -39,16 +39,88 @@ local function get_item_recipes(itemName)
 	return recipes
 end
 
+local function child_filter(childs)
+
+	if not childs then return nil end
+	
+	local newChilds = {}
+	
+	for i, child in ipairs(childs) do
+		if string.split(child, ":")[1] ~= "group" then
+			local itemChild = sys4_quests.MinetestItem(minetest.registered_items[child], nil)
+			if itemChild:is_tool() then
+				local minimal_tool = itemChild
+				
+				local tool_shovel =  itemChild:get_field("tool_capabilities").groupcaps["crumbly"]
+				local tool_axe = itemChild:get_field("tool_capabilities").groupcaps["choppy"]
+				local tool_pick = itemChild:get_field("tool_capabilities").groupcaps["cracky"]
+				local tool_sword = itemChild:get_field("tool_capabilities").groupcaps["snappy"]
+				local tool_level = 0
+				local tool_type = "cracky"
+				if tool_axe then tool_level = 3; tool_type = "choppy"
+				elseif tool_shovel then tool_level = 3; tool_type = "crumbly"
+				elseif tool_pick then tool_level = 3; tool_type = "cracky"
+				elseif tool_sword then tool_level = 3; tool_type = "snappy"
+				else
+					error("Ne devrait pas")
+				end
+				
+				for j, child2 in ipairs(childs) do
+					if string.split(child2, ":")[1] ~= "group" then
+						local itemChild2 = sys4_quests.MinetestItem(minetest.registered_items[child2], nil)
+						print("Item 1 : "..itemChild:get_name().." Item 2 : "..itemChild2:get_name().." Minimal tool : "..minimal_tool:get_name())
+						if itemChild2:is_tool()
+							and itemChild2:get_field("tool_capabilities").groupcaps[tool_type]
+							and minimal_tool:get_field("tool_capabilities").groupcaps[tool_type]
+						and minimal_tool:get_field("tool_capabilities").groupcaps[tool_type].times[tool_level] <= itemChild2:get_field("tool_capabilities").groupcaps[tool_type].times[tool_level] then
+							minimal_tool = itemChild2
+						end
+					end
+				end
+				
+				local isFound = false
+				for j, newChild in ipairs(newChilds) do
+					isFound = isFound or newChild == minimal_tool:get_name()
+					if isFound then break end
+				end
+				if not isFound then
+					table.insert(newChilds, minimal_tool:get_name())
+				end
+			else
+				table.insert(newChilds, child)
+			end
+		else
+			table.insert(newChilds, child)
+		end
+
+	end
+	return newChilds
+end
+
 function sys4_quests.MinetestItem.new(item, childs)
 	local self = setmetatable({}, sys4_quests.MinetestItem)
 	self.stack = ItemStack(item.name)
 	self.name = item.name
 	self.def = item
 	self.recipes = get_item_recipes(item.name)
-	self.childs = childs
+	self.childs = child_filter(childs)
 	return self
 end
 
+function sys4_quests.MinetestItem:remove_childs(childs)
+	local self_childs = self:get_childs()
+	if self_childs and childs then
+		for i, child in ipairs(childs) do
+			for j, childRem in ipairs(self_childs) do
+				if childRem == child then
+					table.remove(self_childs, j)
+					break
+				end
+			end
+		end
+	end
+end
+	
 function sys4_quests.MinetestItems.new()
 	local self = setmetatable({}, sys4_quests.MinetestItems)
 	self.items = nil
@@ -157,7 +229,17 @@ function sys4_quests.MinetestItem:is_diggable_by(itemTool)
 				group = "snappy"
 			end
 
-			if toolGroup[group].times[minetest.get_item_group(self:get_name(), group)]
+			local self_name_split = string.split(self:get_name(), ":")
+			local self_name = self:get_name()
+			if self_name_split[1] == "group" then
+				for name, item in pairs(minetest.registered_items) do
+					if minetest.get_item_group(name, self_name_split[2]) >= 1 then
+						self_name = name
+						break
+					end
+				end
+			end
+			if toolGroup[group].times[minetest.get_item_group(self_name, group)]
 			then return true
 			else return false	end
 		else return false	end
