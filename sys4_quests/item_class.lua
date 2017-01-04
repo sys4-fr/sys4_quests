@@ -199,7 +199,16 @@ function sys4_quests.MinetestItem:add_childs(childs)
 end
 
 function sys4_quests.MinetestItem:is_tool()
-	if self:get_field("tool_capabilities") then return true end
+	if self:get_field("tool_capabilities") then
+		local groupcaps = self:get_field("tool_capabilities").groupcaps
+		if groupcaps
+			and ( groupcaps.snappy
+						or groupcaps.choppy
+						or groupcaps.crumbly
+						or groupcaps.cracky )
+		then return true end
+
+	end
 	return false
 end
 
@@ -227,6 +236,8 @@ function sys4_quests.MinetestItem:is_diggable_by(itemTool)
 				group = "crumbly"
 			elseif toolGroup.snappy then
 				group = "snappy"
+			else
+				error("Ne devrait pas !")
 			end
 
 			local self_name_split = string.split(self:get_name(), ":")

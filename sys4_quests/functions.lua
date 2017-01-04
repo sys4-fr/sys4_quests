@@ -208,7 +208,7 @@ local function add_itemChilds(questTrees, mod)
 end
 
 local function get_minimum_tool_item(item)
-	local deb = item:get_name() == "default:iron_lump"
+	local deb = true
 	
 	if item:is_hand_diggable() then return nil end
 
