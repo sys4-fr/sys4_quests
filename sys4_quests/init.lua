@@ -19,7 +19,8 @@ dofile(modpath.."/quests_patch.lua")
 -- init sys4_quests data structure
 sys4_quests = {}
 sys4_quests.playerList = {}
-sys4_quests.intllib = S
+sys4_quests.intllib = {}
+sys4_quests.S = S
 sys4_quests.questGroups = {}
 sys4_quests.questGroups['global'] = {order = 1, questsIndex = {}}
 sys4_quests.itemGroups = {}
@@ -39,6 +40,116 @@ minetest.register_node(
 		groups = {crumbly=2, flammable=2},
 	})
 
+local function get_itemTexture(itemName)
+	local texture_field = nil
+	local quests = sys4_quests.quests
+	
+	local item = quests[itemName]:get_item()
+	texture_field = item:get_def().inventory_image
+	if not texture_field or texture_field == ""  then
+		texture_field = item:get_def()["tiles"][1]
+	end
+	
+	return texture_field
+end
+
+local function build_infos(data)
+	local quests = sys4_quests.quests
+	local infos = {}
+	
+	for item in pairs(data.tree) do
+		local texture = get_itemTexture(item)
+		if not texture then texture = "waste.png" end
+		infos[item] = {x = quests[item]:get_coord().y,
+							y = quests[item]:get_coord().x,
+							texture=texture,
+							desc=quests[item]:get_name().."\n"
+								..quests[item]:get_action().." "
+								..dump(quests[item]:get_target_items())..
+								"\nUnlock: "..
+								dump(quests[item]:get_item():get_childs())
+		}
+	end
+	
+	return infos
+end
+
+local function build_formspec(playern)
+	local data = sys4_quests.playerList[playern].progress_view
+	local infos = build_infos(data)
+	local formspec = "size[20,10]"
+	local nodes = {}
+	
+	for k in pairs(data.learned) do
+		local info = infos[k]
+		local texture = info.texture .. "^progress_tree_check.png^[colorize:#00FF00:50"
+		local fs = "image_button[" .. info.x .. "," .. info.y .. ";1,1;"
+			.. minetest.formspec_escape(texture) .. ";" .. k .. ";]"
+		local tooltip = "tooltip[" .. k .. ";" .. info.desc .. "]"
+		table.insert(nodes, fs)
+		table.insert(nodes, tooltip)
+	end
+	
+	for k in pairs(data.available) do
+		local info = infos[k]
+		local fs = "image_button[" .. info.x .. "," .. info.y .. ";1,1;" .. info.texture
+			.. ";" .. k .. ";]"
+		local tooltip = "tooltip[" .. k .. ";" .. info.desc .. "]"
+		table.insert(nodes, fs)
+		table.insert(nodes, tooltip)
+	end
+	
+	formspec = formspec .. table.concat(nodes)
+	
+	return formspec
+end
+
+local function show(player)
+	local splayer = sys4_quests.playerList[player:get_player_name()]
+	local player_data = splayer.progress_data
+	if not splayer.progress_view then
+		splayer.progress_view = progress_tree.new_player_data(player_data.tree, player_data.learned)
+	end
+	minetest.show_formspec(player:get_player_name(), "sys4_quests:test", build_formspec(player:get_player_name()))
+end
+
+minetest.register_craftitem("sys4_quests:quest_book", {
+										 description = "Ultimate Techs",
+										 groups = { not_in_creative_inventory = 1 },
+										 inventory_image = "default_book.png",
+										 
+										 on_use = function(itemstack, player)
+											 show(player)
+										 end,
+})	
+
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+		if formname ~= "sys4_quests:test" then return end
+
+		local splayer = sys4_quests.playerList[player:get_player_name()]
+		
+		local data = splayer.progress_view
+		for node in pairs(data.available) do
+			if fields[node] then
+				data:learn(node)
+			end
+		end
+		
+		if not fields["quit"] then
+			show(player)
+		else
+			-- reset view
+			splayer.progress_view = progress_tree.new_player_data(splayer.progress_data.tree, splayer.progress_data.learned)
+		end
+end)
+
+minetest.register_craft({
+		output = "sys4_quests:quest_book",
+		recipe = {
+				{"sys4_quests:waste"}
+			}
+	})
+	
 -- sys4_quests functions
 dofile(modpath.."/functions.lua")
 
@@ -192,15 +303,6 @@ local function give_book(playerName, quest)
 	end
 end
 
-local function get_first_questGroup()
-	for name, group in pairs(sys4_quests.questGroups) do
-		if group.order == 2 then
-			return name
-		end
-	end
-	return nil
-end
-
 local function is_questActive(questName, playern)
 	return quests.active_quests[playern] and quests.active_quests[playern]["sys4_quests:"..questName]
 end
@@ -278,19 +380,12 @@ end
 minetest.register_on_newplayer(
 	function(player)
 		local playern = player:get_player_name()
-		local firstQuestGroup = get_first_questGroup()
-		if not firstQuestGroup then
-			firstQuestGroup = 'global'
-		end
+		
+		-- get new player properties
+		sys4_quests.playerList[playern] = sys4_quests.load(playern)
 
-		-- add new player properties
-		sys4_quests.playerList[playern] = {
-			name = playern,
-			isNew = true,
-			craftMode = true,
-			bookMode = false,
-			activeQuestGroup = firstQuestGroup
-		}
+		-- write player data
+		sys4_quests.save()
 
 		-- give initial stuff
 		if minetest.get_modpath("give_initial_stuff")
@@ -310,45 +405,21 @@ minetest.register_on_joinplayer(
 	function(player)
 		local playern = player:get_player_name()
 		local playerList = sys4_quests.playerList
-		if not playerList[playern] then
-			local activeGroup = get_active_questGroup(playern)
-			if activeGroup == nil then
-				activeGroup = 'global'
-			end
-			playerList[playern] = {
-				name = playern,
-				isNew = false,
-				craftMode = true,
-				bookMode = false,
-				activeQuestGroup = activeGroup
-			}
-		end
+
+		playerList[playern] = sys4_quests.load(playern)
 
 		if (playerList[playern].isNew) then
-			for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
-				for _, registeredQuest in ipairs(registeredQuests.quests) do
-					if (not registeredQuest[7] or #registeredQuest[7] == 0)
-						and (not get_groupQuest_by_questIndex(registeredQuest.index)
-							  or get_groupQuest_by_questIndex(registeredQuest.index) == playerList[playern].activeQuestGroup)	then
-							quests.start_quest(playern, "sys4_quests:"..registeredQuest[1])
-					end
+			local registered_quests = sys4_quests.quests
+			for quest in pairs(playerList[playern].progress_data.available) do
+				if not get_groupQuest_by_questIndex(registered_quests[quest]:get_index())
+				or get_groupQuest_by_questIndex(registered_quests[quest]:get_index()) == playerList[playern].activeQuestGroup	then
+					quests.start_quest(playern, "sys4_quests:"..registered_quests[quest]:get_name())
 				end
 			end
-			
 			playerList[playern].isNew = false
+			sys4_quests.save()
 		end
-
-		if minetest.get_modpath("progress_tree") then
-			local quests = build_questList({}, get_registered_questTrees(nil))
-			for _,quest in ipairs(quests) do
-				local parents = {}
-				if quest[7] and type(quest[7]) == "table" then parents = quest[7] end
-				if quest[7] and type(quest[7]) == "string" then parents = {quest[7]} end
-				sys4_quests.progressTree:add(quest[1], parents)
-			end
-
-			playerList[playern].progress_data = progress_tree.new_player_data(sys4_quests.progressTree, {"group_tree_quest"})
-		end
+		
 	end)
 
 
@@ -356,20 +427,22 @@ minetest.register_on_dignode(
 	function(pos, oldnode, digger)
 		if not digger then return end
 		local playern = digger:get_player_name()
-		local playerList = sys4_quests.playerList
-		for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
-			for _, registeredQuest in ipairs(registeredQuests.quests) do
-				local questName = registeredQuest[1]
-				local questType = registeredQuest.type
+		local player = sys4_quests.playerList[playern]
+		local registered_quests = sys4_quests.quests
+
+		for name in pairs(player.progress_data.available) do
+			local questName = registered_quests[name]:get_name()
+			local questType = registered_quests[name]:get_action()
+			local questTargets = registered_quests[name]:get_target_items()
 				
-				if questType == "dig"
-					and is_items_equivalent(registeredQuest[4], oldnode.name)
-					and quests.update_quest(playern, "sys4_quests:"..questName, 1)
-				then
-					minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
-					if playerList[playern].bookMode then
-						give_book(playern, questName)
-					end
+			if questType == "dig"
+				and is_items_equivalent(questTargets, oldnode.name)
+				and quests.update_quest(playern, "sys4_quests:"..questName, 1)
+			then
+				print("Update ok")
+				--minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
+				if player.bookMode then
+					give_book(playern, questName)
 				end
 			end
 		end
@@ -378,82 +451,85 @@ end)
 minetest.register_on_craft(
 	function(itemstack, player, old_craft_grid, craft_inv)
 		if not player then return end
-
-		if itemstack:get_name() == "sys4_quests:test_book" then
-			return nil
-		end
 		
 		local playern = player:get_player_name()
-		local playerList = sys4_quests.playerList
-
+		local splayer = sys4_quests.playerList[playern]
+		
 		local wasteItem = "sys4_quests:waste"
 		local itemstackName = itemstack:get_name()
 		local itemstackCount = itemstack:get_count()
+		
+		local registered_quests = sys4_quests.quests
+		
+		for quest in pairs(splayer.progress_data.learned) do
+			local questType = registered_quests[quest]:get_action()
+			local questName = registered_quests[quest]:get_name()
+			local items = registered_quests[quest]:get_item():get_childs()
 
-		for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
-			for _, registeredQuest in ipairs(registeredQuests.quests) do
-				local questType = registeredQuest.type
-				local questName = registeredQuest[1]
-				local items = registeredQuest[6]
-
+			if items then
 				for _, item in ipairs(items) do
 					
-					if item == itemstackName 
-						and quests.successfull_quests[playern]
-						and quests.successfull_quests[playern]["sys4_quests:"..questName]
-					then
+					if item == itemstackName then
 						wasteItem = nil
 						break
 					end
 				end
-				if not wasteItem then break end
 			end
+			
+			if not wasteItem then break end
+		end
+
+		if itemstackName == "sys4_quests:quest_book" then
+			wasteItem = nil
 		end
 		
-		for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
-			for _, registeredQuest in ipairs(registeredQuests.quests) do
-				local questType = registeredQuest.type
-				local questName = registeredQuest[1]
-
-				if questType == "craft" and not wasteItem
-				and is_items_equivalent(registeredQuest[4], itemstackName) then 
-					
-					if quests.update_quest(playern, "sys4_quests:"..questName, itemstackCount) then
-						minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
-						if playerList[playern].bookMode then
-							give_book(playern, questName)
-						end
-					end
+		for quest in pairs(splayer.progress_data.available) do
+			local questType = registered_quests[quest]:get_action()
+			local questName = registered_quests[quest]:get_name()
+			
+			if questType == "craft"
+				and not wasteItem
+				and is_items_equivalent(registered_quests[quest]:get_target_items(), itemstackName)				
+			and quests.update_quest(playern, "sys4_quests:"..questName, itemstackCount) then
+				--minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
+				
+				if splayer.bookMode then
+					give_book(playern, questName)
 				end
+				
 			end
 		end
 
-		if not wasteItem or not playerList[playern].craftMode then
+		if not wasteItem or not splayer.craftMode then
 			return nil
 		else
 			return ItemStack(wasteItem)
 		end
-	end)
+end)
 
 local function register_on_placenode(pos, node, placer)
 	if not placer then return end
 	
 	local playern = placer:get_player_name()
-	local playerList = sys4_quests.playerList
-
-	for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
-		for _, registeredQuest in ipairs(registeredQuests.quests) do
-			local questName = registeredQuest[1]
-			local type = registeredQuest.type
+	local player = sys4_quests.playerList[playern]
+	local registered_quests = sys4_quests.quests
+	
+	for quest in pairs(player.progress_data.available) do
+		local questName = registered_quests[quest]:get_name()
+		local type = registered_quests[quest]:get_action()
 			
-			if type == "place" and is_items_equivalent(registeredQuest[4], node.name) then
-				if quests.update_quest(playern, "sys4_quests:"..questName, 1) then
-					minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
-					if playerList[playern].bookMode then
-						give_book(playern, questName)
-					end
-				end
+		if type == "place"
+			and is_items_equivalent(registered_quests[quest]:get_item_targets(), node.name)
+			and quests.update_quest(playern, "sys4_quests:"..questName, 1)
+		then
+			minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
+			player.progress_data:learn(quest)
+			
+			if player.bookMode then
+				give_book(playern, questName)
 			end
+			
+			sys4_quests.save()
 		end
 	end
 end
@@ -495,24 +571,30 @@ local function allow_metadata_inventory_take(pos, listname, index, stack, player
 	
 	if player ~= nil and listname == "dst" then
 		local playern = player:get_player_name()
-		local playerList = sys4_quests.playerList
-		for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
-			for _, registeredQuest in ipairs(registeredQuests.quests) do
-				local questName = registeredQuest[1]
+		local splayer = sys4_quests.playerList[playern]
+		local registered_quests = sys4_quests.quests
+		
+		for quest in pairs(splayer.progress_data.available) do
+			local questName = registered_quests[quest]:get_name()
 				
-				if registeredQuest.type == "cook" and is_items_equivalent(registeredQuest[4], stack:get_name()) then
-					if quests.update_quest(playern, "sys4_quests:"..questName, stackCount) then
-						minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
-						if playerList[playern].bookMode then
-							give_book(playern, questName)
-						end
-					end
+			if registered_quests[quest]:get_action() == "cook"
+				and is_items_equivalent(registered_quests[quest]:get_item_targets(), stack:get_name())
+				and quests.update_quest(playern, "sys4_quests:"..questName, stackCount)
+			then
+				minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
+				splayer.progress_data:learn(quest)
+				
+				if splayer.bookMode then
+					give_book(playern, questName)
 				end
+				
+				sys4_quests.save()
 			end
 		end
 	end
 	return stackCount
-end	
+end
+	
 furnace.allow_metadata_inventory_take = allow_metadata_inventory_take 
 
 -- Chat commands
@@ -971,117 +1053,3 @@ minetest.register_chatcommand(
 			end
 		end
 })
-
--- progress_tree mod support test
-if minetest.get_modpath("progress_tree") then
-	sys4_quests.progressTree = progress_tree.new_tree()
-
-	local function get_itemTexture(itemName, questTree)
-		local texture_field = nil
-		if not questTree then return nil end
-		
-		for i, quest in ipairs(questTree) do
-			if quest:get_quest():get_item():get_name() == itemName then
-				local item = quest:get_quest():get_item()
-				texture_field = item:get_def().inventory_image
-				if not texture_field or texture_field == ""  then
-					texture_field = item:get_def()["tiles"][1]
-				end
-			else
-				local childs = quest:get_quest():get_questTrees()
-				if childs then
-					texture_field = get_itemTexture(itemName, childs)
-				end
-			end
-
-			if texture_field then break end
-		end
-		
-		return texture_field
-	end
-
-	local function build_infos(infos, x, y, quests)
-		for i=1, #quests do
-			local texture = get_itemTexture(quests[i].quest[4][1], sys4_quests.questTrees)
-			if not texture then texture = "waste.png" end
-			infos[quests[i].quest[1]] = {x=x, y=y, texture=texture, desc=quests[i].quest[2].."\n"..quests[i].quest.type.." "..dump(quests[i].quest[4]).."\nUnlock: "..dump(quests[i].quest[6])}
-			if quests[i].childs then
-				infos = build_infos(infos, x, y+1, quests[i].childs)
-			end
-			x = x + 1
-		end
-
-		return infos
-	end
-	
-	local function build_formspec(playern)
-		local infos = build_infos({}, 0, 0, get_registered_questTrees(nil))
-		local formspec = "size[20,10]"
-		local nodes = {}
-		local playerList = sys4_quests.playerList
-		local data = playerList[playern].progress_data
-		
-		for k in pairs(data.learned) do
-			local info = infos[k]
-			local texture = info.texture .. "^progress_tree_check.png^[colorize:#00FF00:50"
-			local fs = "image_button[" .. info.x .. "," .. info.y .. ";1,1;"
-				.. minetest.formspec_escape(texture) .. ";" .. k .. ";]"
-			local tooltip = "tooltip[" .. k .. ";" .. info.desc .. "]"
-			table.insert(nodes, fs)
-			table.insert(nodes, tooltip)
-		end
-		
-		for k in pairs(data.available) do
-			local info = infos[k]
-			local fs = "image_button[" .. info.x .. "," .. info.y .. ";1,1;" .. info.texture
-				.. ";" .. k .. ";]"
-			local tooltip = "tooltip[" .. k .. ";" .. info.desc .. "]"
-			table.insert(nodes, fs)
-			table.insert(nodes, tooltip)
-		end
-		
-		formspec = formspec .. table.concat(nodes)
-		
-		return formspec
-	end
-	
-	
-	local function show(player)
-		minetest.show_formspec(player:get_player_name(), "sys4_quests:test", build_formspec(player:get_player_name()))
-	end
-	
-	
-	minetest.register_on_player_receive_fields(function(player, formname, fields)
-			if formname ~= "sys4_quests:test" then return end
-
-			local data = sys4_quests.playerList[player:get_player_name()].progress_data
-			for node in pairs(data.available) do
-				if fields[node] then
-					data:learn(node)
-				end
-			end
-			
-			if not fields["quit"] then
-				show(player)
-			end
-	end)
-		
-	minetest.register_craftitem("sys4_quests:test_book", {
-											 description = "Ultimate Techs",
-											 groups = { not_in_creative_inventory = 1 },
-											 inventory_image = "default_book.png",
-											 
-											 on_use = function(itemstack, player)
-												 show(player)
-											 end,
-	})
-
-	minetest.register_craft({
-			output = "sys4_quests:test_book",
-			recipe = {
-				{"sys4_quests:waste"}
-			}
-	})
-				
-	
-end

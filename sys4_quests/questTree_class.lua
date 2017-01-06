@@ -52,7 +52,7 @@ local function get_itemTargets(itemName)
 	else return {itemName} end
 end
 
-function sys4_quests.Quest.new(item)
+function sys4_quests.Quest.new(item, coord)
 	local self = setmetatable({}, sys4_quests.Quest)
 	self.item = item
 	local splittedName = string.split(item:get_name(), ":")
@@ -60,6 +60,10 @@ function sys4_quests.Quest.new(item)
 	self.questTrees = nil
 	self.action = nil
 	self.targets = get_itemTargets(item:get_name())
+	self.description = nil
+	self.index = nil
+	self.groupQuest = "global"
+	self.coord = coord
 	return self
 end
 
@@ -71,6 +75,35 @@ end
 function sys4_quests.Quest:set_name(name)
 	self.name = name
 end
+
+function sys4_quests.Quest:get_description()
+	return self.description
+end
+function sys4_quests.Quest:set_description(description)
+	self.description = description
+end
+
+function sys4_quests.Quest:get_index()
+	return self.index
+end
+function sys4_quests.Quest:set_index(index)
+	self.index = index
+end
+
+function sys4_quests.Quest:get_groupQuest()
+	return self.groupQuest
+end
+function sys4_quests.Quest:set_groupQuest(name)
+	self.groupQuest = name
+end
+
+function sys4_quests.Quest:get_coord()
+	return self.coord
+end
+function sys4_quests.Quest:set_coord(coord)
+	self.coord = coord
+end
+
 
 function sys4_quests.Quest:get_item()
 	return self.item
@@ -109,6 +142,10 @@ function sys4_quests.Quest:get_target_items()
 end
 
 function sys4_quests.Quest:get_targetCount()
+	if self.targetCount then
+		return self.targetCount
+	end
+	
 	local itemTarget = self:get_item()
 	local count = 6
 	if itemTarget:has_childs() then
@@ -145,7 +182,12 @@ function sys4_quests.Quest:get_targetCount()
 		end
 	end
 
-	return count
+	self.targetCount = count * sys4_quests.level
+	return self.targetCount
+end
+
+function sys4_quests.Quest:set_targetCount(count)
+	self.targetCount = count
 end
 
 function sys4_quests.Quest:set_action(action)

@@ -1,4 +1,61 @@
-local S = sys4_quests.intllib
+local S = sys4_quests.S
+
+function sys4_quests.save()
+	local data = {}
+	for name, player in pairs (sys4_quests.playerList) do
+		data[name] = {new = player.isNew,
+						  craftmode = player.craftMode,
+						  bookmode = player.bookMode,
+						  current_questGroup = player.activeQuestGroup,
+						  progress_data = player.progress_data:serialize()
+		}
+	end
+	local file = io.open(minetest.get_worldpath().."/sys4_quests.txt", "w")
+	if file then
+		file:write(minetest.serialize(data))
+		file:close()
+	end
+end
+
+local function get_first_questGroup()
+	for name, group in pairs(sys4_quests.questGroups) do
+		if group.order == 2 then
+			return name
+		end
+	end
+	return nil
+end
+
+function sys4_quests.load(playern)
+	local file = io.open(minetest.get_worldpath().."/sys4_quests.txt", "r")
+	if file then
+		local data = minetest.deserialize(file:read("*all"))[playern]
+		data.progress_data = progress_tree.deserialize_player_data(sys4_quests.quests_tree, data.progress_data)
+		return { name = playern,
+					isNew = data.new,
+					craftMode = data.craftmode,
+					bookMode = data.bookmode,
+					activeQuestGroup= data.current_questGroup,
+					progress_data = data.progress_data
+		}
+	end
+
+	local firstQuestGroup = get_first_questGroup()
+	if not firstQuestGroup then
+		firstQuestGroup = 'global'
+	end
+	return {name = playern,
+			  isNew = true,
+			  craftMode = true,
+			  bookMode = false,
+			  activeQuestGroup = firstQuestGroup,
+			  progress_data = progress_tree.new_player_data(sys4_quests.quests_tree)
+	}
+end
+
+function sys4_quests.new_tree()
+	return progress_tree.new_tree()
+end
 
 function sys4_quests.get_quests(modName)
 	local quests = sys4_quests.registeredQuests[modName]
@@ -467,36 +524,12 @@ local function make_auto_quests(mod, intllib)
 end
 
 local function intllib_by_item(item)
-	local mod = string.split(item, ":")[1]
-	if mod == "stairs" or mod == "group" then
-		for questsMod, registeredQuests in pairs(sys4_quests.registeredQuests) do
-			for _, quest in ipairs(registeredQuests.quests) do
-				for __, titem in ipairs(quest[4]) do
-					if item == titem then
-						return registeredQuests.intllib
-					end
-				end
-				for __, titem in ipairs(quest[6]) do
-					if item == titem then
-						return registeredQuests.intllib
-					end
-				end
-			end
-		end
-	end
-
-	local quests = sys4_quests.registeredQuests[mod]
-	if not quests then
-		sys4_quests.registeredQuests[mod] = {}
-		quests = sys4_quests.registeredQuests[mod]
-		quests.intllib = S
-		quests.quests = {}
-	end
-	return sys4_quests.registeredQuests[mod].intllib
+	return sys4_quests.S
 end
 
 local function print_itemsUnlocked(items)
 	local str = ""
+	if not items then return str end
 	for _, item in ipairs(items) do
 		local itemMod = string.split(item, ":")[1]
 		local intllibMod
@@ -516,7 +549,7 @@ local function print_itemsUnlocked(items)
 				end
 			end
 		else
-			intllibMod = sys4_quests.registeredQuests[itemMod].intllib
+			intllibMod = sys4_quests.intllib[itemMod]
 		end
 		str = str.." - "..intllibMod(item).."\n"
 	end
@@ -525,22 +558,22 @@ local function print_itemsUnlocked(items)
 end
 
 local function format_description(quest, level, intllib)
-	local questType = quest.type
-	local targetCount = level
-	local customDesc = quest[3]
+	local questType = quest:get_action()
+	local targetCount = quest:get_targetCount()
+	local customDesc = quest:get_description()
 
 	local str = S(questType).." "..targetCount.." "
 	if customDesc ~= nil then
 		str = str..intllib(customDesc).."."
 	else
-		local itemTarget = quest[4][1]
+		local itemTarget = quest:get_target_items()[1]
 		local item_intllib = intllib_by_item(itemTarget)
 		str = str..item_intllib(itemTarget).."."
 	end
 
 	-- Print Unlocked Items
 	str = str.."\n \n"..S("The end of the quest unlock this items").." :\n"
-	return str..print_itemsUnlocked(quest[6])
+	return str..print_itemsUnlocked(quest:get_item():get_childs())
 end
 
 local function has_dependences(questName)
@@ -662,6 +695,28 @@ local function is_all_groupQuests_successfull(currentQuestGroup, questname, play
 		end
 	end
 	return successfull
+end
+
+function sys4_quests.next_quests(playername, current_quest)
+	print("Next Quest :")
+	local player_data = sys4_quests.playerList[playername].progress_data
+	print(dump(player_data))
+	local squests = sys4_quests.quests
+
+	for quest in pairs(player_data.available) do
+		if "sys4_quests:"..squests[quest]:get_name() == current_quest then
+			player_data:learn(quest)
+			break
+		end
+	end
+	
+	for quest in pairs(player_data.available) do
+		minetest.after(1, function()
+			quests.start_quest(playername, "sys4_quests:"..squests[quest]:get_name())
+		end)
+	end
+
+	sys4_quests.save()
 end
 
 function sys4_quests.nextQuest(playername, questname)
@@ -986,6 +1041,40 @@ local function clean_itemsToUnlock(quest_graph)
 	end
 end
 
+function sys4_quests.register_mod_quests(mod, questList, intllib)
+	if not minetest.get_modpath(mod) then
+		error("Mod '"..mod.."' not found !")
+	end
+
+	sys4_quests.intllib[mod] = intllib
+	sys4_quests.quests = questList
+
+	for _, quest in pairs(questList) do
+		if quests.register_quest(
+			"sys4_quests:"..quest:get_name(),
+			{ title = intllib(quest:get_name()),
+				  description = format_description(quest, intllib),
+				  max = quest:get_targetCount(),
+				  --autoaccept = sys4_quests.has_dependences(quest[1]),
+				  autoaccept = true,
+				  callback = sys4_quests.next_quests
+				})
+		then
+			local index = 0
+			for i in pairs(sys4_quests.quests) do
+				index = index + 1
+			end
+			quest:set_index(index + 1)
+
+			print("Quest Registered : "..quest:get_name())
+				
+			-- insert quest index in specified group
+			table.insert(sys4_quests.questGroups[quest:get_groupQuest()].questsIndex, index)
+
+		end
+	end
+end
+
 local lastQuestIndex = 0
 
 function sys4_quests.registerQuests()
@@ -1072,3 +1161,43 @@ function sys4_quests.registerQuests()
 	end
 end
 
+local function get_items_by_group(groups)
+	if type(groups) == "string" then groups = {groups} end
+
+	local items = {}
+	for _, group in ipairs(groups) do
+		for name, item in pairs(minetest.registered_items) do
+			if minetest.get_item_group(name, group) >= 1 then
+				table.insert(items, name)
+			end
+		end
+	end
+	return items
+end
+
+function sys4_quests.build_quests(quest_tree, coord)
+
+	local quests = {}
+	local items = sys4_quests.MinetestItems()
+	
+	for name in pairs(quest_tree) do
+		local item = minetest.registered_items[name]
+
+		if not item and get_groups(name) then
+			item = minetest.registered_items[get_items_by_group(get_groups(name))[1] ]
+		end
+
+		if item then
+			items:add(item)
+		else
+			error("sys4_quests : item unknown !")
+		end
+	end
+
+	for _, item in ipairs(items:get_items()) do
+		quests[item:get_name()] = sys4_quests.Quest(item, coord[item:get_name()])
+	end
+
+	sys4_quests.quests_tree = quest_tree
+	return quests
+end
