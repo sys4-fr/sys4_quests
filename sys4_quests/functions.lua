@@ -1175,7 +1175,7 @@ local function get_items_by_group(groups)
 	return items
 end
 
-function sys4_quests.build_quests(quest_tree, coord)
+function sys4_quests.build_quests(quest_tree, coord, auto)
 
 	local quests = {}
 	local items = sys4_quests.MinetestItems()
@@ -1195,7 +1195,7 @@ function sys4_quests.build_quests(quest_tree, coord)
 	end
 
 	for _, item in ipairs(items:get_items()) do
-		quests[item:get_name()] = sys4_quests.Quest(item, coord[item:get_name()])
+		quests[item:get_name()] = sys4_quests.Quest(item, coord[item:get_name()], auto)
 	end
 
 	sys4_quests.quests_tree = quest_tree

@@ -24,7 +24,7 @@ sys4_quests.S = S
 sys4_quests.questGroups = {}
 sys4_quests.questGroups['global'] = {order = 1, questsIndex = {}}
 sys4_quests.itemGroups = {}
-sys4_quests.level = 2
+sys4_quests.level = 1
 
 -- init classes
 dofile(modpath.."/item_class.lua")
@@ -448,6 +448,47 @@ minetest.register_on_dignode(
 		end
 end)
 
+local function get_itemGroup(groupName)
+	for _, group in ipairs(sys4_quests.itemGroups) do
+		if group == groupName then return group end
+	end
+	return nil
+end
+
+local function get_groups(itemName)
+	local split = string.split(itemName, ":")
+	if split[1] == "group" then
+		return string.split(split[2], ",")
+	else
+		return nil
+	end
+end
+
+local function is_item_unlocked(p_data, item)
+	local item_recipes = minetest.get_all_craft_recipes(item)
+
+	-- See if ingredient is learned
+	local recipe_ok = true
+	for i, recipe in ipairs(item_recipes) do
+		recipe_ok = true
+		for j, ingredient in ipairs(recipe.items) do
+			local ingre_def = minetest.registered_items[ingredient]
+			if ingre_def and ingre_def.groups then
+				for group, value in pairs(ingre_def.groups) do
+					if get_itemGroup(group) then
+						ingredient = "group:"..group
+						break
+					end
+				end
+			end
+			
+			recipe_ok = recipe_ok and p_data.learned[ingredient]
+		end
+		if recipe_ok then break end
+	end
+	return recipe_ok
+end
+
 minetest.register_on_craft(
 	function(itemstack, player, old_craft_grid, craft_inv)
 		if not player then return end
@@ -461,10 +502,11 @@ minetest.register_on_craft(
 		
 		local registered_quests = sys4_quests.quests
 		
-		for quest in pairs(splayer.progress_data.learned) do
-			local questType = registered_quests[quest]:get_action()
-			local questName = registered_quests[quest]:get_name()
-			local items = registered_quests[quest]:get_item():get_childs()
+		for learn in pairs(splayer.progress_data.learned) do
+			local quest = registered_quests[learn]
+			local questType = quest:get_action()
+			local questName = quest:get_name()
+			local items = quest:get_item():get_childs()
 
 			if items then
 				for _, item in ipairs(items) do
@@ -483,13 +525,19 @@ minetest.register_on_craft(
 			wasteItem = nil
 		end
 		
-		for quest in pairs(splayer.progress_data.available) do
-			local questType = registered_quests[quest]:get_action()
-			local questName = registered_quests[quest]:get_name()
+		for available in pairs(splayer.progress_data.available) do
+			local quest = registered_quests[available]
+			local questType = quest:get_action()
+			local questName = quest:get_name()
+
+			if quest:is_auto()
+			and is_item_unlocked(splayer.progress_data, itemstackName) then
+				wasteItem = nil
+			end
 			
 			if questType == "craft"
 				and not wasteItem
-				and is_items_equivalent(registered_quests[quest]:get_target_items(), itemstackName)				
+				and is_items_equivalent(quest:get_target_items(), itemstackName)				
 			and quests.update_quest(playern, "sys4_quests:"..questName, itemstackCount) then
 				--minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
 				
@@ -578,7 +626,7 @@ local function allow_metadata_inventory_take(pos, listname, index, stack, player
 			local questName = registered_quests[quest]:get_name()
 				
 			if registered_quests[quest]:get_action() == "cook"
-				and is_items_equivalent(registered_quests[quest]:get_item_targets(), stack:get_name())
+				and is_items_equivalent(registered_quests[quest]:get_target_items(), stack:get_name())
 				and quests.update_quest(playern, "sys4_quests:"..questName, stackCount)
 			then
 				minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)

@@ -52,7 +52,7 @@ local function get_itemTargets(itemName)
 	else return {itemName} end
 end
 
-function sys4_quests.Quest.new(item, coord)
+function sys4_quests.Quest.new(item, coord, auto)
 	local self = setmetatable({}, sys4_quests.Quest)
 	self.item = item
 	local splittedName = string.split(item:get_name(), ":")
@@ -64,6 +64,7 @@ function sys4_quests.Quest.new(item, coord)
 	self.index = nil
 	self.groupQuest = "global"
 	self.coord = coord
+	self.auto = auto
 	return self
 end
 
@@ -104,6 +105,12 @@ function sys4_quests.Quest:set_coord(coord)
 	self.coord = coord
 end
 
+function sys4_quests.Quest:is_auto()
+	return self.auto
+end
+function sys4_quests.Quest:set_auto(auto)
+	self.auto = auto
+end
 
 function sys4_quests.Quest:get_item()
 	return self.item
@@ -145,44 +152,8 @@ function sys4_quests.Quest:get_targetCount()
 	if self.targetCount then
 		return self.targetCount
 	end
-	
-	local itemTarget = self:get_item()
-	local count = 6
-	if itemTarget:has_childs() then
-		local itemChilds = {}
-		for i, itemChild in ipairs(itemTarget:get_childs()) do
-			local itemSplit = string.split(itemChild, ":")
-			if itemSplit[1] == "group" then
-				local group = itemSplit[2]
-				for itemName, _ in pairs(minetest.registered_items) do
-					if minetest.get_item_group(itemName, group) >= 1 then
-						table.insert(itemChilds, itemName)
-					end
-				end
-			else
-				table.insert(itemChilds, itemChild)
-			end
-		end
-		for i, itemChild in ipairs(itemChilds) do
-			local recipes = minetest.get_all_craft_recipes(itemChild)
-			if recipes then
-				for j, recipe in ipairs(recipes) do
-					local sCount = 0
-					for k, ingredient in ipairs(recipe.items) do
-						if ingredient == itemTarget:get_name() then
-							sCount = sCount + 1
-						end
-					end
-					
-					if sCount > 0 and count > sCount then
-						count = sCount
-					end
-				end
-			end
-		end
-	end
 
-	self.targetCount = count * sys4_quests.level
+	self.targetCount = sys4_quests.level * sys4_quests.level
 	return self.targetCount
 end
 

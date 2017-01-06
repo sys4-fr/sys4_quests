@@ -165,6 +165,9 @@ end
 function sys4_quests.MinetestItem:get_childs()
 	return self.childs
 end
+function sys4_quests.MinetestItem:set_childs(childs)
+	self.childs = childs
+end
 
 function sys4_quests.MinetestItem:has_childs()
 	return self:get_childs()

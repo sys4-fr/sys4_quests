@@ -72,14 +72,16 @@ quest_tree:add("default:obsidian", {"default:pick_steel"})
 coord["default:obsidian"] = { x = 4, y = 9}
 
 -- build quests list
-local quests = sys4_quests.build_quests(quest_tree, coord)
+local auto = true -- auto determination of items to unlock
+local quests = sys4_quests.build_quests(quest_tree, coord, auto)
 
 -- Make quest custom modifications
 quests["sys4_quests:quest_book"]:set_targetCount(1)
-quests["default:copper_ingot"]:get_item():add_child("default:copper_ingot")
-quests["default:steel_ingot"]:get_item():add_child("default:steel_ingot")
-quests["default:gold_ingot"]:get_item():add_child("default:gold_ingot")
-quests["default:clay_brick"]:get_item():add_child("default:clay_brick")
+quests["default:pick_wood"]:set_targetCount(1)
+quests["default:furnace"]:set_targetCount(1)
+quests["group:sand"]:set_action("dig")
+quests["default:coal_lump"]:set_action("dig")
+quests["group:stone"]:set_action("dig")
 
 -- register quests
 sys4_quests.register_mod_quests("default", quests, S)
