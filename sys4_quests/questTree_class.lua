@@ -29,21 +29,24 @@ local function get_itemTargets(itemName)
 	if string.split(itemName, ":")[1] ~= "group" then
 		local itemTargets = {}
 		for name, item in pairs(minetest.registered_items) do
-			local itemTarget = item.drop
-			if itemTarget then
-				if itemTarget.items then
-					for i=1, #itemTarget.items do
-						if #itemTarget.items[i].items then
-							for j=1, #itemTarget.items[i].items do
-								local itemTarget_str = string.split(itemTarget.items[i].items[j], " ")[1]
-								if itemTarget_str == itemName then
-									table.insert(itemTargets, item.name)
+			if not item.not_in_creative_inventory then
+				local itemTarget = item.drop
+				if itemTarget then
+					if itemTarget.items then
+						for i=1, #itemTarget.items do
+							if #itemTarget.items[i].items then
+								for j=1, #itemTarget.items[i].items do
+									local itemTarget_str = string.split(itemTarget.items[i].items[j], " ")[1]
+									if not minetest.registered_items[itemTarget_str].not_in_creative_inventory
+									and itemTarget_str == itemName then
+										table.insert(itemTargets, item.name)
+									end
 								end
 							end
 						end
+					elseif string.split(itemTarget, " ")[1] == itemName then
+						table.insert(itemTargets, item.name)
 					end
-				elseif string.split(itemTarget, " ")[1] == itemName then
-					table.insert(itemTargets, item.name)
 				end
 			end
 		end

@@ -79,7 +79,10 @@ local quests = sys4_quests.build_quests(quest_tree, coord, auto)
 quests["sys4_quests:quest_book"]:set_targetCount(1)
 quests["default:pick_wood"]:set_targetCount(1)
 quests["default:furnace"]:set_targetCount(1)
+quests["default:furnace"]:add_target_item("default:furnace") -- bug
 quests["group:sand"]:set_action("dig")
+quests["default:clay_lump"]:set_action("dig")
+quests["default:clay_lump"]:get_item():add_child("default:clay_lump")
 quests["default:coal_lump"]:set_action("dig")
 quests["group:stone"]:set_action("dig")
 
