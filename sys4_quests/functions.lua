@@ -533,21 +533,9 @@ local function print_itemsUnlocked(items)
 	for _, item in ipairs(items) do
 		local itemMod = string.split(item, ":")[1]
 		local intllibMod
-		if itemMod == "stairs" or itemMod == "group" then
-			for mod, registeredQuests in pairs(sys4_quests.registeredQuests) do
-				for _, quest in ipairs(registeredQuests.quests) do
-					for __, titem in ipairs(quest[4]) do
-						if item == titem then
-							intllibMod = registeredQuests.intllib
-						end
-					end
-					for __, titem in ipairs(quest[6]) do
-						if item == titem then
-							intllibMod = registeredQuests.intllib
-						end
-					end
-				end
-			end
+		if itemMod == "group" then
+			-- TODO
+			intllibMod = sys4_quests.intllib["default"]
 		else
 			intllibMod = sys4_quests.intllib[itemMod]
 		end
@@ -1041,6 +1029,14 @@ local function clean_itemsToUnlock(quest_graph)
 	end
 end
 
+function sys4_quests.register_mod(mod, intllib)
+	if not minetest.get_modpath(mod) then
+		error("Mod '"..mod.."' not found !")
+	end
+
+	sys4_quests.intllib[mod] = intllib
+end
+
 function sys4_quests.register_mod_quests(mod, questList, intllib)
 	if not minetest.get_modpath(mod) then
 		error("Mod '"..mod.."' not found !")
@@ -1179,23 +1175,34 @@ function sys4_quests.build_quests(quest_tree, coord, auto)
 
 	local quests = {}
 	local items = sys4_quests.MinetestItems()
+
+	local old_quests = sys4_quests.quests
 	
 	for name in pairs(quest_tree) do
-		local item = minetest.registered_items[name]
-
-		if not item and get_groups(name) then
-			item = minetest.registered_items[get_items_by_group(get_groups(name))[1] ]
-		end
-
-		if item then
-			items:add(item)
-		else
-			error("sys4_quests : item unknown !")
+		if not old_quests or not old_quests[name] then
+			
+			local item = minetest.registered_items[name]
+			
+			if not item and get_groups(name) then
+				item = minetest.registered_items[get_items_by_group(get_groups(name))[1] ]
+			end
+			
+			if item then
+				items:add(item)
+			else
+				error("sys4_quests : item unknown !")
+			end
 		end
 	end
 
-	for _, item in ipairs(items:get_items()) do
-		quests[item:get_name()] = sys4_quests.Quest(item, coord[item:get_name()], auto)
+	if old_quests then
+		quests = old_quests
+	end
+
+	if items:get_items() then
+		for _, item in ipairs(items:get_items()) do
+			quests[item:get_name()] = sys4_quests.Quest(item, coord[item:get_name()], auto)
+		end
 	end
 
 	sys4_quests.quests_tree = quest_tree
