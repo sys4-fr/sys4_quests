@@ -24,7 +24,7 @@ sys4_quests.S = S
 sys4_quests.questGroups = {}
 sys4_quests.questGroups['global'] = {order = 1, questsIndex = {}}
 sys4_quests.itemGroups = {}
-sys4_quests.level = 1
+sys4_quests.level = 3
 
 -- init classes
 dofile(modpath.."/item_class.lua")
@@ -47,7 +47,7 @@ local function get_itemTexture(itemName)
 	local item = quests[itemName]:get_item()
 	texture_field = item:get_def().inventory_image
 	if not texture_field or texture_field == ""  then
-		texture_field = item:get_def()["tiles"][1]
+		texture_field = item:get_def()["tiles"][#item:get_def()["tiles"] ]
 	end
 	
 	return texture_field
@@ -408,7 +408,7 @@ minetest.register_on_joinplayer(
 
 		playerList[playern] = sys4_quests.load(playern)
 
-		if (playerList[playern].isNew) then
+--		if (playerList[playern].isNew) then
 			local registered_quests = sys4_quests.quests
 			for quest in pairs(playerList[playern].progress_data.available) do
 				if not get_groupQuest_by_questIndex(registered_quests[quest]:get_index())
@@ -418,7 +418,7 @@ minetest.register_on_joinplayer(
 			end
 			playerList[playern].isNew = false
 			sys4_quests.save()
-		end
+--		end
 		
 	end)
 
