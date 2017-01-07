@@ -35,7 +35,7 @@ function sys4_quests.load(playern)
 					isNew = data.new,
 					craftMode = data.craftmode,
 					bookMode = data.bookmode,
-					activeQuestGroup= data.current_questGroup,
+					activeQuestGroup = data.current_questGroup,
 					progress_data = data.progress_data
 		}
 	end

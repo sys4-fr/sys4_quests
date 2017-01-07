@@ -422,7 +422,6 @@ minetest.register_on_joinplayer(
 		
 	end)
 
-
 minetest.register_on_dignode(
 	function(pos, oldnode, digger)
 		if not digger then return end
@@ -1097,6 +1096,22 @@ minetest.register_chatcommand(
 					minetest.chat_send_player(name, dump(item))
 				else
 					minetest.chat_send_player(name, dump(get_itemDef(item_name, sys4_quests.questTrees)))
+				end
+			end
+		end
+})
+
+minetest.register_chatcommand(
+	"reset_quests",
+	{
+		params = "none",
+		description = "Reset quests.",
+		func = function(name, param)
+			local registered_quests = sys4_quests.quests
+			for quest in pairs(sys4_quests.playerList[name].progress_data.available) do
+				if not get_groupQuest_by_questIndex(registered_quests[quest]:get_index())
+				or get_groupQuest_by_questIndex(registered_quests[quest]:get_index()) == sys4_quests.playerList[name].activeQuestGroup	then
+					quests.start_quest(name, "sys4_quests:"..registered_quests[quest]:get_name())
 				end
 			end
 		end
