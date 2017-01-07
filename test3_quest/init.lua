@@ -71,7 +71,7 @@ coord["default:obsidian"] = { x = 4, y = 9}
 
 -- build quests list --
 --[[ Enable auto determination of items to unlock.
-	  Note: In this mod, unlocked items are not displayed for now, because 
+	  Note: If enabled, unlocked items are not displayed for now, because 
 	  the successful craft determination is dynamically calculated when the 
 	  player try to craft an item.
 --]]
@@ -83,17 +83,18 @@ local quests = sys4_quests.build_quests(quest_tree, coord, auto)
 -- Make quests custom modifications if needed
 quests["sys4_quests:quest_book"]:set_targetCount(1) -- custom level
 quests["sys4_quests:quest_book"]:get_item():add_childs({"default:snow", "default:snowblock"}) -- add another items to unlock in this quest
+quests["group:tree"]:add_target_items({"default:bush_stem", "default:acacia_bush_stem"})
 quests["default:pick_wood"]:set_targetCount(1)
 quests["default:pick_stone"]:set_targetCount(1)
 quests["default:pick_steel"]:set_targetCount(1)
 quests["default:furnace"]:set_targetCount(1)
-quests["default:furnace"]:add_target_item("default:furnace") -- add another target item into this quest
-quests["group:sand"]:set_action("dig") -- fix quest action ("dig", "craft", "cook" or "place"
+quests["default:furnace"]:add_target_item("default:furnace") -- add another target item into this quest (TODO in this case fix bug, this may not happen)
+quests["group:sand"]:set_action("dig") -- force quest action ("dig", "craft", "cook" or "place"
 quests["default:clay_lump"]:set_action("dig")
 quests["default:clay_lump"]:get_item():add_child("default:clay_lump") -- add another item to unlock in this quest
 quests["default:coal_lump"]:set_action("dig")
-quests["group:stone"]:set_action("dig")
 quests["default:coal_lump"]:get_item():add_child("default:coal_lump")
+quests["group:stone"]:set_action("dig")
 
 -- register quests
 sys4_quests.register_mod_quests("default", quests, S)
@@ -102,16 +103,20 @@ sys4_quests.register_mod_quests("default", quests, S)
 -- farming mod
 --
 
+-- get existing quests tree and update it
 quest_tree = sys4_quests.quests_tree
 
 quest_tree:add("farming:wheat", {"group:stick"})
 coord["farming:wheat"] = {x = 1, y = 4}
 
+-- rebuild quests
 quests = sys4_quests.build_quests(quest_tree, coord, true)
 
+-- customize quests
 quests["farming:wheat"]:add_target_item("farming:wheat")
 quests["farming:wheat"]:set_action("dig")
 
+-- register modifications
 sys4_quests.register_mod_quests("farming", quests, S)
 
 --
@@ -202,10 +207,11 @@ quests = sys4_quests.build_quests(quest_tree, coord, true)
 
 sys4_quests.register_mod_quests("doors", quests, S)
 
--- fire
+-- fire (no quest added, but previously quests updated)
 quest_tree = sys4_quests.quests_tree
 quests = sys4_quests.build_quests(quest_tree, coord, true)
 
+-- update quest
 quests["default:gravel"]:get_item():add_child("default:flint")
 
 sys4_quests.register_mod_quests("fire", quests, S)
@@ -238,3 +244,11 @@ quests["default:copper_ingot"]:get_item():add_childs({"stairs:slab_copperblock",
 quests["default:obsidian"]:get_item():add_childs({"stairs:slab_obsidianbricks", "stairs:stair_obsidianbricks", "stairs:slab_obsidian_block", "stairs:stair_obsidian_block"})
 
 sys4_quests.register_mod_quests("stairs", quests, S)
+
+-- Carts
+quest_tree = sys4_quests.quests_tree
+quests = sys4_quests.build_quests(quest_tree, coord, true)
+
+quests["default:mese_crystal"]:get_item():add_child("default:mese_crystal_fragment")
+
+sys4_quests.register_mod_quests("carts", quests, S)

@@ -570,14 +570,14 @@ local function register_on_placenode(pos, node, placer)
 			and is_items_equivalent(registered_quests[quest]:get_item_targets(), node.name)
 			and quests.update_quest(playern, "sys4_quests:"..questName, 1)
 		then
-			minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
-			player.progress_data:learn(quest)
+			--minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
+			--player.progress_data:learn(quest)
 			
 			if player.bookMode then
 				give_book(playern, questName)
 			end
 			
-			sys4_quests.save()
+			--sys4_quests.save()
 		end
 	end
 end
@@ -629,14 +629,14 @@ local function allow_metadata_inventory_take(pos, listname, index, stack, player
 				and is_items_equivalent(registered_quests[quest]:get_target_items(), stack:get_name())
 				and quests.update_quest(playern, "sys4_quests:"..questName, stackCount)
 			then
-				minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
-				splayer.progress_data:learn(quest)
+				--minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
+				--splayer.progress_data:learn(quest)
 				
 				if splayer.bookMode then
 					give_book(playern, questName)
 				end
 				
-				sys4_quests.save()
+				--sys4_quests.save()
 			end
 		end
 	end
