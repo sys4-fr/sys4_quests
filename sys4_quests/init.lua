@@ -24,7 +24,7 @@ sys4_quests.S = S
 sys4_quests.questGroups = {}
 sys4_quests.questGroups['global'] = {order = 1, questsIndex = {}}
 sys4_quests.itemGroups = {}
-sys4_quests.level = 3
+sys4_quests.level = 1
 
 -- init classes
 dofile(modpath.."/item_class.lua")
@@ -418,8 +418,8 @@ minetest.register_on_joinplayer(
 			end
 			playerList[playern].isNew = false
 			sys4_quests.save()
---		end
-		
+			--		end
+			
 	end)
 
 minetest.register_on_dignode(
@@ -465,6 +465,7 @@ end
 
 local function is_item_unlocked(p_data, item)
 	local item_recipes = minetest.get_all_craft_recipes(item)
+	local quests = sys4_quests.quests
 
 	-- See if ingredient is learned
 	local recipe_ok = true
@@ -480,8 +481,21 @@ local function is_item_unlocked(p_data, item)
 					end
 				end
 			end
+
+			local learned_child = false
+			for name in pairs(p_data.learned) do
+				local childs = quests[name]:get_item():get_childs()
+				if childs then
+					for k, child in ipairs(childs) do
+						if child == ingredient then
+							learned_child = true
+						end
+					end
+				end
+			end
 			
-			recipe_ok = recipe_ok and p_data.learned[ingredient]
+			recipe_ok = recipe_ok and (p_data.learned[ingredient]
+													or learned_child)
 		end
 		if recipe_ok then break end
 	end
@@ -501,7 +515,7 @@ minetest.register_on_craft(
 		
 		local registered_quests = sys4_quests.quests
 		
-		for learn in pairs(splayer.progress_data.learned) do
+		--[[for learn in pairs(splayer.progress_data.learned) do
 			local quest = registered_quests[learn]
 			local questType = quest:get_action()
 			local questName = quest:get_name()
@@ -519,7 +533,7 @@ minetest.register_on_craft(
 			
 			if not wasteItem then break end
 		end
-
+		--]]
 		if itemstackName == "sys4_quests:quest_book" then
 			wasteItem = nil
 		end
@@ -554,7 +568,7 @@ minetest.register_on_craft(
 		end
 end)
 
-local function register_on_placenode(pos, node, placer)
+--[[local function register_on_placenode(pos, node, placer)
 	if not placer then return end
 	
 	local playern = placer:get_player_name()
@@ -581,7 +595,7 @@ local function register_on_placenode(pos, node, placer)
 	end
 end
 
-minetest.register_on_placenode(register_on_placenode)
+--minetest.register_on_placenode(register_on_placenode)
 
 local function register_on_place(itemstack, placer, pointed_thing)
 	local node = {}
@@ -609,6 +623,7 @@ local nodes = {
 for i=1, #nodes do
 	nodes[i].on_place = register_on_place
 end
+--]]
 
 -- Furnace inventory take event
 local furnace = minetest.registered_nodes["default:furnace"]

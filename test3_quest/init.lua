@@ -75,6 +75,7 @@ coord["default:obsidian"] = { x = 4, y = 9}
 	  the successful craft determination is dynamically calculated when the 
 	  player try to craft an item.
 --]]
+
 local auto = true
 
 -- build and get quests data accordingly to 'quest_tree' and 'auto' option.
@@ -83,7 +84,7 @@ local quests = sys4_quests.build_quests(quest_tree, coord, auto)
 -- Make quests custom modifications if needed
 quests["sys4_quests:quest_book"]:set_targetCount(1) -- custom level
 quests["sys4_quests:quest_book"]:get_item():add_childs({"default:snow", "default:snowblock"}) -- add another items to unlock in this quest
-quests["group:tree"]:add_target_items({"default:bush_stem", "default:acacia_bush_stem"})
+quests["group:tree"]:add_target_items({"default:bush_stem", "default:acacia_bush_stem"}) --add other target items into this quest
 quests["default:pick_wood"]:set_targetCount(1)
 quests["default:pick_stone"]:set_targetCount(1)
 quests["default:pick_steel"]:set_targetCount(1)
@@ -91,12 +92,24 @@ quests["default:furnace"]:set_targetCount(1)
 quests["default:furnace"]:add_target_item("default:furnace") -- add another target item into this quest (TODO in this case fix bug, this may not happen)
 quests["group:sand"]:set_action("dig") -- force quest action ("dig", "craft", "cook" or "place"
 quests["default:clay_lump"]:set_action("dig")
-quests["default:clay_lump"]:get_item():add_child("default:clay_lump") -- add another item to unlock in this quest
-quests["default:coal_lump"]:set_action("dig")
-quests["default:coal_lump"]:get_item():add_child("default:coal_lump")
-quests["group:stone"]:set_action("dig")
+quests["default:clay_lump"]:add_target_item("default:clay_lump")
+quests["default:clay_lump"]:get_item():add_child("default:clay")
 
--- register quests
+quests["default:coal_lump"]:set_action("dig")
+quests["default:coal_lump"]:add_target_item("default:coal_lump")
+quests["default:coal_lump"]:get_item():add_child("default:coalblock")
+quests["group:stone"]:set_action("dig")
+quests["default:mese_crystal"]:set_action("dig")
+quests["default:mese_crystal"]:get_item():add_child("default:mese_crystal_fragment")
+
+quests["default:diamond"]:set_action("dig")
+quests["default:diamond"]:add_target_item("default:diamond")
+quests["default:diamond"]:get_item():add_child("default:diamondblock")
+
+quests["default:obsidian"]:set_action("dig")
+quests["default:obsidian"]:get_item():add_child("default:obsidian_shard")
+
+-- Quests are ready for mod default. Register them.
 sys4_quests.register_mod_quests("default", quests, S)
 
 --
@@ -110,11 +123,12 @@ quest_tree:add("farming:wheat", {"group:stick"})
 coord["farming:wheat"] = {x = 1, y = 4}
 
 -- rebuild quests
-quests = sys4_quests.build_quests(quest_tree, coord, true)
+quests = sys4_quests.build_quests(quest_tree, coord, auto)
 
 -- customize quests
 quests["farming:wheat"]:add_target_item("farming:wheat")
 quests["farming:wheat"]:set_action("dig")
+quests["farming:wheat"]:get_item():add_child("farming:straw")
 
 -- register modifications
 sys4_quests.register_mod_quests("farming", quests, S)
@@ -130,7 +144,7 @@ coord["farming:cotton"] = {x = 2, y = 4}
 quest_tree:add("wool:white", {"farming:cotton"})
 coord["wool:white"] = {x = 2, y = 5}
 
-quests = sys4_quests.build_quests(quest_tree, coord, true)
+quests = sys4_quests.build_quests(quest_tree, coord, auto)
 
 quests["farming:cotton"]:add_target_item("farming:cotton")
 
@@ -150,7 +164,8 @@ coord["group:flower"] = {x = 5, y = 1}
 quest_tree:add("group:dye", {"group:flower"})
 coord["group:dye"] = {x = 5, y = 2}
 
-quests = sys4_quests.build_quests(quest_tree, coord, true)
+quests = sys4_quests.build_quests(quest_tree, coord, auto)
+quests["group:flower"]:get_item():add_child("group:dye")
 
 sys4_quests.register_mod_quests("dye", quests, S)
 
@@ -161,7 +176,7 @@ quest_tree = sys4_quests.quests_tree
 quest_tree:add("group:wool", {"wool:white", "group:dye"})
 coord["group:wool"] = {x = 2, y = 6}
 
-quests = sys4_quests.build_quests(quest_tree, coord, true)
+quests = sys4_quests.build_quests(quest_tree, coord, auto)
 
 sys4_quests.register_mod_quests("beds", quests, S)
 
@@ -175,7 +190,7 @@ coord["default:gravel"] = {x = 6, y = 1}
 quest_tree:add("tnt:gunpowder", {"default:gravel"})
 coord["tnt:gunpowder"] = {x = 6, y = 2}
 
-quests = sys4_quests.build_quests(quest_tree, coord, true)
+quests = sys4_quests.build_quests(quest_tree, coord, auto)
 
 sys4_quests.register_mod_quests("tnt", quests, S)
 
@@ -191,7 +206,7 @@ coord["default:glass"] = {x = 0, y = 7}
 quest_tree:add("group:vessel", {"default:glass"})
 coord["group:vessel"] = {x = 0, y = 8}
 
-quests = sys4_quests.build_quests(quest_tree, coord, true)
+quests = sys4_quests.build_quests(quest_tree, coord, auto)
 
 sys4_quests.register_mod_quests("vessels", quests, S)
 
@@ -203,13 +218,13 @@ quest_tree = sys4_quests.quests_tree
 quest_tree:add("default:obsidian_glass", {"default:obsidian"})
 coord["default:obsidian_glass"] = {x = 4, y = 10}
 
-quests = sys4_quests.build_quests(quest_tree, coord, true)
+quests = sys4_quests.build_quests(quest_tree, coord, auto)
 
 sys4_quests.register_mod_quests("doors", quests, S)
 
 -- fire (no quest added, but previously quests updated)
 quest_tree = sys4_quests.quests_tree
-quests = sys4_quests.build_quests(quest_tree, coord, true)
+quests = sys4_quests.build_quests(quest_tree, coord, auto)
 
 -- update quest
 quests["default:gravel"]:get_item():add_child("default:flint")
@@ -233,22 +248,37 @@ sys4_quests.register_mod("boats", S)
 
 -- stairs
 quest_tree = sys4_quests.quests_tree
-quests = sys4_quests.build_quests(quest_tree, coord, true)
+quests = sys4_quests.build_quests(quest_tree, coord, auto)
 
-quests["farming:wheat"]:get_item():add_childs({"stairs:slab_straw", "stairs:stair_straw"})
-quests["default:sandstone"]:get_item():add_childs({"stairs:slab_sandstonebricks", "stairs:stair_sandstonebricks", "stairs:slab_sandstone_block", "stairs:stair_sandstone_block"})
-quests["default:clay_brick"]:get_item():add_childs({"stairs:slab_brick", "stairs:stair_brick"})
-quests["default:bronze_ingot"]:get_item():add_childs({"stairs:slab_bronzeblock", "stairs:stair_bronzeblock"})
-quests["default:steel_ingot"]:get_item():add_childs({"stairs:slab_steelblock", "stairs:stair_steelblock"})
-quests["default:copper_ingot"]:get_item():add_childs({"stairs:slab_copperblock", "stairs:stair_copperblock"})
-quests["default:obsidian"]:get_item():add_childs({"stairs:slab_obsidianbricks", "stairs:stair_obsidianbricks", "stairs:slab_obsidian_block", "stairs:stair_obsidian_block"})
+quests["farming:wheat"]:get_item():add_childs({"stairs:slab_straw",
+															  "stairs:stair_straw"})
+
+quests["default:sandstone"]:get_item():add_childs({"stairs:slab_sandstonebricks",
+																	"stairs:stair_sandstonebricks",
+																	"stairs:slab_sandstone_block",
+																	"stairs:stair_sandstone_block"})
+
+quests["default:clay_brick"]:get_item():add_childs({"stairs:slab_brick",
+																	 "stairs:stair_brick"})
+
+quests["default:bronze_ingot"]:get_item():add_childs({"stairs:slab_bronzeblock",
+																		"stairs:stair_bronzeblock"})
+
+quests["default:steel_ingot"]:get_item():add_childs({"stairs:slab_steelblock",
+																	  "stairs:stair_steelblock"})
+
+quests["default:copper_ingot"]:get_item():add_childs({"stairs:slab_copperblock",
+																		"stairs:stair_copperblock"})
+
+quests["default:obsidian"]:get_item():add_childs({"stairs:slab_obsidianbricks",
+																  "stairs:stair_obsidianbricks",
+																  "stairs:slab_obsidian_block",
+																  "stairs:stair_obsidian_block"})
 
 sys4_quests.register_mod_quests("stairs", quests, S)
 
 -- Carts
 quest_tree = sys4_quests.quests_tree
-quests = sys4_quests.build_quests(quest_tree, coord, true)
-
-quests["default:mese_crystal"]:get_item():add_child("default:mese_crystal_fragment")
+quests = sys4_quests.build_quests(quest_tree, coord, auto)
 
 sys4_quests.register_mod_quests("carts", quests, S)
