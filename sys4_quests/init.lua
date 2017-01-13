@@ -555,9 +555,9 @@ minetest.register_on_craft(
 			if not wasteItem then break end
 		end
 		--]]
-		if itemstackName == "sys4_quests:quest_book" then
-			wasteItem = nil
-		end
+		--if itemstackName == "sys4_quests:quest_book" then
+		--	wasteItem = nil
+		--end
 
 		local item = itemstack:get_name()
 		for _, group in ipairs(sys4_quests.itemGroups) do
