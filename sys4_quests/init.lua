@@ -408,44 +408,26 @@ minetest.register_on_joinplayer(
 
 		playerList[playern] = sys4_quests.load(playern)
 
---		if (playerList[playern].isNew) then
-			local registered_quests = sys4_quests.quests
-			for quest in pairs(playerList[playern].progress_data.available) do
-				if not get_groupQuest_by_questIndex(registered_quests[quest]:get_index())
-				or get_groupQuest_by_questIndex(registered_quests[quest]:get_index()) == playerList[playern].activeQuestGroup	then
-					quests.start_quest(playern, "sys4_quests:"..registered_quests[quest]:get_name())
-				end
-			end
-			playerList[playern].isNew = false
-			sys4_quests.save()
-			--		end
-			
-	end)
-
-minetest.register_on_dignode(
-	function(pos, oldnode, digger)
-		if not digger then return end
-		local playern = digger:get_player_name()
-		local player = sys4_quests.playerList[playern]
+		-- hide quests hud
+		if (playerList[playern].isNew) then
+			minetest.after(1, function(playername)
+								quests.hud[playername].autohide = false
+								quests.hide_hud(playername)
+									end, playern)
+		end
+		
 		local registered_quests = sys4_quests.quests
-
-		for name in pairs(player.progress_data.available) do
-			local questName = registered_quests[name]:get_name()
-			local questType = registered_quests[name]:get_action()
-			local questTargets = registered_quests[name]:get_target_items()
-				
-			if questType == "dig"
-				and is_items_equivalent(questTargets, oldnode.name)
-				and quests.update_quest(playern, "sys4_quests:"..questName, 1)
-			then
-				print("Update ok")
-				--minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
-				if player.bookMode then
-					give_book(playern, questName)
-				end
+		for quest in pairs(playerList[playern].progress_data.available) do
+			if not get_groupQuest_by_questIndex(registered_quests[quest]:get_index())
+			or get_groupQuest_by_questIndex(registered_quests[quest]:get_index()) == playerList[playern].activeQuestGroup	then
+				quests.start_quest(playern, "sys4_quests:"..registered_quests[quest]:get_name())
 			end
 		end
-end)
+		
+		playerList[playern].isNew = false
+		sys4_quests.save()
+			
+	end)
 
 local function get_itemGroup(groupName)
 	for _, group in ipairs(sys4_quests.itemGroups) do
@@ -462,6 +444,44 @@ local function get_groups(itemName)
 		return nil
 	end
 end
+
+minetest.register_on_dignode(
+	function(pos, oldnode, digger)
+		if not digger then return end
+		local playern = digger:get_player_name()
+		local player = sys4_quests.playerList[playern]
+		local pdata = player.progress_data
+
+		local node = oldnode.name
+		for _, group in ipairs(sys4_quests.itemGroups) do
+			if minetest.get_item_group(node, group) >= 1 then
+				node = "group:"..group
+				break
+			end
+		end
+
+		local quest = nil
+		
+		if pdata:can_learn(node) then
+			quest = sys4_quests.quests[node]
+		else
+			for name in pairs(player.progress_data.available) do
+				local q = sys4_quests.quests[name]
+				if q:get_action() == "dig"
+					and is_items_equivalent(q:get_target_items(), node)
+				then
+					quest = q
+					break
+				end
+			end
+		end
+		
+		if quest and quests.update_quest(playern, "sys4_quests:"..quest:get_name(), 1) then
+			if player.bookMode then
+				give_book(playern, quest:get_name())
+			end
+		end
+end)
 
 local function is_item_unlocked(p_data, item)
 	local item_recipes = minetest.get_all_craft_recipes(item)
@@ -508,6 +528,7 @@ minetest.register_on_craft(
 		
 		local playern = player:get_player_name()
 		local splayer = sys4_quests.playerList[playern]
+		local pdata = splayer.progress_data
 		
 		local wasteItem = "sys4_quests:waste"
 		local itemstackName = itemstack:get_name()
@@ -537,28 +558,42 @@ minetest.register_on_craft(
 		if itemstackName == "sys4_quests:quest_book" then
 			wasteItem = nil
 		end
-		
-		for available in pairs(splayer.progress_data.available) do
-			local quest = registered_quests[available]
-			local questType = quest:get_action()
-			local questName = quest:get_name()
 
-			if quest:is_auto()
-			and is_item_unlocked(splayer.progress_data, itemstackName) then
-				wasteItem = nil
+		local item = itemstack:get_name()
+		for _, group in ipairs(sys4_quests.itemGroups) do
+			if minetest.get_item_group(item, group) >= 1 then
+				item = "group:"..group
+				break
 			end
-			
-			if questType == "craft"
-				and not wasteItem
-				and is_items_equivalent(quest:get_target_items(), itemstackName)				
-			and quests.update_quest(playern, "sys4_quests:"..questName, itemstackCount) then
+		end
+
+		local quest = nil
+		
+		if pdata:can_learn(item) then
+			quest = sys4_quests.quests[item]
+			wasteItem = nil
+		elseif is_item_unlocked(splayer.progress_data, itemstackName) then
+			wasteItem = nil
+		else
+			for available in pairs(splayer.progress_data.available) do
+				local q = sys4_quests.quests[available]
+				
+				if q:get_action() == "craft"
+				and is_items_equivalent(q:get_target_items(), itemstackName) then
+					quest = q
+					wasteItem = nil
+					break
+				end
+			end
+		end
+		
+		if quest	and quests.update_quest(playern, "sys4_quests:"..quest:get_name(), itemstackCount) then
 				--minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
 				
 				if splayer.bookMode then
 					give_book(playern, questName)
 				end
 				
-			end
 		end
 
 		if not wasteItem or not splayer.craftMode then
@@ -631,26 +666,30 @@ local old_allow_metadata_inventory_take = furnace.allow_metadata_inventory_take
 local function allow_metadata_inventory_take(pos, listname, index, stack, player)
 	local stackCount = old_allow_metadata_inventory_take(pos, listname, index, stack, player)
 	
-	if player ~= nil and listname == "dst" then
+	if player and listname == "dst" then
 		local playern = player:get_player_name()
 		local splayer = sys4_quests.playerList[playern]
-		local registered_quests = sys4_quests.quests
+		local pdata = splayer.progress_data
+
+		local quest = nil
 		
-		for quest in pairs(splayer.progress_data.available) do
-			local questName = registered_quests[quest]:get_name()
-				
-			if registered_quests[quest]:get_action() == "cook"
-				and is_items_equivalent(registered_quests[quest]:get_target_items(), stack:get_name())
-				and quests.update_quest(playern, "sys4_quests:"..questName, stackCount)
-			then
-				--minetest.after(1, quests.accept_quest, playern, "sys4_quests:"..questName)
-				--splayer.progress_data:learn(quest)
-				
-				if splayer.bookMode then
-					give_book(playern, questName)
+		if pdata:can_learn(stack:get_name()) then
+			quest = sys4_quests.quests[stack:get_name()]
+		else
+			for name in pairs(pdata.available) do
+				local q = sys4_quests.quests[name]
+				if q:get_action() == "cook"
+					and is_items_equivalent(q:get_target_items(), stack:get_name())
+				then
+					quest = q
+					break
 				end
-				
-				--sys4_quests.save()
+			end
+		end
+		
+		if quest and quests.update_quest(playern, "sys4_quests:"..quest:get_name(), stackCount) then
+			if player.bookMode then
+				give_book(playern, quest:get_name())
 			end
 		end
 	end
@@ -1131,3 +1170,4 @@ minetest.register_chatcommand(
 			end
 		end
 })
+
