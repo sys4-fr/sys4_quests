@@ -138,12 +138,11 @@ sys4_quests.register_mod_quests("farming", quests, S)
 -- wool
 --
 
+sys4_quests.add_itemGroup("wool")
 quest_tree = sys4_quests.quests_tree
 
 quest_tree:add("farming:cotton", {"group:stick"})
 coord["farming:cotton"] = {x = 2, y = 4}
-quest_tree:add("wool:white", {"farming:cotton"})
-coord["wool:white"] = {x = 2, y = 5}
 
 quests = sys4_quests.build_quests(quest_tree, coord, auto)
 
@@ -158,7 +157,6 @@ sys4_quests.register_mod("flowers", S)
 -- Dye
 quest_tree = sys4_quests.quests_tree
 sys4_quests.add_itemGroup("dye")
-sys4_quests.add_itemGroup("wool")
 
 quest_tree:add("group:flower", {"sys4_quests:quest_book"})
 coord["group:flower"] = {x = 5, y = 1}
@@ -174,8 +172,8 @@ sys4_quests.register_mod_quests("dye", quests, S)
 -- beds
 --
 quest_tree = sys4_quests.quests_tree
-quest_tree:add("group:wool", {"wool:white", "group:dye"})
-coord["group:wool"] = {x = 2, y = 6}
+quest_tree:add("group:wool", {"farming:cotton"})
+coord["group:wool"] = {x = 2, y = 5}
 
 quests = sys4_quests.build_quests(quest_tree, coord, auto)
 

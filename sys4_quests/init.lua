@@ -516,7 +516,6 @@ local function is_item_unlocked(p_data, item)
 			
 			recipe_ok = recipe_ok and (p_data.learned[ingredient]
 													or learned_child)
-			if recipe_ok then break end
 		end
 		if recipe_ok then break end
 	end
@@ -534,8 +533,6 @@ minetest.register_on_craft(
 		local wasteItem = "sys4_quests:waste"
 		local itemstackName = itemstack:get_name()
 		local itemstackCount = itemstack:get_count()
-		
-		local registered_quests = sys4_quests.quests
 		
 		--[[for learn in pairs(splayer.progress_data.learned) do
 			local quest = registered_quests[learn]
