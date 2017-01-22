@@ -89,6 +89,7 @@ quests["group:tree"]:add_target_items({"default:bush_stem", "default:acacia_bush
 quests["default:pick_wood"]:set_targetCount(1)
 quests["default:pick_stone"]:set_targetCount(1)
 quests["default:pick_steel"]:set_targetCount(1)
+quests["default:pick_steel"]:add_target_item("default:pick_bronze")
 quests["default:furnace"]:set_targetCount(1)
 quests["default:furnace"]:add_target_item("default:furnace") -- add another target item into this quest (TODO in this case fix bug, this may not happen)
 quests["group:sand"]:set_action("dig") -- force quest action ("dig", "craft", "cook" or "place"
@@ -96,6 +97,8 @@ quests["default:clay_lump"]:set_action("dig")
 quests["default:clay_lump"]:add_target_item("default:clay_lump")
 quests["default:clay_lump"]:get_item():add_child("default:clay")
 
+quests["default:clay_brick"]:get_item():add_child("default:brick")
+																	 
 quests["default:coal_lump"]:set_action("dig")
 quests["default:coal_lump"]:add_target_item("default:coal_lump")
 quests["default:coal_lump"]:get_item():add_child("default:coalblock")
@@ -109,6 +112,11 @@ quests["default:diamond"]:get_item():add_child("default:diamondblock")
 
 quests["default:obsidian"]:set_action("dig")
 quests["default:obsidian"]:get_item():add_child("default:obsidian_shard")
+
+quests["default:steel_ingot"]:get_item():add_child("default:steelblock")
+quests["default:copper_ingot"]:get_item():add_child("default:copperblock")
+quests["default:gold_ingot"]:get_item():add_child("default:goldblock")
+quests["default:bronze_ingot"]:get_item():add_child("default:bronzeblock")
 
 -- Quests are ready for mod default. Register them.
 sys4_quests.register_mod_quests("default", quests, S)
@@ -270,6 +278,9 @@ quests["default:steel_ingot"]:get_item():add_childs({"stairs:slab_steelblock",
 
 quests["default:copper_ingot"]:get_item():add_childs({"stairs:slab_copperblock",
 																		"stairs:stair_copperblock"})
+
+quests["default:gold_ingot"]:get_item():add_childs({"stairs:slab_goldblock",
+																	 "stairs:stair_goldblock"})
 
 quests["default:obsidian"]:get_item():add_childs({"stairs:slab_obsidianbrick",
 																  "stairs:stair_obsidianbrick",

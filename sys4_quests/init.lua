@@ -488,20 +488,25 @@ local function is_item_unlocked(p_data, item)
 	local quests = sys4_quests.quests
 
 	-- See if ingredient is learned
-	local recipe_ok = true
+	local recipe_ok
 	for i, recipe in ipairs(item_recipes) do
 		recipe_ok = true
-		for j, ingredient in ipairs(recipe.items) do
-			local ingre_def = minetest.registered_items[ingredient]
-			if ingre_def and ingre_def.groups then
-				for group, value in pairs(ingre_def.groups) do
-					if get_itemGroup(group) then
-						ingredient = "group:"..group
-						break
+		for j, ingredient in pairs(recipe.items) do
+			local ingre_group = get_groups(ingredient)
+			if ingre_group then
+				ingredient = "group:"..ingre_group[1]
+			else
+				local ingre_def = minetest.registered_items[ingredient]
+				if ingre_def and ingre_def.groups then
+					for group, value in pairs(ingre_def.groups) do
+						if get_itemGroup(group) then
+							ingredient = "group:"..group
+							break
+						end
 					end
 				end
 			end
-
+			
 			local learned_child = false
 			for name in pairs(p_data.learned) do
 				local childs = quests[name]:get_item():get_childs()
@@ -517,6 +522,7 @@ local function is_item_unlocked(p_data, item)
 			recipe_ok = recipe_ok and (p_data.learned[ingredient]
 													or learned_child)
 		end
+		
 		if recipe_ok then break end
 	end
 	return recipe_ok
@@ -570,9 +576,12 @@ minetest.register_on_craft(
 		if pdata:can_learn(item) then
 			quest = sys4_quests.quests[item]
 			wasteItem = nil
-		elseif is_item_unlocked(splayer.progress_data, itemstackName) then
-			wasteItem = nil
 		else
+			
+			if is_item_unlocked(splayer.progress_data, itemstackName) then
+				wasteItem = nil
+			end
+
 			for available in pairs(splayer.progress_data.available) do
 				local q = sys4_quests.quests[available]
 				
