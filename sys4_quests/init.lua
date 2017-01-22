@@ -516,6 +516,7 @@ local function is_item_unlocked(p_data, item)
 			
 			recipe_ok = recipe_ok and (p_data.learned[ingredient]
 													or learned_child)
+			if recipe_ok then break end
 		end
 		if recipe_ok then break end
 	end

@@ -100,7 +100,14 @@ end
 function sys4_quests.MinetestItem.new(item, childs)
 	local self = setmetatable({}, sys4_quests.MinetestItem)
 	self.stack = ItemStack(item.name)
+
 	self.name = item.name
+	for _, group in ipairs(sys4_quests.itemGroups) do
+		if minetest.get_item_group(item.name, group) > 0 then
+			self.name = "group:"..group
+		end
+	end
+	
 	self.def = item
 	self.recipes = get_item_recipes(item.name)
 	self.childs = child_filter(childs)
@@ -185,12 +192,18 @@ function sys4_quests.MinetestItem:has_child(name)
 end
 
 function sys4_quests.MinetestItem:add_child(child)
+	local stack = ItemStack(child)
+	if string.split(child, ":")[1] ~= "group"
+	and not stack:is_known() then
+		error("Item '"..child.."' not found !")
+	end
+	
 	for _, group in ipairs(sys4_quests.itemGroups) do
 		if minetest.get_item_group(child, group) > 0 then
 			child = "group:"..group
 		end
 	end
-
+	
 	if not self:has_childs() then	self.childs = {} end
 	if not self:has_child(child) then table.insert(self.childs, child) end
 end
@@ -264,12 +277,7 @@ end
 
 function sys4_quests.MinetestItems:add(item, childs)
 	if not self.items then self.items = {} end
-	for _, group in ipairs(sys4_quests.itemGroups) do
-		if minetest.get_item_group(item.name, group) > 0 then
-			item.name = "group:"..group
-		end
-	end
-
+	
 	local isAdded = false
 	for _, currentItem in ipairs(self:get_items()) do
 		if currentItem:get_name() == item.name then
